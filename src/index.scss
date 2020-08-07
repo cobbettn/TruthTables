@@ -1,0 +1,4 @@
+// prevent content shift when scrollbar appears
+html {
+  margin-left: calc(100vw - 100%); 
+}

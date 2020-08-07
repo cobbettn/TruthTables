@@ -1,0 +1,13 @@
+.Display {
+  thead, tbody, th, td {
+    border: 1px solid gray;
+  }
+  th, td {
+    min-width: 1.5rem;
+    text-align: center;
+  }
+  th { 
+    // font-size: large;
+    text-shadow: 2px 2px 2px black;
+  }
+}

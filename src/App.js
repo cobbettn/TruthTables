@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { CssBaseline, Container, Paper, Box } from '@material-ui/core';
+import Editor from './Editor/Editor';
+import Display from './Display/Display';
+import Context from './context';
 
-function App() {
+const App = () => {
+  const [ sentenceCount, setSentenceCount ] = useState(0); // the number of different sentence letters available in the editor
+  const [ schema, setSchema ] = useState([]); // schema that displays in editor
+  const [ schemataList, setSchemataList ] = useState([]); // schemata that have been saved
+  const provider = {
+    sentenceCount: sentenceCount,
+    schema: schema,
+    schemataList: schemataList,
+    setSentenceCount: setSentenceCount,
+    setSchema: setSchema,
+    setSchemataList: setSchemataList,
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box m={2}>
+      <CssBaseline/>
+      <Container component="main">
+        <Paper elevation={10}>
+          <Context.Provider value={provider}>
+            <Box p={2}>
+              <Editor/>
+              <Display/>
+            </Box>
+          </Context.Provider>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
 

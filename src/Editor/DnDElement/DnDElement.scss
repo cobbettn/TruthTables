@@ -1,0 +1,23 @@
+.DnDElement {
+  width: calc(3.5rem - 6px);
+  height: calc(3.5rem - 6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px;
+  text-shadow: 2px 2px 2px black;
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+  75% { transform: rotate(-4deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.DnDElement:hover {
+  /* filter: brightness(75%); */
+  border-width: 2px;
+  animation: wiggle 0.25s;
+}
