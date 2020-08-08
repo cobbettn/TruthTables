@@ -18,7 +18,7 @@ const DnDElement = (props) => {
       className="DnDElement" 
       style={style}
       elevation={10}
-      onClick={() => addToSchema(props.config)}
+      onClick={ !props.config.builderEl ? () => addToSchema(props.config) : null }
     >
       {props.config.display}
     </Card>

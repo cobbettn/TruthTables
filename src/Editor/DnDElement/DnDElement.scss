@@ -10,14 +10,16 @@
 
 @keyframes wiggle {
   0% { transform: rotate(0deg); }
-  25% { transform: rotate(-4deg); }
-  50% { transform: rotate(4deg); }
-  75% { transform: rotate(-4deg); }
+  20% { transform: rotate(-3deg); }
+  25% { transform: rotate(-1deg) };
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(1deg); }
+  80% { transform: rotate(3deg);}
   100% { transform: rotate(0deg); }
 }
 
 .DnDElement:hover {
   /* filter: brightness(75%); */
   border-width: 2px;
-  animation: wiggle 0.25s;
+  animation: wiggle 0.5s;
 }
