@@ -24,7 +24,7 @@ const SchemaBuilder = () => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <DnDElement key={i} config={config}/>
+                    <DnDElement config={config}/>
                   </div>
                 )}
               </Draggable>
