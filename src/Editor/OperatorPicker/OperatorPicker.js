@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DnDElement from '../DnDElement/DnDElement';
 
-const operators = [
+const operatorConfig = [
   {value: 'AND',  display: '\u2227', elType: 'O'}, 
   {value: 'OR',   display: '\u2228', elType: 'O'}, 
   {value: 'NOT',  display: '\u00AC', elType: 'O'}, 
@@ -25,15 +25,15 @@ const OperatorPicker = () => {
             {...provided.dragHandleProps}
             style={{display: 'flex'}}
           >
-            {operators.map((operator, i) => 
-              <Draggable draggableId={operator.value} key={operator.value} index={i} >
+            {operatorConfig.map((config, i) => 
+              <Draggable draggableId={config.value} key={config.value} index={i} >
                 {(provided, snapshot) => (
                   <div className="DraggableElement"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <DnDElement config={operator}/>
+                    <DnDElement config={config}/>
                   </div>
                 )}
               </Draggable>

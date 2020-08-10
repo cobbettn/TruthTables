@@ -7,7 +7,7 @@ import OperatorPicker from './OperatorPicker/OperatorPicker';
 import SchemaBuilder from './SchemaBuilder/SchemaBuilder';
 
 const dragEnd = (x) => {
-  console.log(x);
+  console.log(x); // logs out drag data
 }
 
 const Editor = () => {
