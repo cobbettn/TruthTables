@@ -17,7 +17,7 @@ const SchemaBuilder = () => {
             style={{display: 'flex', height: '3.5rem'}}
           >
             {schema.map((config, i) => (
-              <Draggable draggableId={config.value} key={i} index={i} >
+              <Draggable draggableId={config.value} key={config.value} index={i} >
                 {(provided, snapshot) => (
                   <div 
                     ref={provided.innerRef}

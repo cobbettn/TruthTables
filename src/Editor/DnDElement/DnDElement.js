@@ -11,7 +11,7 @@ const DnDElement = (props) => {
     backgroundColor: bgColor ? bgColor : grey['700']
   };
   const addToSchema = (config) => {
-    setSchema([...schema, config]);
+    setSchema([...schema, {...config, value: `${config.value}${schema.length}` }]);
   }
   return (
     <Card 
