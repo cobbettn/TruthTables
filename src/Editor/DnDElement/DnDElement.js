@@ -6,21 +6,25 @@ import './DnDElement.scss';
 
 const DnDElement = (props) => {
   const { schema, setSchema } = useContext(Context);
-  const bgColor = props.config.bgColor;
+  const { bgColor } = props.config;
   const style = {
-    backgroundColor: bgColor ? bgColor : grey['700']
+    backgroundColor: bgColor ? bgColor['500'] : grey['700'],
   };
-  const addToSchema = (config) => {
-    setSchema([...schema, {...config, value: `${config.value}${schema.length}` }]);
+  const addOnClick = (config) => {
+    setSchema([...schema, {...config}]);
   }
+  const onClick = () => {
+    return !props.config.schemaBuilderEl ? addOnClick(props.config) : null;
+  }
+
   return (
     <Card 
       className="DnDElement" 
       style={style}
       elevation={10}
-      onClick={ !props.config.builderEl ? () => addToSchema(props.config) : null }
+      onClick={ onClick }
     >
-      {props.config.display}
+      {props.config.value}
     </Card>
   );
 }

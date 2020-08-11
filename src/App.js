@@ -8,6 +8,7 @@ const App = () => {
   const [ sentenceCount, setSentenceCount ] = useState(0); // the number of different sentence letters available in the editor
   const [ schema, setSchema ] = useState([]); // schema that displays in editor
   const [ schemataList, setSchemataList ] = useState([]); // schemata that have been saved
+  
   const provider = {
     sentenceCount: sentenceCount,
     schema: schema,
@@ -16,6 +17,7 @@ const App = () => {
     setSchema: setSchema,
     setSchemataList: setSchemataList,
   };
+
   return (
     <Box m={2}>
       <CssBaseline/>
