@@ -11,20 +11,27 @@ const SchemaBuilder = () => {
       <Droppable droppableId='SchemaBuilder' direction="horizontal">
         {(provided, snapshot) => (
           <div 
+            style={{display: 'flex', height: '3.5rem'}}
             ref={provided.innerRef}
             {...provided.droppableProps}
             {...provided.dragHandleProps}
-            style={{display: 'flex', height: '3.5rem'}}
           >
             {schema.map((config, i) => (
-              <Draggable draggableId={config.value} key={config.value} index={i} >
+              <Draggable 
+                draggableId={`${config.value}${i}`} 
+                key={`${config.value}${i}`} 
+                index={i} 
+              >
                 {(provided, snapshot) => (
                   <div 
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <DnDElement config={{...config, builderEl: true}}/>
+
+                    {/* schemaBuilderEl determines whether DnDElement is in the builder or a picker */}
+                    <DnDElement config={{...config, schemaBuilderEl: true}}/>
+
                   </div>
                 )}
               </Draggable>

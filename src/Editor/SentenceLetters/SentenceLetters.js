@@ -5,7 +5,7 @@ import Context from '../../context';
 const SentenceLetters = () => {
   const min = 0, max = 6;
   const { sentenceCount, setSentenceCount } = useContext(Context);
-  const changeHandler = (event) => {
+  const onChange = (event) => {
     if (event.target.value >= min && event.target.value <= max) setSentenceCount(Number(event.target.value));
   };
   const inputProps = {
@@ -13,10 +13,11 @@ const SentenceLetters = () => {
     min: min,
     max: max,
     value: sentenceCount,
-    onChange: changeHandler,
+    onChange: onChange,
   };
   return (
     <TextField
+      style={{minWidth: '5.5rem'}}
       label="Sentences"
       variant="outlined"
       inputProps={inputProps}

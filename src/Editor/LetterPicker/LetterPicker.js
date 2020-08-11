@@ -7,30 +7,37 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 const LetterPicker = () => {
   const { sentenceCount } = useContext(Context);
-  const letters =  [...Array(sentenceCount)].map((e, i) => String.fromCharCode(112 + i));
+  const letterConfig = [...Array(sentenceCount)].map((el, i) => {
+    return {
+      value: String.fromCharCode(112 + i), 
+      bgColor: Colors[i],
+      elType: 'L',
+    }
+  });
   const style = {
     display: sentenceCount === 0 ? 'none' : null,
-    marginLeft: sentenceCount > 0 ? '1rem' : null
+    marginLeft: sentenceCount > 0 ? '1rem' : null,
   }
   return (
     <Paper style={style} variant="outlined">
       <Droppable droppableId="LetterPicker" direction="horizontal">
         {(provided, snapshot) => (
           <div 
+            style={{display: 'flex'}}
             ref={provided.innerRef}
             {...provided.droppableProps}
             {...provided.dragHandleProps}
-            style={{display: 'flex'}}
           >
-            {letters.map((letter, i) => 
-              <Draggable draggableId={letter} key={letter} index={i} >
+            {letterConfig.map((config, i) => 
+              <Draggable draggableId={config.value} key={config.value} index={i} >
                 {(provided, snapshot) => (
-                  <div className="DraggableElement"
+                  <div
+                    className="DraggableElement"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <DnDElement key={letter} config={{value: letter, display: letter, elType: 'L', bgColor: Colors[i]['500']}}/>
+                    <DnDElement config={config}/>
                   </div>
                 )}
               </Draggable>
