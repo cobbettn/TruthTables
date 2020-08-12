@@ -5,13 +5,13 @@ import Context from '../../context';
 import './DnDElement.scss';
 
 const DnDElement = (props) => {
-  const { schema, setSchema } = useContext(Context);
+  const { sentenceCount, schema, setSchema } = useContext(Context);
   const { bgColor } = props.config;
   const style = {
     backgroundColor: bgColor ? bgColor['500'] : grey['700'],
   };
   const addOnClick = (config) => {
-    setSchema([...schema, {...config}]);
+    if (sentenceCount > 0) setSchema([...schema, {...config}]);
   }
   const onClick = () => {
     return !props.config.schemaBuilderEl ? addOnClick(props.config) : null;
