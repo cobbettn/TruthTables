@@ -12,6 +12,7 @@ import { Button } from '@material-ui/core';
 const Editor = () => {
   const { schema, setSchema } = useContext(Context);
   const onDragEnd = (drag) => dragEnd(drag, schema, setSchema);
+  const onClear = () => setSchema([]);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box style={{display: 'flex'}}>
@@ -32,6 +33,7 @@ const Editor = () => {
         <Button 
           variant="outlined" 
           color="secondary"
+          onClick={onClear}
         >
           Clear
         </Button>
