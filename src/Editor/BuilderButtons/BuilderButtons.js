@@ -5,22 +5,26 @@ import Context from '../../context';
 import styles from './BuilderButton.style';
 
 const BuilderButtons = () => {
-  const { schema } = useContext(Context);
+  const { schema, setSchema } = useContext(Context);
   const isValidSchema = validateSchema(schema);
   const schemaSize = schema.length;
   const useStyles = styles(makeStyles, isValidSchema, schemaSize);
   const classes = useStyles();
+  const clearSchemaBuilder = () => setSchema([]);
   return (
     <Box mt="1rem" style={{display: 'flex', flexDirection: 'row-reverse'}}>
       <Button 
-        classes={{root: [classes.saveBtn, classes.common].join(' ')}}
+        classes={ {root: [classes.saveBtn, classes.common].join(' ')} }
         variant="outlined"
+        disabled={ !isValidSchema }
       >
         Save
       </Button>
       <Button
-        classes={{root: [classes.clearBtn, classes.common].join(' ')}}
+        classes={ {root: [classes.clearBtn, classes.common].join(' ')} }
         variant="outlined"
+        disabled={ schemaSize === 0 }
+        onClick={ clearSchemaBuilder }
       >
         Clear
       </Button>
