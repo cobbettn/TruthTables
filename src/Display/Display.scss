@@ -1,13 +1,14 @@
 .Display {
   thead, tbody, th, td {
-    border: 1px solid gray;
+    border: 1px solid #424242; // mui color
   }
   th, td {
     min-width: 1.5rem;
     text-align: center;
+    text-shadow: -2px 1px 4px black;
+    font-weight: normal;
   }
   th { 
-    // font-size: large;
-    text-shadow: 2px 2px 2px black;
+    text-shadow: -2px 1px 4px black;
   }
 }

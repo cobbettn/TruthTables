@@ -1,29 +1,38 @@
 import theme from '../../theme';
 const styles = (makeStyles, validSchema, schemaSize) => {
+  const { 
+    main:   primaryMain, 
+    dark:   primaryDark, 
+    light:  primaryLight,
+  } = theme.palette.primary;
   return makeStyles(
     {
+      
       common : {
         minWidth: '6rem',
       },
+
       saveBtn: {
         marginLeft: '0.5rem',
-        backgroundColor: validSchema ? theme.palette.primary.main : null,
+        backgroundColor: validSchema ? primaryMain : null,
         '&:hover': {
-          backgroundColor: validSchema ? theme.palette.primary.dark : null,
+          backgroundColor: validSchema ? primaryDark : null,
         },
         '&:active': {
-          backgroundColor: validSchema ? theme.palette.primary.light : null,
+          backgroundColor: validSchema ? primaryLight : null,
         },
       },
+      
       clearBtn: {
-        backgroundColor: schemaSize > 0 ? theme.palette.primary.main : null,
+        backgroundColor: schemaSize > 0 ? primaryMain : null,
         '&:hover': {
-          backgroundColor: schemaSize > 0 ? theme.palette.primary.dark : null,
+          backgroundColor: schemaSize > 0 ? primaryDark : null,
         },
         '&:active': {
-          backgroundColor: schemaSize > 0 ? theme.palette.primary.light : null,
+          backgroundColor: schemaSize > 0 ? primaryLight : null,
         },
       },
+
     }
   );
 }

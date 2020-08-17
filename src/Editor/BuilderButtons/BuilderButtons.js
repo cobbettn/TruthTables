@@ -6,9 +6,9 @@ import styles from './BuilderButton.style';
 
 const BuilderButtons = () => {
   const { schema } = useContext(Context);
-  const validSchema = validateSchema(schema);
+  const isValidSchema = validateSchema(schema);
   const schemaSize = schema.length;
-  const useStyles = styles(makeStyles, validSchema, schemaSize);
+  const useStyles = styles(makeStyles, isValidSchema, schemaSize);
   const classes = useStyles();
   return (
     <Box mt="1rem" style={{display: 'flex', flexDirection: 'row-reverse'}}>
@@ -20,7 +20,8 @@ const BuilderButtons = () => {
       </Button>
       <Button
         classes={{root: [classes.clearBtn, classes.common].join(' ')}}
-        variant="outlined">
+        variant="outlined"
+      >
         Clear
       </Button>
     </Box>

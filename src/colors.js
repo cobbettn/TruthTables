@@ -1,2 +1,2 @@
 import { pink, orange, yellow, lightGreen, cyan, purple } from '@material-ui/core/colors';
-export default [pink, orange, yellow, lightGreen, cyan, purple];
+export default [purple, pink, orange, yellow, lightGreen, cyan];
