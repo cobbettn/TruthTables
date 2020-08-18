@@ -13,11 +13,21 @@ const dragEnd = (drag, schema, setSchema) => {
       else {
         const symbol = drag.draggableId.substring(0, 1);
         const schemaSymbol = { value: symbol };
+        // grouping and negation are also in operator picker
         if (sourceId === "OperatorPicker") {
-          schemaSymbol.elType = symbol.match(/[()]/) ? 'G' : 'O';  // grouping is diplayed in operator picker
+          const not = '\u00AC';
+          if (symbol.match(/[()]/)) {
+            schemaSymbol.elType = 'G';
+          }
+          else if (symbol === not) {
+            schemaSymbol.elType = 'N';
+          }
+          else {
+            schemaSymbol.elType = 'O';
+          }
         }
         if (sourceId === "LetterPicker") {
-          const colorIndex = symbol.charCodeAt(0) - 112; // revert back to ascii
+          const colorIndex = symbol.charCodeAt(0) - 112; // revert back to ascii 
           schemaSymbol.elType = 'L';
           schemaSymbol.bgColor = Colors[colorIndex];
         }

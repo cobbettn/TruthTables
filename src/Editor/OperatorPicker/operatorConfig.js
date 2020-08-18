@@ -1,5 +1,5 @@
 export default [
-  {value: '\u00AC', elType: 'O'}, // NOT
+  {value: '\u00AC', elType: 'N'}, // NOT
   {value: '\u2227', elType: 'O'}, // AND
   {value: '\u2228', elType: 'O'}, // OR
   {value: '\u21D2', elType: 'O'}, // IF/THEN
