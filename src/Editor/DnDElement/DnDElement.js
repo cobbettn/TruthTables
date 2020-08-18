@@ -1,22 +1,19 @@
 import React, { useContext } from 'react';
 import Card from '@material-ui/core/Card';
-import grey from '@material-ui/core/colors/grey';
-import Context from '../../context';
+import Context from '../../context'
+import { getStyles, getOnClick } from './dndElementConfig';
 import './DnDElement.scss';
 
 const DnDElement = (props) => {
-  const { schema, setSchema } = useContext(Context);
-  const { bgColor } = props.config;
-  const style = {
-    backgroundColor: bgColor ? bgColor['500'] : grey['700'],
-  };
-  const addOnClick = (config) => {
-    setSchema([...schema, {...config}]);
+  const { sentenceCount, schema, setSchema } = useContext(Context);
+  const configObj = {
+    count: sentenceCount,
+    schema: schema,
+    setSchema: setSchema,
+    elConfig: props.config,
   }
-  const onClick = () => {
-    return !props.config.schemaBuilderEl ? addOnClick(props.config) : null;
-  }
-
+  const style = getStyles(props.config.bgColor);
+  const onClick = getOnClick(configObj);
   return (
     <Card 
       className="DnDElement" 
