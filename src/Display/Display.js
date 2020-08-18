@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { green, red } from '@material-ui/core/colors';
-import { Paper, Box } from '@material-ui/core';
+import { Paper, Box, Card } from '@material-ui/core';
 import Colors from '../colors';
 import Context from '../context';
+import theme from '../theme';
 import './Display.scss';
 
 const Display = () => {
@@ -13,7 +14,7 @@ const Display = () => {
   const tableRows = [];
 
   const sentenceLetters = [...Array(sentenceCount)].map((e, i) => String.fromCharCode(112 + i));
-  const tableColumns = sentenceLetters.map((e, i) => <th style={{backgroundColor: Colors[i]['500']}} key={i}>{e}</th>);
+  const tableColumns = sentenceLetters.map((e, i) => <th style={{backgroundColor: Colors[i]['600']}} key={i}>{e}</th>);
   
   // append statement headers
 
@@ -29,15 +30,19 @@ const Display = () => {
 
   // populate truth values for statements (write parsing fxns)
 
+  // eventually cards will be displayed along side the master table to represent saved and editor schemas
+
   return (
-    <Box className="Display" mt="1rem" style={{display: sentenceCount === 0 ? 'none' : null}}>
-      <Paper elevation={5} style={{padding: '1rem'}}>
-        <table className="TruthTable">
-          <thead>
-            <tr>{ tableColumns }</tr>
-          </thead>
-          <tbody>{ tableRows }</tbody>
-        </table>
+    <Box className="Display" mt="1rem" style={{display: sentenceCount === 0 ? 'none' : 'flex'}}>
+      <Paper elevation={5} style={{padding: '0.5rem', display: 'flex'}}>
+        <Card raised className="Card" style={{backgroundColor: theme.palette.grey['700']}}>
+          <table>
+            <thead>
+              <tr>{ tableColumns }</tr>
+            </thead>
+            <tbody>{ tableRows }</tbody>
+          </table>
+        </Card>
       </Paper>
     </Box>
   );
