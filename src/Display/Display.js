@@ -30,11 +30,13 @@ const Display = () => {
 
   // populate truth values for statements (write parsing fxns)
 
+  // eventually cards will be displayed along side the master table to represent saved and editor schemas
+
   return (
-    <Box className="Display" mt="1rem" style={{display: sentenceCount === 0 ? 'none' : null}}>
-      <Paper elevation={5} style={{padding: '0.5rem'}}>
-        <Card raised style={{padding: '0.15rem', width: 'fit-content', backgroundColor: theme.palette.grey['700']}}>
-          <table className="TruthTable">
+    <Box className="Display" mt="1rem" style={{display: sentenceCount === 0 ? 'none' : 'flex'}}>
+      <Paper elevation={5} style={{padding: '0.5rem', display: 'flex'}}>
+        <Card raised className="Card" style={{backgroundColor: theme.palette.grey['700']}}>
+          <table>
             <thead>
               <tr>{ tableColumns }</tr>
             </thead>

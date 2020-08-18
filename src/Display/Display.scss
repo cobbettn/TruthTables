@@ -1,4 +1,5 @@
 .Display {
+  flex-direction: column;
   thead, tbody, th, td {
     border: 1px solid #424242; // mui color
   }
@@ -10,5 +11,16 @@
   }
   th { 
     text-shadow: -2px 1px 4px black;
+  }
+  .Card {
+    padding: 0.15rem;
+    margin: 0.5rem;
+  }
+
+  .EditorSchema {
+
+  }
+  .SavedSchema {
+
   }
 }
