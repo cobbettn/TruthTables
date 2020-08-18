@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CssBaseline, Container, Paper, Box } from '@material-ui/core';
-
 import Context from './context';
 import Editor from './Editor/Editor';
 import Display from './Display/Display';
