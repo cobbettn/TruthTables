@@ -8,7 +8,7 @@ export const getStyles = (color) => {
 
 export const getOnClick = (config) => {
   const onClick = (config) => {
-    if (config.count > 0) config.setSchema([...config.schema, {...config.elConfig}]);
+    if (config.letterCount > 0) config.setSchema([...config.schema, {...config.elConfig}]);
   }
   return !config.elConfig.schemaBuilderEl ? () => onClick(config) : null;
 }

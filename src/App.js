@@ -5,15 +5,15 @@ import Editor from './Editor/Editor';
 import Display from './Display/Display';
 
 const App = () => {
-  const [ sentenceCount, setSentenceCount ] = useState(0); // the number of different sentence letters available in the editor
+  const [ sentenceLetters, setSentenceLetters ] = useState([]); // the number of different sentence letters available in the editor
   const [ schema, setSchema ] = useState([]); // schema that displays in editor
   const [ schemataList, setSchemataList ] = useState([]); // schemata that have been saved
   
   const provider = {
-    sentenceCount: sentenceCount,
+    sentenceLetters: sentenceLetters,
     schema: schema,
     schemataList: schemataList,
-    setSentenceCount: setSentenceCount,
+    setSentenceLetters: setSentenceLetters,
     setSchema: setSchema,
     setSchemataList: setSchemataList,
   };
