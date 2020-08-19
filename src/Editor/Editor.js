@@ -10,8 +10,13 @@ import Context from '../context';
 import dragEnd from './dragEnd';
 
 const Editor = () => {
-  const { schema, setSchema } = useContext(Context);
-  const onDragEnd = (drag) => dragEnd(drag, schema, setSchema);
+  const { sentenceCount, schema, setSchema } = useContext(Context);
+  const stateObj = {
+    sentenceCount: sentenceCount,
+    schema: schema,
+    setSchema: setSchema,
+  }
+  const onDragEnd = (drag) => dragEnd(drag, stateObj);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box style={{display: 'flex'}}>
