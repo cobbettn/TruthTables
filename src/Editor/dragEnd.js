@@ -1,8 +1,16 @@
 import Colors from '../colors';
 
-const dragEnd = (drag, schema, setSchema) => {
+/**
+ * dragEnd()
+ * 
+ * Drag and drop handler for the Editor component.
+ * 
+ * @param {Object} drag       drag and drop event data
+ * @param {Object} stateObj   object containing setters and getters for the application state
+ */
+const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const tmpSchema = [...schema];
+  const tmpSchema = [...stateObj.schema];
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
@@ -31,7 +39,7 @@ const dragEnd = (drag, schema, setSchema) => {
           schemaSymbol.elType = 'L';
           schemaSymbol.bgColor = Colors[colorIndex];
         }
-        tmpSchema.splice(destIndex, 0, schemaSymbol);
+        if (stateObj.sentenceCount > 0) tmpSchema.splice(destIndex, 0, schemaSymbol);
       } 
     }
   }
@@ -40,7 +48,7 @@ const dragEnd = (drag, schema, setSchema) => {
       tmpSchema.splice(sourceIndex, 1); 
     }
   }
-  setSchema([...tmpSchema]); // update schema state
+  stateObj.setSchema([...tmpSchema]); // update schema state
 }
 
 export default dragEnd;
