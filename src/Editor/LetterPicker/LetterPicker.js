@@ -3,14 +3,17 @@ import Paper from '@material-ui/core/Paper';
 import Context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getLetters, getStyles } from './letterPickerConfig';
 
 const LetterPicker = () => {
-  const { sentenceCount } = useContext(Context);
-  const style = getStyles(sentenceCount);
-  const letterConfig = getLetters(sentenceCount);
+  const { sentenceLetters } = useContext(Context);
+  const getStyles = (count) => { 
+    return {
+      display: count === 0 ? 'none' : null,
+      marginLeft: count > 0 ? '1rem' : null,
+    }
+  }
   return (
-    <Paper style={style} variant="outlined">
+    <Paper style={getStyles(sentenceLetters.length)} variant="outlined">
       <Droppable droppableId="LetterPicker" direction="horizontal">
         {(provided, snapshot) => (
           <div 
@@ -19,7 +22,7 @@ const LetterPicker = () => {
             {...provided.droppableProps}
             {...provided.dragHandleProps}
           >
-            {letterConfig.map((config, i) => 
+            {sentenceLetters.map((config, i) => 
               <Draggable draggableId={config.value} key={config.value} index={i} >
                 {(provided, snapshot) => (
                   <div

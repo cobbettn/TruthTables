@@ -10,9 +10,9 @@ import Context from '../context';
 import dragEnd from './dragEnd';
 
 const Editor = () => {
-  const { sentenceCount, schema, setSchema } = useContext(Context);
+  const { sentenceLetters, schema, setSchema } = useContext(Context);
   const stateObj = {
-    sentenceCount: sentenceCount,
+    sentenceLetters: sentenceLetters,
     schema: schema,
     setSchema: setSchema,
   }

@@ -5,9 +5,9 @@ import { getStyles, getOnClick } from './dndElementConfig';
 import './DnDElement.scss';
 
 const DnDElement = (props) => {
-  const { sentenceCount, schema, setSchema } = useContext(Context);
+  const { sentenceLetters, schema, setSchema } = useContext(Context);
   const configObj = {
-    count: sentenceCount,
+    letterCount: sentenceLetters.length,
     schema: schema,
     setSchema: setSchema,
     elConfig: props.config,
