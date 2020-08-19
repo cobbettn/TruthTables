@@ -14,7 +14,7 @@ const BuilderButtons = () => {
   const saveValidSchema = () => {
     if (isValidSchema) {
       setSchemataList([...schemataList, schema]); // save
-      setSchema([]); // clear builder
+      clearSchemaBuilder(); // clear schema builder
     } 
   }
   return (
