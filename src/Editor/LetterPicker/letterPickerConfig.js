@@ -3,7 +3,7 @@ export const getLetters =  (count) => {
   return [...Array(count)].map((el, i) => {
     return {
       value: String.fromCharCode(112 + i), 
-      bgColor: Colors[i],
+      bgColor: Colors[i]['500'],
       elType: 'L',
     }
   });
