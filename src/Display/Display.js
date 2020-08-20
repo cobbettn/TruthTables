@@ -3,10 +3,11 @@ import { green, red } from '@material-ui/core/colors';
 import { Paper, Box, Card } from '@material-ui/core';
 import Context from '../context';
 import theme from '../theme';
+import parseSchema from '../lib/parseSchema';
 import './Display.scss';
 
 const Display = () => {
-  const { sentenceLetters } = useContext(Context);
+  const { sentenceLetters, schema } = useContext(Context);
   const numCols = sentenceLetters.length;
   const numRows = Math.pow(2, numCols);
   
@@ -34,6 +35,8 @@ const Display = () => {
       legend[key].push(legendData[row][col]);
     }
   }
+
+  parseSchema(schema);
 
   return (
     <Box className="Display" mt="1rem" style={{display: !sentenceLetters.length ? 'none' : 'flex'}}>
