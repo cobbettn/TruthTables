@@ -3,19 +3,20 @@ import { green, red } from '@material-ui/core/colors';
 import { Paper, Box, Card } from '@material-ui/core';
 import Context from '../context';
 import theme from '../theme';
-import parseSchema from '../lib/parseSchema';
+import { grey } from '@material-ui/core/colors'
+import { getRowData } from '../lib/parseSchema';
 import './Display.scss';
 
 const Display = () => {
-  const { sentenceLetters, schema } = useContext(Context);
+  const { sentenceLetters, schema, schemataList } = useContext(Context);
   const numCols = sentenceLetters.length;
   const numRows = Math.pow(2, numCols);
   
   // create column headers from sentence letters
-  const headers = sentenceLetters.map((letter, i) => <th style={{backgroundColor: letter.bgColor}} key={i}>{letter.value}</th>);
+  const legendTableHeaders = sentenceLetters.map((letter, i) => <th style={{backgroundColor: letter.bgColor}} key={i}>{letter.value}</th>);
   
   // populate truth values in legend and generate display of master table
-  const rows = [], legendData = [];
+  const legendTableRows = [], legendData = [];
   for (let row = 0; row < numRows; row++) {
     const legendRow = [], rowElements = [];
     for (let col = 0; col < numCols; col++) {
@@ -23,11 +24,12 @@ const Display = () => {
       legendRow.push(truthVal); 
       rowElements.push(<td key={col} style={{backgroundColor: truthVal ? green['500'] : red['500']}}>{truthVal ? 'T' : 'F'}</td>);
     }
-    rows.push(<tr key={row}>{rowElements}</tr>);
+    legendTableRows.push(<tr key={row}>{rowElements}</tr>);
     legendData.push(legendRow);
   }
 
   const legend = {};
+  
   for (let col = 0; col < numCols; col++) {
     const key = sentenceLetters[col].value;
     legend[key] = [];
@@ -36,7 +38,57 @@ const Display = () => {
     }
   }
 
-  parseSchema(schema);
+  const getRows = (arr) => {
+    return arr.map((row, r) => 
+      (
+        <tr key={r}>
+          {
+            row.map((val, v) =>  (
+              <td key={v} style={{backgroundColor: val === true ? green['500'] : val === false ? red['500'] : grey['500']}}>
+                {val === true ? 'T' : val === false ? 'F' : '?'}
+              </td>
+              )
+            )
+          }
+        </tr>
+      )
+    );
+  }
+
+  const getHeaders = (arr) => {
+    return arr.map((header, i) => <th style={{backgroundColor: header.bgColor ? header.bgColor : grey['700']}} key={i}>{header.value}</th>);
+  }
+
+  const editorData = {
+    schema: schema,
+    legend: legend,
+    numRows: numRows 
+  }
+
+  const editorTableHeaders = getHeaders(schema);
+  const editorTableData = getRowData(editorData);
+  const editorTableRows = getRows(editorTableData);
+
+  const savedTables = schemataList.map((schema, i) => {
+    const schemaData = {
+      schema: schema,
+      legend: legend,
+      numRows: numRows,
+    }
+    const tableHeaders = getHeaders(schema);
+    const tableData = getRowData(schemaData);
+    const tableRows = getRows(tableData);
+    return (
+      <Card key={i} raised className="Card" style={{ display: !schema.length ? 'none' : null, backgroundColor: theme.palette.grey['700']}}>
+        <table>
+          <thead>
+            <tr>{ tableHeaders }</tr>
+          </thead>
+          <tbody>{ tableRows }</tbody>
+        </table>
+      </Card>
+    );
+  });
 
   return (
     <Box className="Display" mt="1rem" style={{display: !sentenceLetters.length ? 'none' : 'flex'}}>
@@ -44,11 +96,22 @@ const Display = () => {
         <Card raised className="Card" style={{backgroundColor: theme.palette.grey['700']}}>
           <table>
             <thead>
-              <tr>{ headers }</tr>
+              <tr>{ legendTableHeaders }</tr>
             </thead>
-            <tbody>{ rows }</tbody>
+            <tbody>{ legendTableRows }</tbody>
           </table>
         </Card>
+
+        <Card raised className="Card" style={{ display: !schema.length ? 'none' : null, backgroundColor: theme.palette.grey['700']}}>
+          <table>
+            <thead>
+              <tr>{ editorTableHeaders }</tr>
+            </thead>
+            <tbody>{ editorTableRows }</tbody>
+          </table>
+        </Card>
+
+        {savedTables}
         {/* TODO: display saved schemas in their own Cards alongside legend table */}
       </Paper>
     </Box>

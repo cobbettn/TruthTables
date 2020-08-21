@@ -1,6 +1,6 @@
-const parseSchema = (schema) => {
+const parseSchema = (parseData) => {
   let depth = 0, maxDepth = 0, maxDepthIndeces = [], operator = [], letter = [], negation = [];
-  schema.forEach((el, i) => {
+  parseData.schema.forEach((el, i) => {
     switch(el.elType) {
       case 'G':
         if (el.value === '(') {
@@ -30,11 +30,18 @@ const parseSchema = (schema) => {
         break;
     }
   });
-
-  console.log(maxDepthIndeces);
-  console.log('L', letter)
-  console.log('O' ,operator)
-  console.log('N', negation)
-  
 };
-export default parseSchema;
+
+const getRowData = (data) => {
+  const tableData = [];
+  [...new Array(data.numRows)].forEach((r, row) => {
+    const rowData = [];
+    data.schema.forEach((el, i) => {
+      rowData.push(el.elType === 'L' ? data.legend[el.value][row] : null);
+    });
+    tableData.push(rowData);
+  });
+  return tableData;
+}
+
+export { getRowData };
