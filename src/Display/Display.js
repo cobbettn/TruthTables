@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { green, red } from '@material-ui/core/colors';
+import { green, red, grey } from '@material-ui/core/colors';
 import { Paper, Box, Card } from '@material-ui/core';
 import Context from '../context';
 import theme from '../theme';
-import { grey } from '@material-ui/core/colors'
-import { getRowData } from '../lib/parseSchema';
+import { stepThruScope, getRowData } from '../lib/parseSchema';
 import './Display.scss';
+import validateSchema from '../Editor/validateSchema';
 
 const Display = () => {
   const { sentenceLetters, schema, schemataList } = useContext(Context);
@@ -42,14 +42,13 @@ const Display = () => {
     return arr.map((row, r) => 
       (
         <tr key={r}>
-          {
-            row.map((val, v) =>  (
+          {row.map((val, v) =>  
+            (
               <td key={v} style={{backgroundColor: val === true ? green['500'] : val === false ? red['500'] : grey['500']}}>
                 {val === true ? 'T' : val === false ? 'F' : '?'}
               </td>
-              )
             )
-          }
+          )}
         </tr>
       )
     );
@@ -59,32 +58,34 @@ const Display = () => {
     return arr.map((header, i) => <th style={{backgroundColor: header.bgColor ? header.bgColor : grey['700']}} key={i}>{header.value}</th>);
   }
 
-  const editorData = {
+  const editorSchemaData = {
     schema: schema,
     legend: legend,
     numRows: numRows 
   }
 
   const editorTableHeaders = getHeaders(schema);
-  const editorTableData = getRowData(editorData);
+  const editorTableData = getRowData(editorSchemaData);
   const editorTableRows = getRows(editorTableData);
 
+  console.log('step thru', validateSchema(schema) ? stepThruScope([...schema]) : 'invalid');
+
   const savedTables = schemataList.map((schema, i) => {
-    const schemaData = {
+    const savedSchemaData = {
       schema: schema,
       legend: legend,
       numRows: numRows,
     }
     const tableHeaders = getHeaders(schema);
-    const tableData = getRowData(schemaData);
-    const tableRows = getRows(tableData);
+    const savedTableData = getRowData(savedSchemaData);
+    const savedTableRows = getRows(savedTableData);
     return (
       <Card key={i} raised className="Card" style={{ display: !schema.length ? 'none' : null, backgroundColor: theme.palette.grey['700']}}>
         <table>
           <thead>
             <tr>{ tableHeaders }</tr>
           </thead>
-          <tbody>{ tableRows }</tbody>
+          <tbody>{ savedTableRows }</tbody>
         </table>
       </Card>
     );
@@ -102,7 +103,7 @@ const Display = () => {
           </table>
         </Card>
 
-        <Card raised className="Card" style={{ display: !schema.length ? 'none' : null, backgroundColor: theme.palette.grey['700']}}>
+        <Card variant="outlined" raised className="Card" style={{ display: !schema.length ? 'none' : null, backgroundColor: theme.palette.grey['500']}}>
           <table>
             <thead>
               <tr>{ editorTableHeaders }</tr>

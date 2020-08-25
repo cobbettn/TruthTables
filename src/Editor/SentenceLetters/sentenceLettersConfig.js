@@ -8,8 +8,8 @@ const getInputProps =  (sentenceLetters, setSentenceLetters) => {
       const letters = [...Array(number)].map((el, i) => {
         return {
           value: String.fromCharCode(112 + i), 
-          bgColor: Colors[i]['500'],
           elType: 'L',
+          bgColor: Colors[i]['500'],
         }
       });
       setSentenceLetters([...letters]);
