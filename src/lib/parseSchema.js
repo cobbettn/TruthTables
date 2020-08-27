@@ -1,14 +1,15 @@
+
 const getMaxDepthIndeces = (schema) => {
   let depth = 0, maxDepth = 0, maxDepthIndeces = [];
   schema.forEach((e, i) => {
     if (e.value === '(') {
       depth++;
-      if (depth > maxDepth) {
-        maxDepth = depth;
-        maxDepthIndeces.push(i);
-      }
       if (depth === maxDepth) {
         maxDepthIndeces.push(i);
+      }
+      if (depth > maxDepth) {
+        maxDepth = depth;
+        maxDepthIndeces = [i];
       }
     }
     if (e.value === ')') {
@@ -18,80 +19,19 @@ const getMaxDepthIndeces = (schema) => {
   return maxDepthIndeces;
 }
 
-
-const stepThruScope = (schema) => {  
-  let maxDepthIndeces = getMaxDepthIndeces(schema);
-  if (maxDepthIndeces.length > 0) {
-    console.log('s', schema);
-    maxDepthIndeces.forEach(i => {
-      const open = schema.slice(i + 1);
-      console.log('open', open);
-      const close = open.findIndex(e => e.value === ')');
-      console.log('close', close);
-      const scope = open.slice(0, close + 1);
-      schema.splice(i, close, {value: false});
-      return stepThruScope([...schema]);
-    });
-  }
-  else {
-    return schema;
-  }
-}
-
-// takes statement without grouping and calculates its truth value
 const simplify = (schema) => {
-  
-} 
-
-
-const parseSchema = (parseData) => {
-  let depth = 0, maxDepth = 0, maxDepthIndeces = [], operator = [], letter = [], negation = [];
-  parseData.schema.forEach((el, i) => {
-    switch(el.elType) {
-      case 'G':
-        if (el.value === '(') {
-          depth++;
-          if (depth === maxDepth) {
-            maxDepthIndeces.push(i);
-          }
-          else if (depth > maxDepth) {
-            maxDepth = depth;
-            maxDepthIndeces = [i];
-          }
-        }
-        else {
-          depth--;
-        }
-        break;
-      case 'L':
-        letter.push({val: el.value, index: i});
-        break;
-      case 'O':
-        operator.push({val: el.value, index: i})
-        break;
-      case 'N':
-        negation.push(i);
-        break;
-      default:
-        break;
-    }
+  let maxDepthIndeces = getMaxDepthIndeces(schema);
+  maxDepthIndeces.forEach(i => {
+    const open = schema.slice(i);
+    const close = open.findIndex(e => e.value === ')');
+    const scope = open.slice(1, close); // scope is what we want to process
+    schema.splice(i, close + 1, {value:false});
+    simplify([...schema]);
   });
-
-};
-
-const getRowData = (data) => {
-  const tableData = [];
-  [...new Array(data.numRows)].forEach((r, row) => {
-    const rowData = [];
-    data.schema.forEach((el, i) => {
-      rowData.push(el.elType === 'L' ? data.legend[el.value][row] : null);
-    });
-    tableData.push(rowData);
-  });
-  return tableData;
+  if (maxDepthIndeces.length === 0) return schema;
 }
 
-const compute = (operator, valArr) => {
+const computeTruthValue = (operator, valArr) => {
   switch (operator) {
     case '\u00AC':
       return !valArr[0];
@@ -109,4 +49,42 @@ const compute = (operator, valArr) => {
   }
 }
 
-export { getRowData, stepThruScope };
+// takes statement without grouping and calculates its truth value
+const operatorPrecedence = (data) => {
+  const {schema, legend, numRows, isTopLevel} = data;
+  let max = 0, maxPrecedenceIndeces = [];
+  schema.forEach((e, i) => {
+    if (e.precedence) {
+      if (e.precedence === max) {
+        maxPrecedenceIndeces.push(i);
+      }
+      if (e.precedence > max) {
+        max = e.precedence;
+        maxPrecedenceIndeces = [i];
+      }
+    }
+  });
+  maxPrecedenceIndeces.forEach(i => {
+
+  })
+} 
+
+
+const setLetterValues = (data) => {
+  const tableData = [];
+  [...new Array(data.numRows)].forEach((r, row) => {
+    const rowData = [];
+    data.schema.forEach((el, i) => {
+      rowData.push(el.elType === 'L' && data.legend[el.value] ? data.legend[el.value][row] : null);
+    });
+    tableData.push(rowData);
+  });
+  console.log(tableData)
+  return tableData;
+}
+
+const setOperatorValues = (data) => {
+
+}
+
+export { setLetterValues as getRowData, simplify };
