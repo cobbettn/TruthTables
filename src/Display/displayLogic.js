@@ -3,12 +3,6 @@ import { green, red, grey } from '@material-ui/core/colors';
 import Card  from '@material-ui/core/Card';
 import theme from '../theme';
 
-/**
- * getHeaders
- * 
- * @param {*} arr 
- * @returns JSX for <th> elements in table
- */
 const getHeaders = (arr) => {
   const getStyle = (header) => {
     return {
@@ -22,16 +16,10 @@ const getHeaders = (arr) => {
   );
 };
 
-/**
- * getRows
- * 
- * @param {*} arr 
- * @returns JSX for <tr> elements in the table
- */
 const getRows = (arr) => {
   const getStyle = (rowVal) => {
     return {
-      backgroundColor: rowVal === true ? green['500'] :rowVal === false ? red['500'] : grey['500']
+      backgroundColor: rowVal === true ? green['500'] : rowVal === false ? red['500'] : grey['500']
     };
   }
   return arr.map((row, i) => 
@@ -40,7 +28,7 @@ const getRows = (arr) => {
         {row.map((val, key) =>  
           (
             <td key={key} style={getStyle(val)}>
-              {val === true ? 'T' : val === false ? 'F' : ''}
+              {val === true ? 'T' : val === false ? 'F' : '?'}
             </td>
           )
         )}
@@ -56,22 +44,8 @@ const getTableDimensions = (numSentenceLetters) => {
   };
 }
 
-/**
- * getTruthValFromCoordinates
- * 
- * @param {*} numRows 
- * @param {*} row 
- * @param {*} col
- * @returns boolean - truth value of table cell
- */
 const getTruthValFromCoordinates = (numRows, row, col) => Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2) === 0;
 
-/**
- * getLegend
- * 
- * @param {*} sentenceLetters 
- * @returns object representing table legend
- */
 const getLegend = (sentenceLetters) => {
   const { numRows, numCols } = getTableDimensions(sentenceLetters.length);
   const legend = {};
@@ -134,21 +108,29 @@ const getLegendTable = (sentenceLetters) => {
 const getSchemaTable = (tableData) => {
   const { schema, sentenceLetters, key } = tableData;
   const { numRows } = getTableDimensions(sentenceLetters.length);
+  const legend = getLegend(sentenceLetters);
   const style = { 
     display: !schema.length ? 'none' : null, 
     backgroundColor: !key ? theme.palette.grey['500'] : theme.palette.grey['700']
   };
 
-
+  const editorTableData = [];
+  for (let row = 0; row < numRows; row++) {
+    const rowData = [];
+    schema.forEach(e => {
+      rowData.push(e.elType === 'L' && legend[e.value] ? legend[e.value][row] : null);
+    });
+    editorTableData.push(rowData);
+  }
 
   const editorTableHeaders = getHeaders(schema);
-  // const editorTable = getRows(editorSchemaData);
+  const editorTable = getRows(editorTableData);
 
   return getCardTable({
     key: key ? key : 'editor',
     style: style,
     headers: editorTableHeaders,
-    // table: editorTable
+    table: editorTable
   });
 }
 
