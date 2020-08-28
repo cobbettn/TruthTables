@@ -13,20 +13,20 @@ const dragEnd = (drag, stateObj) => {
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
-      let element;
+      let dropElement; // element being dropped into schema builder
       switch (sourceId) {
         case "SchemaBuilder": 
-          element = tmpSchema.splice(sourceIndex, 1)[0]; 
+          dropElement = tmpSchema.splice(sourceIndex, 1)[0]; 
           break;
         case "LetterPicker": 
-          element = stateObj.sentenceLetters[sourceIndex];
+          dropElement = stateObj.sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
-          element = OperatorConfig[sourceIndex];
+          dropElement = OperatorConfig[sourceIndex];
           break;
         default:
       }
-      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, element);
+      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, dropElement);
     }
   }
   else {

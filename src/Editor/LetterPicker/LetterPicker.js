@@ -6,14 +6,14 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 const LetterPicker = () => {
   const { sentenceLetters } = useContext(Context);
-  const getStyles = (count) => { 
+  const getPaperStyles = (count) => { 
     return {
-      display: count === 0 ? 'none' : null,
+      display: count === 0 ? 'none' : 'flex',
       marginLeft: count > 0 ? '1rem' : null,
     }
   }
   return (
-    <Paper style={getStyles(sentenceLetters.length)} variant="outlined">
+    <Paper style={getPaperStyles(sentenceLetters.length)} variant="outlined">
       <Droppable droppableId="LetterPicker" direction="horizontal">
         {(provided, snapshot) => (
           <div 

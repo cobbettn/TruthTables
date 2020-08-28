@@ -16,7 +16,7 @@ const App = () => {
     setSentenceLetters: setSentenceLetters,
     setSchema: setSchema,
     setSchemataList: setSchemataList,
-  };
+  }
 
   return (
     <Box m={2}>

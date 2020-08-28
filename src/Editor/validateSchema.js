@@ -1,7 +1,7 @@
 const validateSchema = (schema) => {
   let isValid = true;
 
-  if (schema.length === 0) {
+  if (!schema.length) {
     return false; // empty schema
   } 
   else {
@@ -44,7 +44,7 @@ const validateSchema = (schema) => {
         default:
       } 
     });
-    // unclosed parenthesis
+    // unclosed parentheses
     if (openParen !== closeParen) isValid = false;
   }
 
