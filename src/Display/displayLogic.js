@@ -7,7 +7,7 @@ const getHeaders = (arr) => {
   const getStyle = (header) => {
     return {
       backgroundColor: header.bgColor ? header.bgColor : grey['700']
-    };
+    }
   };
   return arr.map((header, i) => 
     (
@@ -48,7 +48,7 @@ const getTruthValFromCoordinates = (numRows, row, col) => Math.floor(row / (numR
 
 const getLegend = (sentenceLetters) => {
   const { numRows, numCols } = getTableDimensions(sentenceLetters.length);
-  const legend = {};
+  const legend = {}
   for (let col = 0; col < numCols; col++) {
     const key = sentenceLetters[col].value;
     legend[key] = [];
@@ -78,14 +78,17 @@ const getLegendTable = (sentenceLetters) => {
   const legendTableHeaders = getHeaders(sentenceLetters);
   const style = {
     backgroundColor: theme.palette.grey['700']
-  };
+  }
   const legendTable = [];
   for (let row = 0; row < numRows; row++) {
     const rowElements = [];
     for (let col = 0; col < numCols; col++) {
       const truthVal = getTruthValFromCoordinates(numRows, row, col);
+      const cellColor = {
+        backgroundColor: truthVal ? green['500'] : red['500']
+      }
       rowElements.push(
-        <td key={col} style={{backgroundColor: truthVal ? green['500'] : red['500']}}>
+        <td key={col} style={cellColor}>
           {truthVal ? 'T' : 'F'}
         </td>
       );
@@ -111,26 +114,26 @@ const getSchemaTable = (tableData) => {
   const legend = getLegend(sentenceLetters);
   const style = { 
     display: !schema.length ? 'none' : null, 
-    backgroundColor: !key ? theme.palette.grey['500'] : theme.palette.grey['700']
-  };
+    backgroundColor: !key ? theme.palette.primary.main : theme.palette.grey['700']
+  }
 
-  const editorTableData = [];
+  const schemaTableData = [];
   for (let row = 0; row < numRows; row++) {
     const rowData = [];
     schema.forEach(e => {
       rowData.push(e.elType === 'L' && legend[e.value] ? legend[e.value][row] : null);
     });
-    editorTableData.push(rowData);
+    schemaTableData.push(rowData);
   }
 
-  const editorTableHeaders = getHeaders(schema);
-  const editorTable = getRows(editorTableData);
+  const schemaTableHeaders = getHeaders(schema);
+  const schemaTable = getRows(schemaTableData);
 
   return getCardTable({
     key: key ? key : 'editor',
     style: style,
-    headers: editorTableHeaders,
-    table: editorTable
+    headers: schemaTableHeaders,
+    table: schemaTable
   });
 }
 
