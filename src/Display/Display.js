@@ -19,8 +19,8 @@ const Display = () => {
     <Box className="Display" mt="1rem" style={{display: !sentenceLetters.length ? 'none' : 'flex'}}>
       <Paper elevation={5} style={{padding: '0.5rem', display: 'flex'}}>
         {legendTable}
-        {savedTables}
         {editorTable}
+        {savedTables}
       </Paper>
     </Box>
   );

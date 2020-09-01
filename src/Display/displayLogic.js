@@ -2,6 +2,7 @@ import React from 'react';
 import { green, red, grey } from '@material-ui/core/colors';
 import Card  from '@material-ui/core/Card';
 import theme from '../theme';
+import { Box } from '@material-ui/core';
 
 const getHeaders = (arr) => {
   const getStyle = (header) => {
@@ -17,24 +18,39 @@ const getHeaders = (arr) => {
 };
 
 const getRows = (arr) => {
-  const getStyle = (rowVal) => {
+  const getCellStyle = (val) => {
     return {
-      backgroundColor: rowVal === true ? green['500'] : rowVal === false ? red['500'] : grey['500']
+      backgroundColor: val === true ? green['500'] : val === false ? red['500'] : grey['500']
     };
   }
+  const getCellDisplayValue = (val) => {
+    let cellDisplayValue = '?';
+    if (typeof val === 'string') {
+      cellDisplayValue = val;
+    }
+    if (val === true) {
+      cellDisplayValue = 'T';
+    }
+    if (val === false) {
+      cellDisplayValue = 'F';
+    }
+    return cellDisplayValue;
+  }
+  
   return arr.map((row, i) => 
     (
       <tr key={i}>
         {row.map((val, key) =>  
           (
-            <td key={key} style={getStyle(val)}>
-              {val === true ? 'T' : val === false ? 'F' : '?'}
+            <td key={key} style={ getCellStyle(val) }>
+              { getCellDisplayValue(val) }
             </td>
           )
         )}
       </tr>
     )
   );
+
 };
 
 const getTableDimensions = (numSentenceLetters) => {
@@ -48,12 +64,12 @@ const getTruthValFromCoordinates = (numRows, row, col) => Math.floor(row / (numR
 
 const getLegend = (sentenceLetters) => {
   const { numRows, numCols } = getTableDimensions(sentenceLetters.length);
-  const legend = {}
+  const legend = {};
   for (let col = 0; col < numCols; col++) {
-    const key = sentenceLetters[col].value;
-    legend[key] = [];
+    const { value: legendKey }= sentenceLetters[col];
+    legend[legendKey] = [];
     for (let row = 0; row < numRows; row++) {
-      legend[key].push(getTruthValFromCoordinates(numRows, row, col));
+      legend[legendKey].push(getTruthValFromCoordinates(numRows, row, col));
     }
   }
   return legend;
@@ -61,8 +77,15 @@ const getLegend = (sentenceLetters) => {
 
 const getCardTable = (config) => {
   const { key, style, headers, table } = config;
+  const boxStyle = {
+    display: 'flex', 
+    justifyContent: 'center', 
+    padding: '0 0.25rem',
+    textShadow: '2px 2px 2px black'
+  }
   return (
-    <Card key={ key ? key : null } raised className="Card" style={style}>
+    <Card key={key} raised className="Card" style={style}>
+      <Box style={boxStyle}> {key} </Box>
       <table>
         <thead>
           <tr>{ headers }</tr>
@@ -71,6 +94,36 @@ const getCardTable = (config) => {
       </table>
     </Card>
   );
+}
+
+
+
+/**
+ * Returns an array containing the start and end of deepest scopes
+ * @param {*} schema 
+ */
+const getDeepestScopes = (schema) => {
+  let indeces = [];
+  let depth = 0, max = 0, start, end;
+  schema.forEach((el, i) => {
+    if (el.value === '(') {
+      depth++;
+      if (depth > max) {
+        max = depth;
+      }
+      if (depth >= max) {
+        start = i + 1;
+      }
+    }
+    if (el.value ===')') {
+      if (depth === max) {
+        end = i;
+        indeces.push([start, end]);
+      }
+      depth--;
+    }
+  });
+  return indeces;
 }
 
 const getLegendTable = (sentenceLetters) => {
@@ -101,7 +154,7 @@ const getLegendTable = (sentenceLetters) => {
   }
 
   return getCardTable({
-    key: 'legend',
+    key: 'Legend',
     style: style, 
     headers: legendTableHeaders, 
     table: legendTable
@@ -114,23 +167,34 @@ const getSchemaTable = (tableData) => {
   const legend = getLegend(sentenceLetters);
   const style = { 
     display: !schema.length ? 'none' : null, 
-    backgroundColor: !key ? theme.palette.primary.main : theme.palette.grey['700']
+    backgroundColor: theme.palette.grey['700']
   }
-
   const schemaTableData = [];
   for (let row = 0; row < numRows; row++) {
     const rowData = [];
-    schema.forEach(e => {
-      rowData.push(e.elType === 'L' && legend[e.value] ? legend[e.value][row] : null);
+    // writes in letter values for table data
+    schema.forEach(el => {
+      const { elType, value } = el;
+      let cellValue;
+      if (elType === 'L') {
+        cellValue = legend[value] ? legend[value][row] : null;
+      }
+      if (elType === 'G') {
+        cellValue = value;
+      }
+      rowData.push(cellValue);
     });
     schemaTableData.push(rowData);
   }
+
+  // pass in schemaTableData to a compute function
+  // const computed = getComputedTable(schema);
 
   const schemaTableHeaders = getHeaders(schema);
   const schemaTable = getRows(schemaTableData);
 
   return getCardTable({
-    key: key ? key : 'editor',
+    key: key ? key : 'Editor',
     style: style,
     headers: schemaTableHeaders,
     table: schemaTable
@@ -139,7 +203,7 @@ const getSchemaTable = (tableData) => {
 
 const getSavedSchemataTables = (tableData) => {
   return tableData.schemataList?.map((schema, i) => getSchemaTable({
-    key: `saved-${i}`,
+    key: schema.isConclusion ? `c${i + 1}`: `p${i + 1}`,
     schema: schema,
     sentenceLetters: tableData.sentenceLetters
   }));

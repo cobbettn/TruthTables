@@ -5,6 +5,6 @@ export default [
   {value: '\u21D2', elType: 'O', precedence: 3},  // MATERIAL CONDITIONAL
   {value: '\u21D4', elType: 'O', precedence: 3},  // BICONDITIONAL
   {value: '\u22BB', elType: 'O', precedence: 3},  // XOR
-  {value: '(',      elType: 'G', precedence: 4},  // OPEN PAREN
+  {value: '(',      elType: 'G'},                 // OPEN PAREN
   {value: ')',      elType: 'G'},                 // CLOSE PAREN
 ];
