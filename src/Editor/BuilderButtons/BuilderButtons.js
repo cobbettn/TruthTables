@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Box, Button, makeStyles } from '@material-ui/core';
-import validateSchema from '../validateSchema';
+import validateSchema from '../../lib/validateSchema';
 import Context from '../../context';
 import styles from './BuilderButton.style';
 

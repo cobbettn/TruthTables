@@ -36,13 +36,12 @@ const getRows = (arr) => {
     }
     return cellDisplayValue;
   }
-  
-  return arr.map((row, i) => 
+  return arr.map((row, rowKey) => 
     (
-      <tr key={i}>
-        {row.map((val, key) =>  
+      <tr key={rowKey}>
+        {row.map((val, cellKey) =>  
           (
-            <td key={key} style={ getCellStyle(val) }>
+            <td key={cellKey} style={ getCellStyle(val) }>
               { getCellDisplayValue(val) }
             </td>
           )
@@ -50,7 +49,6 @@ const getRows = (arr) => {
       </tr>
     )
   );
-
 };
 
 const getTableDimensions = (numSentenceLetters) => {
@@ -60,7 +58,7 @@ const getTableDimensions = (numSentenceLetters) => {
   };
 }
 
-const getTruthValFromCoordinates = (numRows, row, col) => Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2) === 0;
+const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
 
 const getLegend = (sentenceLetters) => {
   const { numRows, numCols } = getTableDimensions(sentenceLetters.length);
@@ -94,28 +92,26 @@ const getCardTable = (config) => {
       </table>
     </Card>
   );
-}
-
-
+} 
 
 /**
- * Returns an array containing the start and end of deepest scopes
+ * gets an array containing the start/end indeces of the deepest scope(s)
  * @param {*} schema 
  */
 const getDeepestScopes = (schema) => {
   let indeces = [];
   let depth = 0, max = 0, start, end;
   schema.forEach((el, i) => {
-    if (el.value === '(') {
+    if (el?.value === '(') {
       depth++;
       if (depth > max) {
         max = depth;
       }
       if (depth >= max) {
-        start = i + 1;
+        start = i;
       }
     }
-    if (el.value ===')') {
+    if (el?.value ===')') {
       if (depth === max) {
         end = i;
         indeces.push([start, end]);
@@ -126,6 +122,108 @@ const getDeepestScopes = (schema) => {
   return indeces;
 }
 
+/**
+ * pre-populates table model with letter and grouping values
+ * @param {*} schema 
+ * @param {*} numRows 
+ * @param {*} legend 
+ */
+const getTableModel = (schema, numRows, legend) => {
+  const tableModel = [];
+  for (let row = 0; row < numRows; row++) {
+    const rowData = [];
+    schema.forEach(el => {
+      const { elType, value } = el;
+      let cellValue;
+      if (elType === 'L' && legend[value]) {
+        cellValue = legend[value][row];
+      }
+      if (elType === 'G') {
+        cellValue = value;
+      }
+      rowData.push(cellValue);
+    });
+    tableModel.push(rowData);
+  }
+  return tableModel;
+}
+
+/**
+ * compute the 
+ * @param {*} schema
+ * @return number
+ */
+const getOperatorOrder = (schema) => {
+  const order = [];
+  for (let prec = 0; prec <= 3; prec++) {
+    for (let i = 0; i < schema.length; i++) {
+      if (schema[i]?.precedence === prec) order.push(i);
+    }
+  }
+  return order;
+}
+
+const doOperation = (operatorIndex, schema, tableModel, numRows) => {
+  const { value: operator } = schema[operatorIndex];
+  let result = [],  numArgs = 2;
+  for (let row = 0; row < numRows; row++) {
+    const left = tableModel[row][operatorIndex - 1];
+    const right = tableModel[row][operatorIndex + 1];
+    switch (operator) {
+      case '\u00AC': // not
+        numArgs = 1;
+        result.push(!right); 
+      break;
+      case '\u2228': // or
+        result.push(left || right); 
+      break;
+      case '\u2227': // and
+        result.push(left && right);
+      break;
+      case '\u21D2': // if
+        result.push(!left || right); 
+      break;
+      case '\u21D4': // iff
+        result.push(left === right);
+      break;
+      case '\u22BB': // xor
+        result.push(left !== right);
+      break;
+      default:
+    }
+  }
+  const operationResult = {
+    tableData: result,
+    deleteCount: numArgs
+  }; 
+  return operationResult;
+}
+
+const getComputedTable = (schema, tableModel, numRows) => {
+  const computeOperators = getOperatorOrder(schema);
+  const computeSchema = [...schema];
+  const computeTable = tableModel.map(row => row.slice()); // create deep copy of tableModel
+  let operators = getOperatorOrder(computeSchema);
+  while (operators.length > 0) {
+    const opIndex = operators.shift();
+    const modelIndex = computeOperators.shift();
+    const { tableData, deleteCount } = doOperation(opIndex, computeSchema, computeTable, numRows);
+    console.log('result', tableData);
+    tableModel.forEach((row, i) => row[modelIndex] = tableData[i]);
+    computeTable.forEach((row, i) => {
+      row.splice(deleteCount === 2 ? opIndex - 1 : opIndex, deleteCount + 1, tableData[i]);
+    });
+   
+    computeSchema.splice(deleteCount === 2 ? opIndex - 1 : opIndex, deleteCount + 1, {elType: 'C', value: tableData});
+    operators = getOperatorOrder(computeSchema);
+    console.log('computetable', computeTable)
+    console.log('tablemodel', tableModel);
+  }
+  
+  return tableModel;
+}
+
+// legend table
 const getLegendTable = (sentenceLetters) => {
   const { numCols, numRows } = getTableDimensions(sentenceLetters.length);
   const legendTableHeaders = getHeaders(sentenceLetters);
@@ -161,6 +259,7 @@ const getLegendTable = (sentenceLetters) => {
   });
 }
 
+// schema table
 const getSchemaTable = (tableData) => {
   const { schema, sentenceLetters, key } = tableData;
   const { numRows } = getTableDimensions(sentenceLetters.length);
@@ -169,29 +268,16 @@ const getSchemaTable = (tableData) => {
     display: !schema.length ? 'none' : null, 
     backgroundColor: theme.palette.grey['700']
   }
-  const schemaTableData = [];
-  for (let row = 0; row < numRows; row++) {
-    const rowData = [];
-    // writes in letter values for table data
-    schema.forEach(el => {
-      const { elType, value } = el;
-      let cellValue;
-      if (elType === 'L') {
-        cellValue = legend[value] ? legend[value][row] : null;
-      }
-      if (elType === 'G') {
-        cellValue = value;
-      }
-      rowData.push(cellValue);
-    });
-    schemaTableData.push(rowData);
-  }
 
-  // pass in schemaTableData to a compute function
-  // const computed = getComputedTable(schema);
+  const tableModel = getTableModel(schema, numRows, legend);
+
+  // call compute function and then pass result to the getRows fxn
+  const computedTable = getComputedTable(schema, tableModel, numRows);
+  console.log('getSchemaTable() tableModel: ', computedTable.tableModel);
+  // ... const schemaTable = getRows(computedTable);
 
   const schemaTableHeaders = getHeaders(schema);
-  const schemaTable = getRows(schemaTableData);
+  const schemaTable = getRows(tableModel);
 
   return getCardTable({
     key: key ? key : 'Editor',
@@ -201,6 +287,7 @@ const getSchemaTable = (tableData) => {
   });
 }
 
+// saved schemata tables
 const getSavedSchemataTables = (tableData) => {
   return tableData.schemataList?.map((schema, i) => getSchemaTable({
     key: schema.isConclusion ? `c${i + 1}`: `p${i + 1}`,
@@ -208,6 +295,5 @@ const getSavedSchemataTables = (tableData) => {
     sentenceLetters: tableData.sentenceLetters
   }));
 };
-
 
 export { getLegendTable, getSchemaTable, getSavedSchemataTables };
