@@ -95,34 +95,6 @@ const getCardTable = (config) => {
 } 
 
 /**
- * gets an array containing the start/end indeces of the deepest scope(s)
- * @param {*} schema 
- */
-const getDeepestScopes = (schema) => {
-  let indeces = [];
-  let depth = 0, max = 0, start, end;
-  schema.forEach((el, i) => {
-    if (el?.value === '(') {
-      depth++;
-      if (depth > max) {
-        max = depth;
-      }
-      if (depth >= max) {
-        start = i;
-      }
-    }
-    if (el?.value ===')') {
-      if (depth === max) {
-        end = i;
-        indeces.push([start, end]);
-      }
-      depth--;
-    }
-  });
-  return indeces;
-}
-
-/**
  * pre-populates table model with letter and grouping values
  * @param {*} schema 
  * @param {*} numRows 
@@ -148,82 +120,165 @@ const getTableModel = (schema, numRows, legend) => {
   return tableModel;
 }
 
-/**
- * compute the 
- * @param {*} schema
- * @return number
- */
-const getOperatorOrder = (schema) => {
-  const order = [];
+const setupOpMap = (schema) => {
+  const map = {};
+  const opMap = {};
+  schema.forEach((sym, i) => {
+    if (sym.elType === 'O' || sym.elType === 'N') {
+      const { value } = sym;
+      if (map[value]) {
+        map[value]++;
+      } 
+      else {
+        map[value] = 1;
+      } 
+      const id = `${value}${map[value]}`; // operator ids
+      sym.opMapId = id;
+      opMap[id] = i;
+    }
+  });
+  return opMap;
+}
+
+const getDeepestScopes = (schema) => {
+  let indeces = [];
+  let depth = 0, max = 0, start, end;
+  schema.forEach((el, i) => {
+    if (el?.value === '(') {
+      depth++;
+      if (depth > max) {
+        max = depth;
+      }
+      if (depth >= max) {
+        start = i;
+      }
+    }
+    if (el?.value ===')') {
+      if (depth === max) {
+        end = i;
+        indeces.push([start, end]);
+      }
+      depth--;
+    }
+  });
+  return indeces;
+}
+
+const getNextOperator = (schema) => {
   for (let prec = 0; prec <= 3; prec++) {
     for (let i = 0; i < schema.length; i++) {
-      if (schema[i]?.precedence === prec) order.push(i);
+      if (schema[i]?.precedence === prec) return i;
     }
   }
-  return order;
 }
 
-const doOperation = (operatorIndex, schema, tableModel, numRows) => {
-  const { value: operator } = schema[operatorIndex];
+const doOperation = (data) => {
+  const { schema, opIndex, table, numRows } = data;
+  const { value: operator, opMapId } = schema[opIndex];
   let result = [],  numArgs = 2;
   for (let row = 0; row < numRows; row++) {
-    const left = tableModel[row][operatorIndex - 1];
-    const right = tableModel[row][operatorIndex + 1];
+    let value;
+    let L, R;
+    if (opIndex - 1 >= 0) L = table[row][opIndex - 1];
+    if (opIndex + 1 < table[row].length) R = table[row][opIndex + 1];
     switch (operator) {
       case '\u00AC': // not
+        value = !R; 
         numArgs = 1;
-        result.push(!right); 
-      break;
+        break;
       case '\u2228': // or
-        result.push(left || right); 
-      break;
+        value = L || R; 
+        break;
       case '\u2227': // and
-        result.push(left && right);
-      break;
+        value = L && R;
+        break;
       case '\u21D2': // if
-        result.push(!left || right); 
-      break;
+        value = !L || R; 
+        break;
       case '\u21D4': // iff
-        result.push(left === right);
-      break;
+        value = L === R;
+        break;
       case '\u22BB': // xor
-        result.push(left !== right);
-      break;
+        value = L !== R;
+        break;
       default:
     }
+    result.push(value);
   }
-  const operationResult = {
-    tableData: result,
-    deleteCount: numArgs
-  }; 
-  return operationResult;
+  const resultObj = {
+    result: result,
+    numArgs: numArgs,
+    opMapId: opMapId
+  }
+  return resultObj;
 }
 
-const getComputedTable = (schema, tableModel, numRows) => {
-  const computeOperators = getOperatorOrder(schema);
-  const computeSchema = [...schema];
-  const computeTable = tableModel.map(row => row.slice()); // create deep copy of tableModel
-  let operators = getOperatorOrder(computeSchema);
-  while (operators.length > 0) {
-    const opIndex = operators.shift();
-    const modelIndex = computeOperators.shift();
-    const { tableData, deleteCount } = doOperation(opIndex, computeSchema, computeTable, numRows);
-    console.log('result', tableData);
-    tableModel.forEach((row, i) => row[modelIndex] = tableData[i]);
-    computeTable.forEach((row, i) => {
-      row.splice(deleteCount === 2 ? opIndex - 1 : opIndex, deleteCount + 1, tableData[i]);
+const computeTable = (tableData) => {
+  const { schema, tableModel, numRows } = tableData;
+  const compSchema = schema.map(el => Object.assign({}, el)); // make copy of schema
+  const compTable = tableModel.map(row => row.slice()); // make copy of table
+  const opMap = setupOpMap(compSchema); 
+  let scopes = getDeepestScopes(compSchema);
+  let scopeResult;
+  while (scopes.length > 0) {
+    const [ start, end ] = scopes.shift();
+    const subSchema = compSchema.splice(start, end + 1 - start);
+    subSchema.shift();
+    subSchema.pop();
+    const subTable = [];
+    compTable.forEach(row => {
+      const subTableData = row.splice(start, end + 1 - start);
+      subTableData.shift();
+      subTableData.pop();
+      subTable.push(subTableData);
     });
-   
-    computeSchema.splice(deleteCount === 2 ? opIndex - 1 : opIndex, deleteCount + 1, {elType: 'C', value: tableData});
-    operators = getOperatorOrder(computeSchema);
-    console.log('computetable', computeTable)
-    console.log('tablemodel', tableModel);
+    scopeResult = subTable; // set to subTable in event there are no operations
+    scopeResult = doOperations({
+      subSchema: subSchema,
+      subTable: subTable,
+      tableModel: tableModel,
+      opMap: opMap,
+      numRows: numRows
+    });
+    compSchema.splice(start, 0, {elType: 'SCOPE'});
+    for (let i = 0; i < compTable.length; i++) {
+      compTable[i].splice(start, 0, scopeResult[i]);
+    }
+    scopes = getDeepestScopes(compSchema);
   }
-  
+  doOperations({
+    subSchema: compSchema,
+    subTable: compTable,
+    tableModel: tableModel,
+    opMap: opMap,
+    numRows: numRows
+  });
   return tableModel;
 }
 
-// legend table
+const doOperations = (schemaData) => {
+  const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
+  let mainResult = subTable.flat();
+  let opIndex = getNextOperator(subSchema);
+  while (opIndex !== undefined) {
+    const { numArgs, opMapId, result } = doOperation({
+      schema: subSchema,
+      opIndex: opIndex, 
+      table: subTable,
+      numRows: numRows
+    });
+    mainResult = result;
+    subSchema.splice(numArgs === 2 ? opIndex - 1 : opIndex, numArgs + 1, {elType: 'COMPUTED'});
+    for (let i = 0; i < subTable.length; i++) {
+      subTable[i].splice(numArgs === 2 ? opIndex - 1 : opIndex, numArgs + 1, result[i]);
+    }
+    const modelIndex = opMap[opMapId];
+    tableModel.forEach((row, i)  => row[modelIndex] = result[i]);
+    opIndex = getNextOperator(subSchema);
+  }
+  return mainResult; // maybe return modelIndex here too for main op highlighting ??
+}
+
 const getLegendTable = (sentenceLetters) => {
   const { numCols, numRows } = getTableDimensions(sentenceLetters.length);
   const legendTableHeaders = getHeaders(sentenceLetters);
@@ -266,19 +321,16 @@ const getSchemaTable = (tableData) => {
   const legend = getLegend(sentenceLetters);
   const style = { 
     display: !schema.length ? 'none' : null, 
-    backgroundColor: theme.palette.grey['700']
+    backgroundColor: !key ? theme.palette.primary.dark : theme.palette.grey['700']
   }
-
   const tableModel = getTableModel(schema, numRows, legend);
-
-  // call compute function and then pass result to the getRows fxn
-  const computedTable = getComputedTable(schema, tableModel, numRows);
-  console.log('getSchemaTable() tableModel: ', computedTable.tableModel);
-  // ... const schemaTable = getRows(computedTable);
-
+  computeTable({
+    tableModel: tableModel,
+    schema: schema, 
+    numRows: numRows
+  });
   const schemaTableHeaders = getHeaders(schema);
   const schemaTable = getRows(tableModel);
-
   return getCardTable({
     key: key ? key : 'Editor',
     style: style,

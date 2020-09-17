@@ -8,15 +8,18 @@ import './Display.scss';
 const Display = () => {
   const { sentenceLetters, schema, schemataList } = useContext(Context);
   const legendTable = getLegendTable(sentenceLetters);
+  
   let editorTable;
   const savedTables = getSavedSchemataTables({
     schemataList: schemataList,
     sentenceLetters: sentenceLetters
   });
+  // move validation to inside getSchemaTable()?
   if (validateSchema(schema)) {
     editorTable = getSchemaTable({
       schema: schema, 
       sentenceLetters: sentenceLetters
+      // no key for editor?
     });
   }
 
@@ -36,6 +39,7 @@ const Display = () => {
       </Paper>
     </Box>
   );
+
 }
 
 export default Display;
