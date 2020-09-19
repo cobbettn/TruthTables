@@ -4,23 +4,32 @@ import Card  from '@material-ui/core/Card';
 import theme from '../theme';
 import { Box } from '@material-ui/core';
 
-const getHeaders = (arr) => {
-  const getStyle = (header) => {
+const getHeaders = (arr, mainOpIndex) => {
+  const getStyle = (header, index) => {
+    const mainOp = mainOpIndex === index;
     return {
-      backgroundColor: header.bgColor ? header.bgColor : grey['700']
-    }
+      backgroundColor: header.bgColor ? header.bgColor : grey['700'],
+      fontWeight: mainOp ? 'bold' : ''
+    };
   };
   return arr.map((header, i) => 
     (
-      <th style={getStyle(header)} key={i}>{header.value}</th>
+      <th className={i === mainOpIndex ? 'mainOp'  : ''} style={ getStyle(header, i) } key={i}>{header.value}</th>
     )
   );
 };
 
-const getRows = (arr) => {
-  const getCellStyle = (val) => {
+const getRows = (arr, mainOpIndex) => {
+  const getCellStyle = (val, index) => {
+    const mainOp = mainOpIndex === index;
     return {
-      backgroundColor: val === true ? green['500'] : val === false ? red['500'] : grey['500']
+      backgroundColor: 
+        val === true  ? 
+          mainOp ? green['700'] : green['500'] :
+        val === false ? 
+          mainOp ? red['700']   : red['500']   : 
+        grey['500'],
+      fontWeight: mainOp ? 'bold' : ''
     };
   }
   const getCellDisplayValue = (val) => {
@@ -36,12 +45,12 @@ const getRows = (arr) => {
     }
     return cellDisplayValue;
   }
-  return arr.map((row, rowKey) => 
+  return arr.map((row, rowIndex) => 
     (
-      <tr key={rowKey}>
-        {row.map((val, cellKey) =>  
+      <tr key={rowIndex}>
+        {row.map((val, cellIndex) =>  
           (
-            <td key={cellKey} style={ getCellStyle(val) }>
+            <td className={mainOpIndex === cellIndex ? 'mainOp' : ''} key={cellIndex} style={ getCellStyle(val, cellIndex) }>
               { getCellDisplayValue(val) }
             </td>
           )
@@ -219,7 +228,7 @@ const computeTable = (tableData) => {
   const compTable = tableModel.map(row => row.slice()); // make copy of table
   const opMap = setupOpMap(compSchema); 
   let scopes = getDeepestScopes(compSchema);
-  let scopeResult;
+  let i;
   while (scopes.length > 0) {
     const [ start, end ] = scopes.shift();
     const subSchema = compSchema.splice(start, end + 1 - start);
@@ -232,34 +241,39 @@ const computeTable = (tableData) => {
       subTableData.pop();
       subTable.push(subTableData);
     });
-    scopeResult = subTable; // set to subTable in event there are no operations
-    scopeResult = doOperations({
+    let res = subTable;
+    const { result, index } = doOperations({
       subSchema: subSchema,
       subTable: subTable,
       tableModel: tableModel,
       opMap: opMap,
       numRows: numRows
     });
+    res = result;
+    i = index;
     compSchema.splice(start, 0, {elType: 'SCOPE'});
     for (let i = 0; i < compTable.length; i++) {
-      compTable[i].splice(start, 0, scopeResult[i]);
+      compTable[i].splice(start, 0, res[i]);
     }
     scopes = getDeepestScopes(compSchema);
   }
-  doOperations({
+  console.log(i)
+  const { index } = doOperations({
     subSchema: compSchema,
     subTable: compTable,
     tableModel: tableModel,
     opMap: opMap,
     numRows: numRows
   });
-  return tableModel;
+  if (index) i = index;
+  return i;
 }
 
 const doOperations = (schemaData) => {
   const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
   let mainResult = subTable.flat();
   let opIndex = getNextOperator(subSchema);
+  let modelIndex;
   while (opIndex !== undefined) {
     const { numArgs, opMapId, result } = doOperation({
       schema: subSchema,
@@ -272,11 +286,17 @@ const doOperations = (schemaData) => {
     for (let i = 0; i < subTable.length; i++) {
       subTable[i].splice(numArgs === 2 ? opIndex - 1 : opIndex, numArgs + 1, result[i]);
     }
-    const modelIndex = opMap[opMapId];
-    tableModel.forEach((row, i)  => row[modelIndex] = result[i]);
+    modelIndex = opMap[opMapId];
+    for (let i = 0; i < tableModel.length; i++) {
+      tableModel[i][modelIndex] = result[i];
+    }
     opIndex = getNextOperator(subSchema);
   }
-  return mainResult; // maybe return modelIndex here too for main op highlighting ??
+  const endResult = {
+    result: mainResult,
+    index: modelIndex
+  }
+  return endResult;
 }
 
 const getLegendTable = (sentenceLetters) => {
@@ -324,13 +344,13 @@ const getSchemaTable = (tableData) => {
     backgroundColor: !key ? theme.palette.primary.dark : theme.palette.grey['700']
   }
   const tableModel = getTableModel(schema, numRows, legend);
-  computeTable({
+  const mainOpIndex = computeTable({
     tableModel: tableModel,
     schema: schema, 
     numRows: numRows
   });
-  const schemaTableHeaders = getHeaders(schema);
-  const schemaTable = getRows(tableModel);
+  const schemaTableHeaders = getHeaders(schema, mainOpIndex);
+  const schemaTable = getRows(tableModel, mainOpIndex);
   return getCardTable({
     key: key ? key : 'Editor',
     style: style,
@@ -342,7 +362,7 @@ const getSchemaTable = (tableData) => {
 // saved schemata tables
 const getSavedSchemataTables = (tableData) => {
   return tableData.schemataList?.map((schema, i) => getSchemaTable({
-    key: schema.isConclusion ? `c${i + 1}`: `p${i + 1}`,
+    key: schema.isConclusion ? `C${i + 1}`: `P${i + 1}`,
     schema: schema,
     sentenceLetters: tableData.sentenceLetters
   }));
