@@ -4,19 +4,6 @@ import { Box, Card } from '@material-ui/core';
 import theme from '../theme';
 import validateSchema from '../validateSchema';
 
-const getLegend = (sentenceLetters) => {
-  const { numRows, numCols } = getTableDimensions(sentenceLetters?.length);
-  const legend = {};
-  for (let col = 0; col < numCols; col++) {
-    const { value: legendKey }= sentenceLetters[col];
-    legend[legendKey] = [];
-    for (let row = 0; row < numRows; row++) {
-      legend[legendKey].push(getTruthValFromCoordinates(numRows, row, col));
-    }
-  }
-  return legend;
-};
-
 const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
 
 const getHeaders = (headers, mainOpIndex) => {
@@ -83,6 +70,19 @@ const getTableDimensions = (numSentenceLetters) => {
     numCols: numSentenceLetters, 
     numRows: Math.pow(2, numSentenceLetters)
   };
+};
+
+const getLegend = (sentenceLetters) => {
+  const { numRows, numCols } = getTableDimensions(sentenceLetters?.length);
+  const legend = {};
+  for (let col = 0; col < numCols; col++) {
+    const { value: legendKey }= sentenceLetters[col];
+    legend[legendKey] = [];
+    for (let row = 0; row < numRows; row++) {
+      legend[legendKey].push(getTruthValFromCoordinates(numRows, row, col));
+    }
+  }
+  return legend;
 };
 
 const getTableModel = (schema, numRows, legend) => {
@@ -171,11 +171,21 @@ const getDeepestScopes = (schema) => {
 };
 
 const getNextOperator = (schema) => {
+  let index, innermostNot;
   for (let prec = 0; prec <= 3; prec++) {
     for (let i = 0; i < schema.length; i++) {
-      if (schema[i]?.precedence === prec) return i;
+      if (schema[i]?.precedence === prec) {
+        index = i;
+        if (prec === 0) {
+          innermostNot = index;
+        }
+        else {
+          return innermostNot || index;
+        }
+      } 
     }
   }
+  return index;
 };
 
 const computeOperation = (data) => {
@@ -225,7 +235,7 @@ const computeTable = (tableData) => {
   const tableCopy = tableModel.map(row => row.slice());
   const opMap = setupOpMap(schemaCopy); 
   let scopes = getDeepestScopes(schemaCopy);
-  let i;
+  let index;
   while (scopes.length > 0) {
     const [ start, end ] = scopes.shift();
     const subSchema = schemaCopy.splice(start, end + 1 - start);
@@ -239,7 +249,7 @@ const computeTable = (tableData) => {
       subTable.push(subTableData);
     });
     let res = subTable;
-    const { result, index } = doOperations({
+    const { result, mainOpIndex } = doOperations({
       subSchema: subSchema,
       subTable: subTable,
       tableModel: tableModel,
@@ -247,28 +257,28 @@ const computeTable = (tableData) => {
       numRows: numRows
     });
     res = result;
-    i = index;
+    index = mainOpIndex
     schemaCopy.splice(start, 0, {elType: 'SCOPE'});
     for (let i = 0; i < tableCopy.length; i++) {
       tableCopy[i].splice(start, 0, res[i]);
     }
     scopes = getDeepestScopes(schemaCopy);
   }
-  const { index } = doOperations({
+  const { mainOpIndex } = doOperations({
     subSchema: schemaCopy,
     subTable: tableCopy,
     tableModel: tableModel,
     opMap: opMap,
     numRows: numRows
   });
-  if (index) i = index;
-  return i;
+  return mainOpIndex >= 0 ? mainOpIndex : index;
 };
 
 const doOperations = (schemaData) => {
   const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
   let mainResult = subTable.flat();
   let opIndex = getNextOperator(subSchema);
+  console.log('op', opIndex)
   let modelIndex;
   while (opIndex !== undefined) {
     const { numArgs, opMapId, result } = computeOperation({
@@ -290,7 +300,7 @@ const doOperations = (schemaData) => {
   }
   const endResult = {
     result: mainResult,
-    index: modelIndex
+    mainOpIndex: modelIndex
   }
   return endResult;
 };
