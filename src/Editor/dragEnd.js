@@ -1,4 +1,4 @@
-import OperatorConfig from '../Editor/OperatorPicker/operatorConfig';
+import OperatorConfig from './operatorConfig';
 /**
  * dragEnd()
  * 

@@ -1,7 +1,12 @@
+/**
+ * Checks if a schema is well-formed
+ * 
+ * @param {*} schema 
+ */
 const validateSchema = (schema) => {
   let isValid = true;
 
-  if (!schema.length) {
+  if (schema.length === 0) {
     return false; // empty schema
   } 
   else {

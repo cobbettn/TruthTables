@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Box, Button, makeStyles } from '@material-ui/core';
-import validateSchema from '../../lib/validateSchema';
+import validateSchema from '../../validateSchema';
 import Context from '../../context';
 import styles from './BuilderButton.style';
 
@@ -13,8 +13,8 @@ const BuilderButtons = () => {
   const clearSchemaBuilder = () => setSchema([]);
   const saveValidSchema = () => {
     if (isValidSchema) {
-      setSchemataList([...schemataList, schema]); // save
-      clearSchemaBuilder(); // clear schema builder
+      setSchemataList([...schemataList, schema]);
+      clearSchemaBuilder();
     } 
   }
   return (

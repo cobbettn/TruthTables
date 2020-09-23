@@ -2,7 +2,7 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DnDElement from '../DnDElement/DnDElement';
-import operatorConfig from './operatorConfig';
+import operatorConfig from '../operatorConfig';
 
 const OperatorPicker = () => {
   return (

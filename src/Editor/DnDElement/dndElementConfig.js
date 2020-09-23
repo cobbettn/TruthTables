@@ -2,7 +2,7 @@ import grey from '@material-ui/core/colors/grey';
 
 export const getStyles = (color) => {
   return {
-    backgroundColor: color ? color : grey['700'],
+    backgroundColor: color || grey['700'],
   };
 }
 

@@ -7,10 +7,11 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 const LetterPicker = () => {
   const { sentenceLetters } = useContext(Context);
   const getPaperStyles = (count) => { 
-    return {
-      display: count === 0 ? 'none' : 'flex',
-      marginLeft: count > 0 ? '1rem' : null,
+    const style = {
+      display: count === 0 ? 'none' : 'flex'
     }
+    if (count > 0) style.marginLeft = '1rem';
+    return style;
   }
   return (
     <Paper style={getPaperStyles(sentenceLetters.length)} variant="outlined">

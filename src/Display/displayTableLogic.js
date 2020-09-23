@@ -1,51 +1,69 @@
 import React from 'react';
 import { green, red, grey } from '@material-ui/core/colors';
-import Card  from '@material-ui/core/Card';
+import { Box, Card } from '@material-ui/core';
 import theme from '../theme';
-import { Box } from '@material-ui/core';
+import validateSchema from '../validateSchema';
 
-const getHeaders = (arr, mainOpIndex) => {
+const getLegend = (sentenceLetters) => {
+  const { numRows, numCols } = getTableDimensions(sentenceLetters?.length);
+  const legend = {};
+  for (let col = 0; col < numCols; col++) {
+    const { value: legendKey }= sentenceLetters[col];
+    legend[legendKey] = [];
+    for (let row = 0; row < numRows; row++) {
+      legend[legendKey].push(getTruthValFromCoordinates(numRows, row, col));
+    }
+  }
+  return legend;
+};
+
+const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
+
+const getHeaders = (headers, mainOpIndex) => {
   const getStyle = (header, index) => {
-    const mainOp = mainOpIndex === index;
-    return {
-      backgroundColor: header.bgColor ? header.bgColor : grey['700'],
-      fontWeight: mainOp ? 'bold' : ''
-    };
+    const style = {
+      backgroundColor: header.bgColor || grey['700'],
+    }
+    if (mainOpIndex === index) style.fontWeight = 'bold'
+    return style;
   };
-  return arr.map((header, i) => 
+  return headers.map((header, i) => 
     (
       <th className={i === mainOpIndex ? 'mainOp'  : ''} style={ getStyle(header, i) } key={i}>{header.value}</th>
     )
   );
 };
 
-const getRows = (arr, mainOpIndex) => {
+const getRows = (rows, mainOpIndex) => {
   const getCellStyle = (val, index) => {
-    const mainOp = mainOpIndex === index;
-    return {
+    const isMainOpColumn = mainOpIndex === index;
+    const style = {
       backgroundColor: 
         val === true  ? 
-          mainOp ? green['700'] : green['500'] :
+          isMainOpColumn ? green['700'] : green['500'] :
         val === false ? 
-          mainOp ? red['700']   : red['500']   : 
-        grey['500'],
-      fontWeight: mainOp ? 'bold' : ''
+          isMainOpColumn ? red['700']   : red['500']   : 
+        grey['500']
     };
+    if (mainOpIndex === index) {
+      style.fontWeight = 'bold'
+    }
+    return style;
   }
   const getCellDisplayValue = (val) => {
     let cellDisplayValue = '?';
     if (typeof val === 'string') {
       cellDisplayValue = val;
     }
-    if (val === true) {
+    else if (val === true) {
       cellDisplayValue = 'T';
     }
-    if (val === false) {
+    else if (val === false) {
       cellDisplayValue = 'F';
     }
     return cellDisplayValue;
   }
-  return arr.map((row, rowIndex) => 
+  return rows.map((row, rowIndex) => 
     (
       <tr key={rowIndex}>
         {row.map((val, cellIndex) =>  
@@ -65,22 +83,27 @@ const getTableDimensions = (numSentenceLetters) => {
     numCols: numSentenceLetters, 
     numRows: Math.pow(2, numSentenceLetters)
   };
-}
+};
 
-const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
-
-const getLegend = (sentenceLetters) => {
-  const { numRows, numCols } = getTableDimensions(sentenceLetters.length);
-  const legend = {};
-  for (let col = 0; col < numCols; col++) {
-    const { value: legendKey }= sentenceLetters[col];
-    legend[legendKey] = [];
-    for (let row = 0; row < numRows; row++) {
-      legend[legendKey].push(getTruthValFromCoordinates(numRows, row, col));
-    }
+const getTableModel = (schema, numRows, legend) => {
+  const tableModel = [];
+  for (let row = 0; row < numRows; row++) {
+    const rowData = [];
+    schema.forEach(el => {
+      const { elType, value } = el;
+      let cellValue;
+      if (elType === 'L' && legend[value]) {
+        cellValue = legend[value][row];
+      }
+      if (elType === 'G') {
+        cellValue = value;
+      }
+      rowData.push(cellValue);
+    });
+    tableModel.push(rowData);
   }
-  return legend;
-}
+  return tableModel;
+};
 
 const getCardTable = (config) => {
   const { key, style, headers, table } = config;
@@ -101,33 +124,7 @@ const getCardTable = (config) => {
       </table>
     </Card>
   );
-} 
-
-/**
- * pre-populates table model with letter and grouping values
- * @param {*} schema 
- * @param {*} numRows 
- * @param {*} legend 
- */
-const getTableModel = (schema, numRows, legend) => {
-  const tableModel = [];
-  for (let row = 0; row < numRows; row++) {
-    const rowData = [];
-    schema.forEach(el => {
-      const { elType, value } = el;
-      let cellValue;
-      if (elType === 'L' && legend[value]) {
-        cellValue = legend[value][row];
-      }
-      if (elType === 'G') {
-        cellValue = value;
-      }
-      rowData.push(cellValue);
-    });
-    tableModel.push(rowData);
-  }
-  return tableModel;
-}
+};
 
 const setupOpMap = (schema) => {
   const map = {};
@@ -147,7 +144,7 @@ const setupOpMap = (schema) => {
     }
   });
   return opMap;
-}
+};
 
 const getDeepestScopes = (schema) => {
   let indeces = [];
@@ -171,7 +168,7 @@ const getDeepestScopes = (schema) => {
     }
   });
   return indeces;
-}
+};
 
 const getNextOperator = (schema) => {
   for (let prec = 0; prec <= 3; prec++) {
@@ -179,9 +176,9 @@ const getNextOperator = (schema) => {
       if (schema[i]?.precedence === prec) return i;
     }
   }
-}
+};
 
-const doOperation = (data) => {
+const computeOperation = (data) => {
   const { schema, opIndex, table, numRows } = data;
   const { value: operator, opMapId } = schema[opIndex];
   let result = [],  numArgs = 2;
@@ -220,22 +217,22 @@ const doOperation = (data) => {
     opMapId: opMapId
   }
   return resultObj;
-}
+};
 
 const computeTable = (tableData) => {
   const { schema, tableModel, numRows } = tableData;
-  const compSchema = schema.map(el => Object.assign({}, el)); // make copy of schema
-  const compTable = tableModel.map(row => row.slice()); // make copy of table
-  const opMap = setupOpMap(compSchema); 
-  let scopes = getDeepestScopes(compSchema);
+  const schemaCopy = schema.map(el => Object.assign({}, el));
+  const tableCopy = tableModel.map(row => row.slice());
+  const opMap = setupOpMap(schemaCopy); 
+  let scopes = getDeepestScopes(schemaCopy);
   let i;
   while (scopes.length > 0) {
     const [ start, end ] = scopes.shift();
-    const subSchema = compSchema.splice(start, end + 1 - start);
+    const subSchema = schemaCopy.splice(start, end + 1 - start);
     subSchema.shift();
     subSchema.pop();
     const subTable = [];
-    compTable.forEach(row => {
+    tableCopy.forEach(row => {
       const subTableData = row.splice(start, end + 1 - start);
       subTableData.shift();
       subTableData.pop();
@@ -251,23 +248,22 @@ const computeTable = (tableData) => {
     });
     res = result;
     i = index;
-    compSchema.splice(start, 0, {elType: 'SCOPE'});
-    for (let i = 0; i < compTable.length; i++) {
-      compTable[i].splice(start, 0, res[i]);
+    schemaCopy.splice(start, 0, {elType: 'SCOPE'});
+    for (let i = 0; i < tableCopy.length; i++) {
+      tableCopy[i].splice(start, 0, res[i]);
     }
-    scopes = getDeepestScopes(compSchema);
+    scopes = getDeepestScopes(schemaCopy);
   }
-  console.log(i)
   const { index } = doOperations({
-    subSchema: compSchema,
-    subTable: compTable,
+    subSchema: schemaCopy,
+    subTable: tableCopy,
     tableModel: tableModel,
     opMap: opMap,
     numRows: numRows
   });
   if (index) i = index;
   return i;
-}
+};
 
 const doOperations = (schemaData) => {
   const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
@@ -275,7 +271,7 @@ const doOperations = (schemaData) => {
   let opIndex = getNextOperator(subSchema);
   let modelIndex;
   while (opIndex !== undefined) {
-    const { numArgs, opMapId, result } = doOperation({
+    const { numArgs, opMapId, result } = computeOperation({
       schema: subSchema,
       opIndex: opIndex, 
       table: subTable,
@@ -297,75 +293,78 @@ const doOperations = (schemaData) => {
     index: modelIndex
   }
   return endResult;
-}
+};
 
 const getLegendTable = (sentenceLetters) => {
   const { numCols, numRows } = getTableDimensions(sentenceLetters.length);
-  const legendTableHeaders = getHeaders(sentenceLetters);
-  const style = {
-    backgroundColor: theme.palette.grey['700']
-  }
-  const legendTable = [];
-  for (let row = 0; row < numRows; row++) {
-    const rowElements = [];
-    for (let col = 0; col < numCols; col++) {
-      const truthVal = getTruthValFromCoordinates(numRows, row, col);
-      const cellColor = {
-        backgroundColor: truthVal ? green['500'] : red['500']
+  if (numCols > 0) {
+    const legendTableHeaders = getHeaders(sentenceLetters);
+    const style = {
+      backgroundColor: theme.palette.grey['700']
+    }
+    const legendTable = [];
+    for (let row = 0; row < numRows; row++) {
+      const rowElements = [];
+      for (let col = 0; col < numCols; col++) {
+        const truthVal = getTruthValFromCoordinates(numRows, row, col);
+        const cellColor = {
+          backgroundColor: truthVal ? green['500'] : red['500']
+        }
+        rowElements.push(
+          <td key={col} style={cellColor}>
+            {truthVal ? 'T' : 'F'}
+          </td>
+        );
       }
-      rowElements.push(
-        <td key={col} style={cellColor}>
-          {truthVal ? 'T' : 'F'}
-        </td>
+      legendTable.push(
+        <tr key={row}>
+          {rowElements}
+        </tr>
       );
     }
-    legendTable.push(
-      <tr key={row}>
-        {rowElements}
-      </tr>
-    );
+    return getCardTable({
+      key: 'Legend',
+      style: style, 
+      headers: legendTableHeaders, 
+      table: legendTable
+    });
   }
+};
 
-  return getCardTable({
-    key: 'Legend',
-    style: style, 
-    headers: legendTableHeaders, 
-    table: legendTable
-  });
-}
-
-// schema table
 const getSchemaTable = (tableData) => {
   const { schema, sentenceLetters, key } = tableData;
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
+  const tableModel = getTableModel(schema, numRows, legend);
+  let schemaTableHeaders = getHeaders(schema);
+  let schemaTable = getRows(tableModel);
   const style = { 
-    display: !schema.length ? 'none' : null, 
+    display: schema.length === 0 ? 'none' : null, 
     backgroundColor: !key ? theme.palette.primary.dark : theme.palette.grey['700']
   }
-  const tableModel = getTableModel(schema, numRows, legend);
-  const mainOpIndex = computeTable({
-    tableModel: tableModel,
-    schema: schema, 
-    numRows: numRows
-  });
-  const schemaTableHeaders = getHeaders(schema, mainOpIndex);
-  const schemaTable = getRows(tableModel, mainOpIndex);
+  if (validateSchema(schema)) {
+    const mainOpIndex = computeTable({
+      tableModel: tableModel,
+      schema: schema, 
+      numRows: numRows
+    });
+    schemaTableHeaders = getHeaders(schema, mainOpIndex);
+    schemaTable = getRows(tableModel, mainOpIndex);
+  }
   return getCardTable({
-    key: key ? key : 'Editor',
+    key: key || 'Editor',
     style: style,
     headers: schemaTableHeaders,
     table: schemaTable
   });
-}
+};
 
-// saved schemata tables
-const getSavedSchemataTables = (tableData) => {
-  return tableData.schemataList?.map((schema, i) => getSchemaTable({
+const getSavedTables = (tableData) => {
+  return tableData.savedList?.map((schema, i) => getSchemaTable({
     key: schema.isConclusion ? `C${i + 1}`: `P${i + 1}`,
     schema: schema,
     sentenceLetters: tableData.sentenceLetters
   }));
 };
 
-export { getLegendTable, getSchemaTable, getSavedSchemataTables };
+export { getLegendTable, getSchemaTable, getSavedTables };
