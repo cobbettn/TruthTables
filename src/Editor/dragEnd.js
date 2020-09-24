@@ -1,11 +1,11 @@
-import OperatorConfig from '../Editor/OperatorPicker/operatorConfig';
+import OperatorConfig from './operatorConfig';
 /**
  * dragEnd()
  * 
  * Drag and drop handler for the Editor component.
  * 
  * @param {Object} drag       drag and drop event data
- * @param {Object} stateObj   object containing setters and getters for the application state
+ * @param {Object} stateObj   object containing setters and getters for the app's state
  */
 const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
@@ -31,7 +31,7 @@ const dragEnd = (drag, stateObj) => {
   }
   else {
     if (sourceId === "SchemaBuilder") {
-      tmpSchema.splice(sourceIndex, 1); 
+      tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
   stateObj.setSchema([...tmpSchema]); // update schema state

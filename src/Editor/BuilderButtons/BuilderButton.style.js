@@ -7,11 +7,9 @@ const styles = (makeStyles, validSchema, schemaSize) => {
   } = theme.palette.primary;
   return makeStyles(
     {
-      
       common : {
         minWidth: '6rem',
       },
-
       saveBtn: {
         marginLeft: '0.5rem',
         backgroundColor: validSchema ? primaryMain : null,
@@ -22,7 +20,6 @@ const styles = (makeStyles, validSchema, schemaSize) => {
           backgroundColor: validSchema ? primaryLight : null,
         },
       },
-      
       clearBtn: {
         backgroundColor: schemaSize > 0 ? primaryMain : null,
         '&:hover': {
@@ -32,7 +29,6 @@ const styles = (makeStyles, validSchema, schemaSize) => {
           backgroundColor: schemaSize > 0 ? primaryLight : null,
         },
       },
-
     }
   );
 }
