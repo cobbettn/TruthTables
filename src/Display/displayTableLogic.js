@@ -180,7 +180,7 @@ const getNextOperator = (schema) => {
           innermostNot = index;
         }
         else {
-          return innermostNot || index;
+          return innermostNot >= 0 ? innermostNot : index;
         }
       } 
     }
@@ -188,7 +188,7 @@ const getNextOperator = (schema) => {
   return index;
 };
 
-const computeOperation = (data) => {
+const computeOperator = (data) => {
   const { schema, opIndex, table, numRows } = data;
   const { value: operator, opMapId } = schema[opIndex];
   let result = [],  numArgs = 2;
@@ -235,12 +235,13 @@ const computeTable = (tableData) => {
   const tableCopy = tableModel.map(row => row.slice());
   const opMap = setupOpMap(schemaCopy); 
   let scopes = getDeepestScopes(schemaCopy);
-  let index;
+  let scopedIndex;
+  // do scoped operations (if any) from the innermost scope outwards
   while (scopes.length > 0) {
     const [ start, end ] = scopes.shift();
     const subSchema = schemaCopy.splice(start, end + 1 - start);
-    subSchema.shift();
-    subSchema.pop();
+    subSchema.shift();  // remove opening paren
+    subSchema.pop();    // remoce closing paren
     const subTable = [];
     tableCopy.forEach(row => {
       const subTableData = row.splice(start, end + 1 - start);
@@ -248,7 +249,6 @@ const computeTable = (tableData) => {
       subTableData.pop();
       subTable.push(subTableData);
     });
-    let res = subTable;
     const { result, mainOpIndex } = doOperations({
       subSchema: subSchema,
       subTable: subTable,
@@ -256,14 +256,14 @@ const computeTable = (tableData) => {
       opMap: opMap,
       numRows: numRows
     });
-    res = result;
-    index = mainOpIndex
+    scopedIndex = mainOpIndex;
     schemaCopy.splice(start, 0, {elType: 'SCOPE'});
     for (let i = 0; i < tableCopy.length; i++) {
-      tableCopy[i].splice(start, 0, res[i]);
+      tableCopy[i].splice(start, 0, result[i]);
     }
     scopes = getDeepestScopes(schemaCopy);
   }
+  // do remaining unscoped operations (if any)
   const { mainOpIndex } = doOperations({
     subSchema: schemaCopy,
     subTable: tableCopy,
@@ -271,17 +271,17 @@ const computeTable = (tableData) => {
     opMap: opMap,
     numRows: numRows
   });
-  return mainOpIndex >= 0 ? mainOpIndex : index;
+  if (mainOpIndex >= 0) scopedIndex = mainOpIndex;
+  return scopedIndex;
 };
 
 const doOperations = (schemaData) => {
   const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
-  let mainResult = subTable.flat();
+  let mainResult = subTable.flat();  // .flat() needed for simplifications of '(p)'
   let opIndex = getNextOperator(subSchema);
-  console.log('op', opIndex)
   let modelIndex;
   while (opIndex !== undefined) {
-    const { numArgs, opMapId, result } = computeOperation({
+    const { numArgs, opMapId, result } = computeOperator({
       schema: subSchema,
       opIndex: opIndex, 
       table: subTable,
@@ -298,11 +298,11 @@ const doOperations = (schemaData) => {
     }
     opIndex = getNextOperator(subSchema);
   }
-  const endResult = {
+  const finalResult = {
     result: mainResult,
     mainOpIndex: modelIndex
   }
-  return endResult;
+  return finalResult;
 };
 
 const getLegendTable = (sentenceLetters) => {
