@@ -1,46 +1,40 @@
-import Colors from '../colors';
-
-const dragEnd = (drag, schema, setSchema) => {
+import OperatorConfig from './operatorConfig';
+/**
+ * dragEnd()
+ * 
+ * Drag and drop handler for the Editor component.
+ * 
+ * @param {Object} drag       drag and drop event data
+ * @param {Object} stateObj   object containing setters and getters for the app's state
+ */
+const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const tmpSchema = [...schema];
+  const tmpSchema = [...stateObj.schema];
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
-      if (sourceId === "SchemaBuilder") {
-        const symbol = tmpSchema.splice(sourceIndex, 1)[0]; 
-        tmpSchema.splice(destIndex, 0, symbol);
+      let dropElement; // element being dropped into schema builder
+      switch (sourceId) {
+        case "SchemaBuilder": 
+          dropElement = tmpSchema.splice(sourceIndex, 1)[0]; 
+          break;
+        case "LetterPicker": 
+          dropElement = stateObj.sentenceLetters[sourceIndex];
+          break;
+        case "OperatorPicker":
+          dropElement = OperatorConfig[sourceIndex];
+          break;
+        default:
       }
-      else {
-        const symbol = drag.draggableId.substring(0, 1);
-        const schemaSymbol = { value: symbol };
-        // grouping and negation are also in operator picker
-        if (sourceId === "OperatorPicker") {
-          const not = '\u00AC';
-          if (symbol.match(/[()]/)) {
-            schemaSymbol.elType = 'G';
-          }
-          else if (symbol === not) {
-            schemaSymbol.elType = 'N';
-          }
-          else {
-            schemaSymbol.elType = 'O';
-          }
-        }
-        if (sourceId === "LetterPicker") {
-          const colorIndex = symbol.charCodeAt(0) - 112; // revert back to ascii 
-          schemaSymbol.elType = 'L';
-          schemaSymbol.bgColor = Colors[colorIndex];
-        }
-        tmpSchema.splice(destIndex, 0, schemaSymbol);
-      } 
+      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, dropElement);
     }
   }
   else {
     if (sourceId === "SchemaBuilder") {
-      tmpSchema.splice(sourceIndex, 1); 
+      tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  setSchema([...tmpSchema]); // update schema state
+  stateObj.setSchema([...tmpSchema]); // update schema state
 }
 
 export default dragEnd;

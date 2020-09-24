@@ -1,3 +1,8 @@
+/**
+ * Checks if a schema is well-formed
+ * 
+ * @param {*} schema 
+ */
 const validateSchema = (schema) => {
   let isValid = true;
 
@@ -44,7 +49,7 @@ const validateSchema = (schema) => {
         default:
       } 
     });
-    // unclosed parenthesis
+    // unclosed parentheses
     if (openParen !== closeParen) isValid = false;
   }
 

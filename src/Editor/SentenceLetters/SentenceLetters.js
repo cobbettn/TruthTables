@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Context from '../../context';
-import getInputProps from './sentenceLettersConfig';
+import getInputProps from '../sentenceLettersConfig';
 
 const SentenceLetters = () => {
-  const { sentenceCount, setSentenceCount } = useContext(Context);
-  const inputProps = getInputProps(sentenceCount, setSentenceCount);
+  const { sentenceLetters, setSentenceLetters } = useContext(Context);
+  const inputProps = getInputProps(sentenceLetters, setSentenceLetters);
   return (
     <TextField
       style={{width: '5.5rem'}}

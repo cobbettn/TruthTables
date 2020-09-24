@@ -1,4 +1,4 @@
-import Colors from '../../letterColors';
+import Colors from '../letterColors';
 
 const getInputProps =  (sentenceLetters, setSentenceLetters) => {
   const min = 0, max = 6;
