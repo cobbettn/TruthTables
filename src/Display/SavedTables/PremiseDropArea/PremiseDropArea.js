@@ -1,20 +1,19 @@
-import React, { useContext } from 'react';
-import { Paper } from '@material-ui/core';
+import React from 'react';
+import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import Context from '../../context';
-import DnDElement from '../DnDElement/DnDElement';
+import { getSavedTables } from '../../displayTableLogic';
 
-const SchemaBuilder = () => {
-  const { schema } = useContext(Context);
+const PremiseDropArea = (props) => {
+  const premiseTables =  getSavedTables(props);
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
-    height: '3.5rem',
+    width: '100%',
     backgroundColor: isDraggingOver && grey['900']
   });
   return (
-    <Paper variant="outlined">
-      <Droppable droppableId='SchemaBuilder' direction="horizontal">
+    <Paper variant="outlined" style={{display: 'flex', flexBasis: '66%'}}>
+      <Droppable droppableId='PremiseDropZone' direction="horizontal">
         {(provided, snapshot) => (
           <div 
             style={getDropStyle(snapshot.isDraggingOver)}
@@ -22,32 +21,29 @@ const SchemaBuilder = () => {
             {...provided.droppableProps}
             {...provided.dragHandleProps}
           >
-            {schema.map((config, i) => (
+            { premiseTables && premiseTables.map((premiseTable, i) => (
               <Draggable 
-                draggableId={`${config.value}${i}`} 
-                key={`${config.value}${i}`} 
+                draggableId={`p${i}`} 
+                key={`p${i}`} 
                 index={i} 
               >
-                {(provided, snapshot) => (
+                { (provided, snapshot) => (
                   <div 
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-
-                    {/* schemaBuilderEl determines whether DnDElement is in the builder or a picker */}
-                    <DnDElement config={{...config, schemaBuilderEl: true}}/>
-
+                    { premiseTable }
                   </div>
-                )}
+                ) }
               </Draggable>
-            ))}
+            )) }
             {provided.placeholder}
           </div>
         )}
       </Droppable>
     </Paper>
-  );
+  )
 }
 
-export default SchemaBuilder;
+export default PremiseDropArea;

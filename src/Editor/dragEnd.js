@@ -16,7 +16,7 @@ const dragEnd = (drag, stateObj) => {
       let dropElement; // element being dropped into schema builder
       switch (sourceId) {
         case "SchemaBuilder": 
-          dropElement = tmpSchema.splice(sourceIndex, 1)[0]; 
+          [dropElement] = tmpSchema.splice(sourceIndex, 1); 
           break;
         case "LetterPicker": 
           dropElement = stateObj.sentenceLetters[sourceIndex];

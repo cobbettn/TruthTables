@@ -370,8 +370,8 @@ const getSchemaTable = (tableData) => {
 };
 
 const getSavedTables = (tableData) => {
-  return tableData.savedList?.map((schema, i) => getSchemaTable({
-    key: schema.isConclusion ? `C${i + 1}`: `P${i + 1}`,
+  return tableData.premises?.map((schema, i) => getSchemaTable({
+    key: `P${i + 1}`,
     schema: schema,
     sentenceLetters: tableData.sentenceLetters
   }));
