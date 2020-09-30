@@ -5,7 +5,7 @@ import Context from '../../context';
 import styles from './BuilderButton.style';
 
 const BuilderButtons = () => {
-  const { schema, setSchema, schemataList, setSchemataList } = useContext(Context);
+  const { schema, setSchema, premises, setPremises } = useContext(Context);
   const isValidSchema = validateSchema(schema);
   const schemaSize = schema.length;
   const useStyles = styles(makeStyles, isValidSchema, schemaSize);
@@ -13,7 +13,7 @@ const BuilderButtons = () => {
   const clearSchemaBuilder = () => setSchema([]);
   const saveValidSchema = () => {
     if (isValidSchema) {
-      setSchemataList([...schemataList, schema]);
+      setPremises([...premises, schema]);
       clearSchemaBuilder();
     } 
   }

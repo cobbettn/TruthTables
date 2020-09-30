@@ -7,35 +7,33 @@ import EditorTable from './EditorTable/EditorTable';
 import SavedTables from './SavedTables/SavedTables';
 
 const Display = () => {
-  const { sentenceLetters, schema, schemataList } = useContext(Context);;
+  const { sentenceLetters, schema, premises } = useContext(Context);;
   const boxStyle = {
     display: sentenceLetters.length > 0 ? 'flex' : 'none'
   };
   const paperStyle = {
     padding: '0.5rem', 
-    display: 'flex'
+    display: 'flex',
+    flexDirection: 'column'
   };
-  const savedPaperStyle = {
-    display: schemataList.length > 0 ? 'flex' : 'none',
-    marginTop: '1rem',
-    padding: '0.5rem',
-  }
   return (
     <Box className="Display" mt="1rem" style={boxStyle}>
       <Paper elevation={5} style={paperStyle}>
-        <LegendTable
-          sentenceLetters={sentenceLetters}
-        />
-        <EditorTable  
-          sentenceLetters={sentenceLetters}
-          schema={schema}
-        />
-      </Paper>
-      <Paper elevation={5} style={savedPaperStyle}>
-        <SavedTables
-          sentenceLetters={sentenceLetters}
-          savedList={schemataList}
-        />
+        <Box display="flex">
+          <LegendTable
+            sentenceLetters={sentenceLetters}
+          />
+          <EditorTable  
+            sentenceLetters={sentenceLetters}
+            schema={schema}
+          />
+        </Box>
+        <Box>
+          <SavedTables
+            sentenceLetters={sentenceLetters}
+            premises={premises}
+          />
+        </Box>
       </Paper>
     </Box>
   );
