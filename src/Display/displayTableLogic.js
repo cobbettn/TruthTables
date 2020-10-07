@@ -1,6 +1,6 @@
 import React from 'react';
 import { green, red, grey } from '@material-ui/core/colors';
-import { Box, Card } from '@material-ui/core';
+import { Box, Card, Typography } from '@material-ui/core';
 import theme from '../theme';
 import validateSchema from '../validateSchema';
 
@@ -16,7 +16,7 @@ const getHeaders = (headers, mainOpIndex) => {
   };
   return headers.map((header, i) => 
     (
-      <th className={i === mainOpIndex ? 'mainOp'  : ''} style={ getStyle(header, i) } key={i}>{header.value}</th>
+      <th className={i === mainOpIndex ? 'mainOp' : ''} style={ getStyle(header, i) } key={i}>{header.value}</th>
     )
   );
 };
@@ -106,16 +106,32 @@ const getTableModel = (schema, numRows, legend) => {
 };
 
 const getCardTable = (config) => {
-  const { key, style, headers, table } = config;
-  const boxStyle = {
-    display: 'flex', 
-    justifyContent: 'center', 
-    padding: '0 0.25rem',
-    textShadow: '2px 2px 2px black'
+  const { style, headers, table, onEdit, onDelete, showButtons } = config;
+  const buttonStyle = {
+    backgroundColor: grey[600],
+    border: `1px solid ${grey[900]}`,
+    width: '1.5rem',
+    height: '1.5rem',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '0.1rem',
+    borderRadius: '3px', 
+    cursor: 'pointer',
+    boxShadow: `1px 1px 1px ${grey[800]}`
   }
+  const buttons = (
+    <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
+      <Box style={buttonStyle} onClick={onEdit}>
+        <Typography>{'\u270E'}</Typography>
+      </Box>
+      <Box style={buttonStyle} onClick={onDelete}>
+        <Typography>{'\u{1F5D1}'}</Typography>
+      </Box>
+    </Box>
+  );
   return (
-    <Card key={key} raised className="Card" style={style}>
-      <Box style={boxStyle}> {key} </Box>
+    <Card raised className="Card" style={style}>
+      { showButtons &&  buttons }
       <table>
         <thead>
           <tr>{ headers }</tr>
@@ -305,53 +321,18 @@ const doOperations = (schemaData) => {
   return finalResult;
 };
 
-const getLegendTable = (sentenceLetters) => {
-  const { numCols, numRows } = getTableDimensions(sentenceLetters.length);
-  if (numCols > 0) {
-    const legendTableHeaders = getHeaders(sentenceLetters);
-    const style = {
-      backgroundColor: theme.palette.grey['700']
-    }
-    const legendTable = [];
-    for (let row = 0; row < numRows; row++) {
-      const rowElements = [];
-      for (let col = 0; col < numCols; col++) {
-        const truthVal = getTruthValFromCoordinates(numRows, row, col);
-        const cellColor = {
-          backgroundColor: truthVal ? green['500'] : red['500']
-        }
-        rowElements.push(
-          <td key={col} style={cellColor}>
-            {truthVal ? 'T' : 'F'}
-          </td>
-        );
-      }
-      legendTable.push(
-        <tr key={row}>
-          {rowElements}
-        </tr>
-      );
-    }
-    return getCardTable({
-      key: 'Legend',
-      style: style, 
-      headers: legendTableHeaders, 
-      table: legendTable
-    });
-  }
-};
-
 const getSchemaTable = (tableData) => {
-  const { schema, sentenceLetters, key } = tableData;
+  const { schema, sentenceLetters, onEdit, onDelete, showButtons } = tableData;
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
   const tableModel = getTableModel(schema, numRows, legend);
   let schemaTableHeaders = getHeaders(schema);
   let schemaTable = getRows(tableModel);
   const style = { 
-    display: schema.length === 0 ? 'none' : null, 
-    backgroundColor: !key ? theme.palette.primary.dark : theme.palette.grey['700']
+    display: schema.length === 0 && 'none',
+    backgroundColor: !showButtons ? theme.palette.primary.dark : theme.palette.grey['700']
   }
+
   if (validateSchema(schema)) {
     const mainOpIndex = computeTable({
       tableModel: tableModel,
@@ -362,19 +343,34 @@ const getSchemaTable = (tableData) => {
     schemaTable = getRows(tableModel, mainOpIndex);
   }
   return getCardTable({
-    key: key || 'Editor',
     style: style,
     headers: schemaTableHeaders,
-    table: schemaTable
+    table: schemaTable,
+    onEdit: onEdit,
+    onDelete: onDelete,
+    showButtons
   });
 };
 
 const getSavedTables = (tableData) => {
-  return tableData.premises?.map((schema, i) => getSchemaTable({
-    key: `P${i + 1}`,
+  const { sentenceLetters, premises, setPremises, setSchema } = tableData;
+  const onEdit = (index) => {
+    const [schema] = premises.splice(index, index + 1);
+    setPremises([...premises]);
+    setSchema(schema);
+  }
+  const onDelete = (index) => {
+    premises.splice(index, index + 1);
+    setPremises([...premises]);
+  }
+  return premises.map((schema, i) => getSchemaTable({
+    sentenceLetters: sentenceLetters,
     schema: schema,
-    sentenceLetters: tableData.sentenceLetters
+    tableType: 'Premise',
+    onEdit: () => onEdit(i),
+    onDelete: () => onDelete(i),
+    showButtons: true
   }));
 };
 
-export { getLegendTable, getSchemaTable, getSavedTables };
+export { getSchemaTable, getSavedTables };

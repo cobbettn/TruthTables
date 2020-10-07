@@ -22,7 +22,7 @@ const SchemaBuilder = () => {
             {...provided.droppableProps}
             {...provided.dragHandleProps}
           >
-            {schema.map((config, i) => (
+            {schema && schema.map((config, i) => (
               <Draggable 
                 draggableId={`${config.value}${i}`} 
                 key={`${config.value}${i}`} 

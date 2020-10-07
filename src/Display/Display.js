@@ -2,14 +2,13 @@ import React, { useContext } from 'react';
 import { Paper, Box } from '@material-ui/core';
 import './Display.scss';
 import Context from '../context';
-import LegendTable from './LegendTable/LegendTable';
 import EditorTable from './EditorTable/EditorTable';
 import SavedTables from './SavedTables/SavedTables';
 
 const Display = () => {
-  const { sentenceLetters, schema, premises } = useContext(Context);;
+  const { sentenceLetters, schema, premises, conclusion } = useContext(Context);;
   const boxStyle = {
-    display: sentenceLetters.length > 0 ? 'flex' : 'none'
+    display: schema.length > 0 || premises.length > 0 || conclusion ? 'flex' : 'none'
   };
   const paperStyle = {
     padding: '0.5rem', 
@@ -19,21 +18,14 @@ const Display = () => {
   return (
     <Box className="Display" mt="1rem" style={boxStyle}>
       <Paper elevation={5} style={paperStyle}>
-        <Box display="flex">
-          <LegendTable
-            sentenceLetters={sentenceLetters}
-          />
-          <EditorTable  
-            sentenceLetters={sentenceLetters}
-            schema={schema}
-          />
-        </Box>
-        <Box>
-          <SavedTables
-            sentenceLetters={sentenceLetters}
-            premises={premises}
-          />
-        </Box>
+        <EditorTable  
+          sentenceLetters={sentenceLetters}
+          schema={schema}
+        />
+        <SavedTables
+          sentenceLetters={sentenceLetters}
+          premises={premises}
+        />
       </Paper>
     </Box>
   );

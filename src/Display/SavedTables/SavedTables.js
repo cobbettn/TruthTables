@@ -7,7 +7,7 @@ import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
 import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
 
 const SavedTables = () => {
-  const { sentenceLetters, premises, setPremises, conclusion, setConclusion } = useContext(context);
+  const { premises, setPremises, conclusion, setConclusion } = useContext(context);
   const onDragEnd = (drag) => {
     const stateObj = {
       premises: premises,
@@ -21,13 +21,13 @@ const SavedTables = () => {
     <Box style={{display: !conclusion && premises.length === 0 && 'none'}}>
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{display: 'flex', flexDirection:'row'}}>
-          <PremiseDropArea
-            sentenceLetters={sentenceLetters}
+          <PremiseDropArea 
             premises={premises}
+            setPremises={setPremises}
           />
-          <ConclusionDropArea
-            sentenceLetters={sentenceLetters}
-            schema={conclusion}
+          <ConclusionDropArea 
+            conclusion={conclusion}
+            setConclusion={setConclusion}
           />
         </div>
       </DragDropContext>
