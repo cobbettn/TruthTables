@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { getSchemaTable } from '../../displayTableLogic'
+import Context from '../../../context';
 
 const ConclusionDropArea = (props) => {
-  const conclusionTable = props.schema && getSchemaTable({...props, key: 'C'});
+  const { conclusion, setConclusion } = props;
+  const { sentenceLetters, setSchema } = useContext(Context);
+  const schemaTableData = {
+    sentenceLetters: sentenceLetters,
+    schema: conclusion,
+    tableType: 'Conclusion',
+    onEdit: () => {
+      setSchema(conclusion);
+      setConclusion(null);
+    },
+    onDelete: () => {
+      setConclusion(null);
+    },
+    showButtons: true
+  }
+
+  const conclusionTable = conclusion && getSchemaTable(schemaTableData);
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     width: '100%',

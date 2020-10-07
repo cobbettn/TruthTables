@@ -2,9 +2,9 @@ import React from 'react';
 import { getSchemaTable } from '../displayTableLogic';
 
 const EditorTable = (props) => {
-  const editorTable = getSchemaTable(props);
+  const editorTable = getSchemaTable({...props, showButtons: false});
   return (
-    <div>
+    <div style={{display: 'flex'}}>
       { editorTable }
     </div>
   );
