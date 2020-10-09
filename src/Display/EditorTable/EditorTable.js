@@ -2,7 +2,14 @@ import React from 'react';
 import { getSchemaTable } from '../displayTableLogic';
 
 const EditorTable = (props) => {
-  const editorTable = getSchemaTable({...props, showButtons: false});
+  const { sentenceLetters, schema } = props;
+  const { symbols } = schema;
+  const editorTableData = {
+    sentenceLetters: sentenceLetters,
+    schema: symbols,
+    showButtons: false
+  }
+  const editorTable = getSchemaTable(editorTableData);
   return (
     <div style={{display: 'flex'}}>
       { editorTable }

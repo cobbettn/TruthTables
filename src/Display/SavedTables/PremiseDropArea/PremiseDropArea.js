@@ -2,19 +2,19 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getSavedTables } from '../../displayTableLogic';
+import { getSavedPremiseTables } from '../../displayTableLogic';
 import Context from '../../../context';
 
 const PremiseDropArea = (props) => {
   const { premises, setPremises } = props;
   const { sentenceLetters, setSchema } = useContext(Context);
-  const savedTablesData = {
+  const savedPremisesData = {
     sentenceLetters: sentenceLetters,
     premises: premises,
     setPremises: setPremises,
     setSchema: setSchema
   }
-  const premiseTables = premises && getSavedTables(savedTablesData);
+  const premiseTables = premises && getSavedPremiseTables(savedPremisesData);
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     width: '100%',
