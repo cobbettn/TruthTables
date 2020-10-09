@@ -7,6 +7,7 @@ import DnDElement from '../DnDElement/DnDElement';
 
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
+  const { symbols } = schema;
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     height: '3.5rem',
@@ -22,7 +23,7 @@ const SchemaBuilder = () => {
             {...provided.droppableProps}
             {...provided.dragHandleProps}
           >
-            {schema && schema.map((config, i) => (
+            {symbols && symbols.map((config, i) => (
               <Draggable 
                 draggableId={`${config.value}${i}`} 
                 key={`${config.value}${i}`} 

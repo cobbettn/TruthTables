@@ -9,7 +9,8 @@ import OperatorConfig from './operatorConfig';
  */
 const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const tmpSchema = [...stateObj.schema];
+  const { symbols } = stateObj.schema;
+  const tmpSchema = [...symbols];
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
@@ -34,7 +35,7 @@ const dragEnd = (drag, stateObj) => {
       tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  stateObj.setSchema([...tmpSchema]); // update schema state
+  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema]}); // update schema state
 }
 
 export default dragEnd;

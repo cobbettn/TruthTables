@@ -13,7 +13,7 @@ const ConclusionDropArea = (props) => {
     schema: conclusion,
     tableType: 'Conclusion',
     onEdit: () => {
-      setSchema(conclusion);
+      setSchema({type: 'C', symbols: conclusion});
       setConclusion(null);
     },
     onDelete: () => {

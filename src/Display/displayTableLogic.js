@@ -352,12 +352,12 @@ const getSchemaTable = (tableData) => {
   });
 };
 
-const getSavedTables = (tableData) => {
+const getSavedPremiseTables = (tableData) => {
   const { sentenceLetters, premises, setPremises, setSchema } = tableData;
   const onEdit = (index) => {
     const [schema] = premises.splice(index, index + 1);
     setPremises([...premises]);
-    setSchema(schema);
+    setSchema({type: 'P', symbols: schema});
   }
   const onDelete = (index) => {
     premises.splice(index, index + 1);
@@ -373,4 +373,4 @@ const getSavedTables = (tableData) => {
   }));
 };
 
-export { getSchemaTable, getSavedTables };
+export { getSchemaTable, getSavedPremiseTables };
