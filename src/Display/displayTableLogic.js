@@ -121,6 +121,14 @@ const getCardTable = (config) => {
   }
   const buttons = (
     <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
+      
+      <Box style={buttonStyle} onClick={onDelete}>
+        <Typography>{'\u23EA'}</Typography>
+      </Box>
+      <Box style={buttonStyle} onClick={onDelete}>
+        <Typography>{'\u23E9'}</Typography>
+      </Box>
+      
       <Box style={buttonStyle} onClick={onEdit}>
         <Typography>{'\u270E'}</Typography>
       </Box>
