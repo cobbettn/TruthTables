@@ -17,7 +17,10 @@ const BuilderButtons = () => {
   });
   const saveValidSchema = () => {
     if (isValidSchema) {
-      type === 'P' ? setPremises([...premises, symbols]) : setConclusion(symbols);
+      const steps = symbols.filter(s => s.elType === 'O' || s.elType === 'N').length;
+      type === 'P' ? 
+        setPremises([...premises, {symbols: symbols, steps: steps}]) :
+        setConclusion({symbols: symbols, steps: steps});
       clearSchemaBuilder();
     } 
   }

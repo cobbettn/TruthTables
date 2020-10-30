@@ -106,7 +106,7 @@ const getTableModel = (schema, numRows, legend) => {
 };
 
 const getCardTable = (config) => {
-  const { style, headers, table, onEdit, onDelete, showButtons } = config;
+  const { style, headers, table, onEdit, onDelete, onNext, onPrev, showButtons } = config;
   const buttonStyle = {
     backgroundColor: grey[600],
     border: `1px solid ${grey[900]}`,
@@ -122,10 +122,10 @@ const getCardTable = (config) => {
   const buttons = (
     <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
       
-      <Box style={buttonStyle} onClick={onDelete}>
+      <Box style={buttonStyle} onClick={onPrev}>
         <Typography>{'\u23EA'}</Typography>
       </Box>
-      <Box style={buttonStyle} onClick={onDelete}>
+      <Box style={buttonStyle} onClick={onNext}>
         <Typography>{'\u23E9'}</Typography>
       </Box>
       
@@ -255,11 +255,13 @@ const computeOperator = (data) => {
 
 const computeTable = (tableData) => {
   const { schema, tableModel, numRows } = tableData;
-  const schemaCopy = schema.map(el => Object.assign({}, el));
+  let { symbols, steps } = schema;
+  const schemaCopy = symbols.map(el => Object.assign({}, el));
   const tableCopy = tableModel.map(row => row.slice());
   const opMap = setupOpMap(schemaCopy); 
   let scopes = getDeepestScopes(schemaCopy);
   let scopedIndex;
+  
   // do scoped operations (if any) from the innermost scope outwards
   while (scopes.length > 0) {
     const [ start, end ] = scopes.shift();
@@ -273,13 +275,15 @@ const computeTable = (tableData) => {
       subTableData.pop();
       subTable.push(subTableData);
     });
-    const { result, mainOpIndex } = doOperations({
+    const { result, mainOpIndex, stepsLeft } = doOperations({
       subSchema: subSchema,
       subTable: subTable,
       tableModel: tableModel,
       opMap: opMap,
-      numRows: numRows
+      numRows: numRows,
+      steps: steps
     });
+    steps = stepsLeft;
     scopedIndex = mainOpIndex;
     schemaCopy.splice(start, 0, {elType: 'SCOPE'});
     for (let i = 0; i < tableCopy.length; i++) {
@@ -293,7 +297,8 @@ const computeTable = (tableData) => {
     subTable: tableCopy,
     tableModel: tableModel,
     opMap: opMap,
-    numRows: numRows
+    numRows: numRows,
+    steps: steps
   });
   if (mainOpIndex >= 0) scopedIndex = mainOpIndex;
   return scopedIndex;
@@ -301,10 +306,12 @@ const computeTable = (tableData) => {
 
 const doOperations = (schemaData) => {
   const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
+  let { steps } = schemaData;
   let mainResult = subTable.flat();  // .flat() needed for simplifications of '(p)'
   let opIndex = getNextOperator(subSchema);
   let modelIndex;
-  while (opIndex !== undefined) {
+
+  while (opIndex !== undefined && steps > 0) {
     const { numArgs, opMapId, result } = computeOperator({
       schema: subSchema,
       opIndex: opIndex, 
@@ -321,33 +328,37 @@ const doOperations = (schemaData) => {
       tableModel[i][modelIndex] = result[i];
     }
     opIndex = getNextOperator(subSchema);
+    steps--;
   }
   const finalResult = {
     result: mainResult,
-    mainOpIndex: modelIndex
+    mainOpIndex: modelIndex,
+    stepsLeft: steps
   }
   return finalResult;
 };
 
 const getSchemaTable = (tableData) => {
-  const { schema, sentenceLetters, onEdit, onDelete, showButtons } = tableData;
+  const { schema, sentenceLetters, onEdit, onDelete, onNext, onPrev, showButtons } = tableData;
+  let { symbols, steps } = schema;
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
-  const tableModel = getTableModel(schema, numRows, legend);
-  let schemaTableHeaders = getHeaders(schema);
+  const tableModel = getTableModel(symbols, numRows, legend);
+  let schemaTableHeaders = getHeaders(symbols);
   let schemaTable = getRows(tableModel);
   const style = { 
-    display: schema.length === 0 && 'none',
+    display: symbols.length === 0 && 'none',
     backgroundColor: !showButtons ? theme.palette.primary.dark : theme.palette.grey['700']
   }
 
-  if (validateSchema(schema)) {
+  if (validateSchema(symbols)) {
     const mainOpIndex = computeTable({
       tableModel: tableModel,
       schema: schema, 
-      numRows: numRows
+      numRows: numRows,
+      steps: steps
     });
-    schemaTableHeaders = getHeaders(schema, mainOpIndex);
+    schemaTableHeaders = getHeaders(symbols, mainOpIndex);
     schemaTable = getRows(tableModel, mainOpIndex);
   }
   return getCardTable({
@@ -356,6 +367,8 @@ const getSchemaTable = (tableData) => {
     table: schemaTable,
     onEdit: onEdit,
     onDelete: onDelete,
+    onNext: onNext,
+    onPrev: onPrev,
     showButtons
   });
 };
@@ -365,10 +378,20 @@ const getSavedPremiseTables = (tableData) => {
   const onEdit = (index) => {
     const [schema] = premises.splice(index, index + 1);
     setPremises([...premises]);
-    setSchema({type: 'P', symbols: schema});
+    schema.type = 'P';
+    setSchema({...schema});
   }
   const onDelete = (index) => {
     premises.splice(index, index + 1);
+    setPremises([...premises]);
+  }
+  const onNext = (index) => {
+    const max = premises[index].symbols.filter(s => s.elType === 'O' || s.elType === 'N').length;
+    premises[index].steps < max && premises[index].steps++;
+    setPremises([...premises]);
+  }
+  const onPrev = (index) => {
+    premises[index].steps > 0 && premises[index].steps--;
     setPremises([...premises]);
   }
   return premises.map((schema, i) => getSchemaTable({
@@ -377,6 +400,8 @@ const getSavedPremiseTables = (tableData) => {
     tableType: 'Premise',
     onEdit: () => onEdit(i),
     onDelete: () => onDelete(i),
+    onNext: () => onNext(i),
+    onPrev: () => onPrev(i),
     showButtons: true
   }));
 };

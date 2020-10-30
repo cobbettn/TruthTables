@@ -8,7 +8,8 @@ const App = () => {
   const [ sentenceLetters, setSentenceLetters ] = useState([]); // the number of different sentence letters available in the editor
   const [ schema, setSchema ] = useState({
     symbols: [],
-    type: 'P'
+    type: 'P',
+    steps: null
   }); // schema that displays in editor
   const [ premises, setPremises ] = useState([]); // schemata that have been saved
   const [ conclusion, setConclusion ] = useState(null); // the conclusion
