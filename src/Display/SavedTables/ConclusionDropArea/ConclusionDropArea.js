@@ -4,6 +4,7 @@ import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { getSchemaTable } from '../../displayTableLogic'
 import Context from '../../../context';
+import { getMaxSteps } from '../../../lib';
 
 const ConclusionDropArea = (props) => {
   const { conclusion, setConclusion } = props;
@@ -13,11 +14,21 @@ const ConclusionDropArea = (props) => {
     schema: conclusion,
     tableType: 'Conclusion',
     onEdit: () => {
-      setSchema({type: 'C', symbols: conclusion});
+      conclusion.type = 'C'
+      setSchema({...conclusion});
       setConclusion(null);
     },
     onDelete: () => {
       setConclusion(null);
+    },
+    onNext: () => {
+      const maxSteps = getMaxSteps(conclusion.symbols);
+      conclusion.steps < maxSteps && conclusion.steps++;
+      setConclusion({...conclusion});
+    },
+    onPrev: () => {
+      conclusion.steps > 0 && conclusion.steps--;
+      setConclusion({...conclusion});
     },
     showButtons: true
   }

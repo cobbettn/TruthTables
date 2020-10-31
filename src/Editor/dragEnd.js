@@ -1,4 +1,5 @@
 import OperatorConfig from './operatorConfig';
+import { getMaxSteps } from '../lib';
 /**
  * dragEnd()
  * 
@@ -35,7 +36,8 @@ const dragEnd = (drag, stateObj) => {
       tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema]}); // update schema state
+  const steps = getMaxSteps(tmpSchema);
+  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
 }
 
 export default dragEnd;

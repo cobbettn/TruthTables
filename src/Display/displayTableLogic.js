@@ -3,6 +3,7 @@ import { green, red, grey } from '@material-ui/core/colors';
 import { Box, Card, Typography } from '@material-ui/core';
 import theme from '../theme';
 import validateSchema from '../validateSchema';
+import { getMaxSteps } from '../lib';
 
 const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
 
@@ -305,7 +306,7 @@ const computeTable = (tableData) => {
 };
 
 const doOperations = (schemaData) => {
-  const {subSchema, subTable, tableModel, opMap, numRows } = schemaData;
+  const { subSchema, subTable, tableModel, opMap, numRows } = schemaData;
   let { steps } = schemaData;
   let mainResult = subTable.flat();  // .flat() needed for simplifications of '(p)'
   let opIndex = getNextOperator(subSchema);
@@ -386,7 +387,7 @@ const getSavedPremiseTables = (tableData) => {
     setPremises([...premises]);
   }
   const onNext = (index) => {
-    const max = premises[index].symbols.filter(s => s.elType === 'O' || s.elType === 'N').length;
+    const max = getMaxSteps(premises[index].symbols);
     premises[index].steps < max && premises[index].steps++;
     setPremises([...premises]);
   }
