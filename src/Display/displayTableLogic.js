@@ -285,7 +285,7 @@ const computeTable = (tableData) => {
       steps: steps
     });
     steps = stepsLeft;
-    scopedIndex = mainOpIndex;
+    if (mainOpIndex) scopedIndex = mainOpIndex;
     schemaCopy.splice(start, 0, {elType: 'SCOPE'});
     for (let i = 0; i < tableCopy.length; i++) {
       tableCopy[i].splice(start, 0, result[i]);
@@ -331,6 +331,7 @@ const doOperations = (schemaData) => {
     opIndex = getNextOperator(subSchema);
     steps--;
   }
+  console.log(modelIndex);
   const finalResult = {
     result: mainResult,
     mainOpIndex: modelIndex,
@@ -378,9 +379,10 @@ const getSavedPremiseTables = (tableData) => {
   const { sentenceLetters, premises, setPremises, setSchema } = tableData;
   const onEdit = (index) => {
     const [schema] = premises.splice(index, index + 1);
+    const steps = getMaxSteps(schema.symbols);
     setPremises([...premises]);
     schema.type = 'P';
-    setSchema({...schema});
+    setSchema({...schema, steps: steps});
   }
   const onDelete = (index) => {
     premises.splice(index, index + 1);
