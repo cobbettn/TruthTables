@@ -341,7 +341,7 @@ const doOperations = (schemaData) => {
 };
 
 const getSchemaTable = (tableData) => {
-  const { schema, sentenceLetters, onEdit, onDelete, onNext, onPrev, showButtons } = tableData;
+  const { schema, sentenceLetters, onEdit, onDelete, onPrev, onNext, showButtons } = tableData;
   let { symbols, steps } = schema;
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
@@ -379,10 +379,10 @@ const getSavedPremiseTables = (tableData) => {
   const { sentenceLetters, premises, setPremises, setSchema } = tableData;
   const onEdit = (index) => {
     const [schema] = premises.splice(index, index + 1);
-    const steps = getMaxSteps(schema.symbols);
+    schema.steps = getMaxSteps(premises[index].symbols);
+    premises[index].type = 'P';
     setPremises([...premises]);
-    schema.type = 'P';
-    setSchema({...schema, steps: steps});
+    setSchema({...schema});
   }
   const onDelete = (index) => {
     premises.splice(index, index + 1);
@@ -408,5 +408,40 @@ const getSavedPremiseTables = (tableData) => {
     showButtons: true
   }));
 };
+
+const getTableButtonHandlers = (stateObj) => {
+  const { data, setData, setSchema, type, index } = stateObj;
+  const onEdit = () => {
+    const schema = type === 'P' ? data.splice(index, index + 1)[0] : data; 
+    schema.steps = getMaxSteps(schema.symbols);
+    if (type === 'P') data[index].type = type;
+    else data.type = type;
+    setData(type === 'P' ? [...data] : {...data})
+    setSchema({...schema});
+  }
+  const onDelete = () => {
+    if (type === 'P') data.splice(index, index + 1);
+    setData(type === 'P' ? [...data] : null);
+  }
+  const onNext = () => {
+    const maxSteps = getMaxSteps(type === 'P' ? data[index].symbols : data.symbols);
+    type === 'P' ? 
+      data[index].steps < maxSteps && data[index].steps++ :
+      data.steps < maxSteps && data.steps++;
+    setData(type === 'P' ? [...data] : {...data});
+  }
+  const onPrev = () => {
+    type === 'P' ?
+      data[index].steps > 0 && data[index].steps-- :
+      data.steps > 0 && data.steps--;
+    setData(type === 'P' ? [...data] : {...data});
+  }
+  return {
+    onEdit: onEdit,
+    onDelete: onDelete,
+    onNext: onNext,
+    onPrev: onPrev
+  }
+}
 
 export { getSchemaTable, getSavedPremiseTables };
