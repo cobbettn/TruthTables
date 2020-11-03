@@ -389,7 +389,6 @@ const getSavedPremiseTables = (tableData) => {
 
 const getTableButtonHandlers = (obj) => {
   const { data, setData, setSchema, type, index } = obj;
-  console.log(data);
   const onEdit = () => {
     const schema = type === 'P' ? data.splice(index, index + 1)[0] : data; 
     schema.steps = getMaxSteps(schema.symbols);

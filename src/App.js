@@ -9,7 +9,6 @@ const App = () => {
   const [ schema, setSchema ] = useState({
     symbols: [],
     type: 'P',
-    steps: null
   }); // schema that displays in editor
   const [ premises, setPremises ] = useState([]); // schemata that have been saved
   const [ conclusion, setConclusion ] = useState(null); // the conclusion
