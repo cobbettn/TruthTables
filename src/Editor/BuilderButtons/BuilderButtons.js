@@ -3,17 +3,25 @@ import { Box, Button, makeStyles } from '@material-ui/core';
 import validateSchema from '../../validateSchema';
 import Context from '../../context';
 import styles from './BuilderButton.style';
+import { getMaxSteps } from '../../lib';
 
 const BuilderButtons = () => {
-  const { schema, setSchema, schemataList, setSchemataList } = useContext(Context);
-  const isValidSchema = validateSchema(schema);
-  const schemaSize = schema.length;
+  const { schema, setSchema, premises, setPremises, setConclusion } = useContext(Context);
+  const { symbols, type } = schema;
+  const isValidSchema = validateSchema(symbols);
+  const schemaSize = symbols.length;
   const useStyles = styles(makeStyles, isValidSchema, schemaSize);
   const classes = useStyles();
-  const clearSchemaBuilder = () => setSchema([]);
+  const clearSchemaBuilder = () => setSchema({
+    symbols: [],
+    type: 'P'
+  });
   const saveValidSchema = () => {
     if (isValidSchema) {
-      setSchemataList([...schemataList, schema]);
+      const steps = getMaxSteps(symbols);
+      type === 'P' ? 
+        setPremises([...premises, {symbols: symbols, steps: steps}]) :
+        setConclusion({symbols: symbols, steps: steps});
       clearSchemaBuilder();
     } 
   }

@@ -1,22 +1,29 @@
 import React, { useContext } from 'react';
 import { Paper } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
 
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
+  const { symbols } = schema;
+  const getDropStyle = isDraggingOver => ({
+    display: 'flex',
+    height: '3.5rem',
+    backgroundColor: isDraggingOver && grey['900']
+  });
   return (
     <Paper variant="outlined">
       <Droppable droppableId='SchemaBuilder' direction="horizontal">
         {(provided, snapshot) => (
           <div 
-            style={{display: 'flex', height: '3.5rem'}}
+            style={getDropStyle(snapshot.isDraggingOver)}
             ref={provided.innerRef}
             {...provided.droppableProps}
             {...provided.dragHandleProps}
           >
-            {schema.map((config, i) => (
+            {symbols && symbols.map((config, i) => (
               <Draggable 
                 draggableId={`${config.value}${i}`} 
                 key={`${config.value}${i}`} 

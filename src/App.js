@@ -6,16 +6,22 @@ import Display from './Display/Display';
 
 const App = () => {
   const [ sentenceLetters, setSentenceLetters ] = useState([]); // the number of different sentence letters available in the editor
-  const [ schema, setSchema ] = useState([]); // schema that displays in editor
-  const [ schemataList, setSchemataList ] = useState([]); // schemata that have been saved
+  const [ schema, setSchema ] = useState({
+    symbols: [],
+    type: 'P',
+  }); // schema that displays in editor
+  const [ premises, setPremises ] = useState([]); // schemata that have been saved
+  const [ conclusion, setConclusion ] = useState(null); // the conclusion
   
   const provider = {
     sentenceLetters: sentenceLetters,
     schema: schema,
-    schemataList: schemataList,
+    premises: premises,
+    conclusion: conclusion,
     setSentenceLetters: setSentenceLetters,
     setSchema: setSchema,
-    setSchemataList: setSchemataList,
+    setPremises: setPremises,
+    setConclusion: setConclusion,
   }
 
   return (

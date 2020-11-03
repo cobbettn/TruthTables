@@ -1,11 +1,37 @@
-import React from 'react';
-import { getSavedTables } from '../displayTableLogic';
+import React, { useContext } from 'react';
+import Box from '@material-ui/core/Box';
+import { DragDropContext } from 'react-beautiful-dnd';
+import context from '../../context';
+import dragEnd from './dragEnd';
+import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
+import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
 
-const SavedTables = (props) => {
+const SavedTables = () => {
+  const { premises, setPremises, conclusion, setConclusion } = useContext(context);
+  const onDragEnd = (drag) => {
+    const stateObj = {
+      premises: premises,
+      setPremises: setPremises,
+      conclusion: conclusion,
+      setConclusion: setConclusion
+    }
+    dragEnd(drag, stateObj);
+  }
   return (
-    <div style={{display: 'flex'}}>
-      { getSavedTables(props) }  
-    </div>
+    <Box style={{display: !conclusion && premises.length === 0 && 'none'}}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div style={{display: 'flex', flexDirection:'row'}}>
+          <PremiseDropArea 
+            premises={premises}
+            setPremises={setPremises}
+          />
+          <ConclusionDropArea 
+            conclusion={conclusion}
+            setConclusion={setConclusion}
+          />
+        </div>
+      </DragDropContext>
+    </Box>
   );
 }
 

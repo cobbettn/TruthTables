@@ -1,4 +1,5 @@
 import OperatorConfig from './operatorConfig';
+import { getMaxSteps } from '../lib';
 /**
  * dragEnd()
  * 
@@ -9,14 +10,15 @@ import OperatorConfig from './operatorConfig';
  */
 const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const tmpSchema = [...stateObj.schema];
+  const { symbols } = stateObj.schema;
+  const tmpSchema = [...symbols];
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
       let dropElement; // element being dropped into schema builder
       switch (sourceId) {
         case "SchemaBuilder": 
-          dropElement = tmpSchema.splice(sourceIndex, 1)[0]; 
+          [dropElement] = tmpSchema.splice(sourceIndex, 1); 
           break;
         case "LetterPicker": 
           dropElement = stateObj.sentenceLetters[sourceIndex];
@@ -34,7 +36,8 @@ const dragEnd = (drag, stateObj) => {
       tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  stateObj.setSchema([...tmpSchema]); // update schema state
+  const steps = getMaxSteps(tmpSchema);
+  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
 }
 
 export default dragEnd;
