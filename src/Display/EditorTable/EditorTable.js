@@ -3,10 +3,9 @@ import { getSchemaTable } from '../displayTableLogic';
 
 const EditorTable = (props) => {
   const { sentenceLetters, schema } = props;
-  const { symbols } = schema;
   const editorTableData = {
     sentenceLetters: sentenceLetters,
-    schema: symbols,
+    schema: schema,
     showButtons: false
   }
   const editorTable = getSchemaTable(editorTableData);

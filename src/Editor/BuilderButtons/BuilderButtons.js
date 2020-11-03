@@ -3,6 +3,7 @@ import { Box, Button, makeStyles } from '@material-ui/core';
 import validateSchema from '../../validateSchema';
 import Context from '../../context';
 import styles from './BuilderButton.style';
+import { getMaxSteps } from '../../lib';
 
 const BuilderButtons = () => {
   const { schema, setSchema, premises, setPremises, setConclusion } = useContext(Context);
@@ -17,7 +18,10 @@ const BuilderButtons = () => {
   });
   const saveValidSchema = () => {
     if (isValidSchema) {
-      type === 'P' ? setPremises([...premises, symbols]) : setConclusion(symbols);
+      const steps = getMaxSteps(symbols);
+      type === 'P' ? 
+        setPremises([...premises, {symbols: symbols, steps: steps}]) :
+        setConclusion({symbols: symbols, steps: steps});
       clearSchemaBuilder();
     } 
   }

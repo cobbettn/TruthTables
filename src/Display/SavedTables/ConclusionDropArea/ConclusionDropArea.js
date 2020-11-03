@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getSchemaTable } from '../../displayTableLogic'
+import { getSchemaTable, getTableButtonHandlers } from '../../displayTableLogic'
 import Context from '../../../context';
 
 const ConclusionDropArea = (props) => {
@@ -11,15 +11,14 @@ const ConclusionDropArea = (props) => {
   const schemaTableData = {
     sentenceLetters: sentenceLetters,
     schema: conclusion,
-    tableType: 'Conclusion',
-    onEdit: () => {
-      setSchema({type: 'C', symbols: conclusion});
-      setConclusion(null);
-    },
-    onDelete: () => {
-      setConclusion(null);
-    },
-    showButtons: true
+    showButtons: true,
+    clickHandlers: getTableButtonHandlers({
+      data: conclusion,
+      setData: setConclusion,
+      setSchema: setSchema,
+      type: 'C',
+      index: null
+    })
   }
 
   const conclusionTable = conclusion && getSchemaTable(schemaTableData);
