@@ -107,14 +107,14 @@ const getTableModel = (schema, numRows, legend) => {
 };
 
 const getCardTable = (config) => {
-  const { style, headers, table, onEdit, onDelete, onNext, onPrev, showButtons } = config;
+  const { style, headers, table, clickHandlers, showButtons } = config;
   const buttonStyle = {
     backgroundColor: grey[600],
     border: `1px solid ${grey[900]}`,
     width: '1.5rem',
     height: '1.5rem',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center',   
     margin: '0.1rem',
     borderRadius: '3px', 
     cursor: 'pointer',
@@ -123,17 +123,17 @@ const getCardTable = (config) => {
   const buttons = (
     <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
       
-      <Box style={buttonStyle} onClick={onPrev}>
+      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onPrev}>
         <Typography>{'\u23EA'}</Typography>
       </Box>
-      <Box style={buttonStyle} onClick={onNext}>
+      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onNext}>
         <Typography>{'\u23E9'}</Typography>
       </Box>
       
-      <Box style={buttonStyle} onClick={onEdit}>
+      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onEdit}>
         <Typography>{'\u270E'}</Typography>
       </Box>
-      <Box style={buttonStyle} onClick={onDelete}>
+      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onDelete}>
         <Typography>{'\u{1F5D1}'}</Typography>
       </Box>
     </Box>
@@ -331,7 +331,6 @@ const doOperations = (schemaData) => {
     opIndex = getNextOperator(subSchema);
     steps--;
   }
-  console.log(modelIndex);
   const finalResult = {
     result: mainResult,
     mainOpIndex: modelIndex,
@@ -341,7 +340,7 @@ const doOperations = (schemaData) => {
 };
 
 const getSchemaTable = (tableData) => {
-  const { schema, sentenceLetters, onEdit, onDelete, onPrev, onNext, showButtons } = tableData;
+  const { schema, sentenceLetters, clickHandlers, showButtons } = tableData;
   let { symbols, steps } = schema;
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
@@ -367,57 +366,35 @@ const getSchemaTable = (tableData) => {
     style: style,
     headers: schemaTableHeaders,
     table: schemaTable,
-    onEdit: onEdit,
-    onDelete: onDelete,
-    onNext: onNext,
-    onPrev: onPrev,
+    clickHandlers: clickHandlers,
     showButtons
   });
 };
 
 const getSavedPremiseTables = (tableData) => {
   const { sentenceLetters, premises, setPremises, setSchema } = tableData;
-  const onEdit = (index) => {
-    const [schema] = premises.splice(index, index + 1);
-    schema.steps = getMaxSteps(premises[index].symbols);
-    premises[index].type = 'P';
-    setPremises([...premises]);
-    setSchema({...schema});
-  }
-  const onDelete = (index) => {
-    premises.splice(index, index + 1);
-    setPremises([...premises]);
-  }
-  const onNext = (index) => {
-    const max = getMaxSteps(premises[index].symbols);
-    premises[index].steps < max && premises[index].steps++;
-    setPremises([...premises]);
-  }
-  const onPrev = (index) => {
-    premises[index].steps > 0 && premises[index].steps--;
-    setPremises([...premises]);
-  }
-  return premises.map((schema, i) => getSchemaTable({
+  return premises.map((premise, i) => getSchemaTable({
     sentenceLetters: sentenceLetters,
-    schema: schema,
-    tableType: 'Premise',
-    onEdit: () => onEdit(i),
-    onDelete: () => onDelete(i),
-    onNext: () => onNext(i),
-    onPrev: () => onPrev(i),
-    showButtons: true
+    schema: premise,
+    showButtons: true,
+    clickHandlers: getTableButtonHandlers({
+      data: premises,
+      setData: setPremises,
+      setSchema: setSchema,
+      type: 'P',
+      index: i
+    })
   }));
 };
 
-const getTableButtonHandlers = (stateObj) => {
-  const { data, setData, setSchema, type, index } = stateObj;
+const getTableButtonHandlers = (obj) => {
+  const { data, setData, setSchema, type, index } = obj;
+  console.log(data);
   const onEdit = () => {
     const schema = type === 'P' ? data.splice(index, index + 1)[0] : data; 
     schema.steps = getMaxSteps(schema.symbols);
-    if (type === 'P') data[index].type = type;
-    else data.type = type;
-    setData(type === 'P' ? [...data] : {...data})
-    setSchema({...schema});
+    setData(type === 'P' ? [...data] : null);
+    setSchema({...schema, type: type});
   }
   const onDelete = () => {
     if (type === 'P') data.splice(index, index + 1);
@@ -444,4 +421,4 @@ const getTableButtonHandlers = (stateObj) => {
   }
 }
 
-export { getSchemaTable, getSavedPremiseTables };
+export { getSchemaTable, getSavedPremiseTables, getTableButtonHandlers };
