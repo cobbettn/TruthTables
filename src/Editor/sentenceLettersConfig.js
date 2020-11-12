@@ -1,10 +1,11 @@
 import Colors from '../letterColors';
 
-const getInputProps =  (sentenceLetters, setSentenceLetters) => {
-  const min = 0, max = 6;
+const getInputProps =  (sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps) => {
+  const min = 1, max = 6;
   const onChange = (event) => {
     if (event.target.value >= min && event.target.value <= max) {
       const number = Number(event.target.value);
+      if (number > 0 && !tutorialSteps.addLetter) setTutorialSteps ({...tutorialSteps, addLetter: true});
       const letters = [...Array(number)].map((el, i) => {
         return {
           value: String.fromCharCode(112 + i), 

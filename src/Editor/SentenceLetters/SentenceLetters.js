@@ -2,17 +2,27 @@ import React, { useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Context from '../../context';
 import getInputProps from '../sentenceLettersConfig';
+import { Tooltip } from '@material-ui/core';
+import { getTutorialStyles } from '../../lib';
 
 const SentenceLetters = () => {
-  const { sentenceLetters, setSentenceLetters } = useContext(Context);
-  const inputProps = getInputProps(sentenceLetters, setSentenceLetters);
+  const { sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps } = useContext(Context);
+  const inputProps = getInputProps(sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps);
+  const classes = getTutorialStyles();
   return (
-    <TextField
-      style={{width: '5.5rem'}}
-      label="Sentences"
-      variant="outlined"
-      inputProps={inputProps}
-    />
+    <Tooltip
+      title='Add sentence letter(s)'
+      arrow={true}
+      open={!tutorialSteps.addLetter}
+      classes={classes}
+    >
+      <TextField
+        style={{width: '5.5rem'}}
+        label="Sentences"
+        variant="outlined"
+        inputProps={inputProps}
+      />
+    </Tooltip>
   );
 }
 

@@ -10,11 +10,13 @@ import Context from '../context';
 import dragEnd from './dragEnd';
 
 const Editor = () => {
-  const { sentenceLetters, schema, setSchema } = useContext(Context);
+  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
   const stateObj = {
     sentenceLetters: sentenceLetters,
     schema: schema,
     setSchema: setSchema,
+    tutorialSteps: tutorialSteps,
+    setTutorialSteps: setTutorialSteps
   }
   const onDragEnd = (drag) => dragEnd(drag, stateObj);
   return (
