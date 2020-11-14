@@ -44,7 +44,7 @@ const BuilderButtons = () => {
     <Box mt="1rem" style={{display: 'flex', flexDirection: 'row-reverse'}}>
       <Tooltip
         title='Save schema to create an argument premise'
-        arrow={true}
+        arrow
         open={isValidSchema && tutorialSteps.editorOperator && !tutorialSteps.saveSchema}
         classes={tooltipClasses}
       >

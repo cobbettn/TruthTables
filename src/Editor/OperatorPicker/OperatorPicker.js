@@ -13,7 +13,7 @@ const OperatorPicker = () => {
   return (
     <Tooltip
       title='Click or drag an operator into the schema editor'
-      arrow={true}
+      arrow
       open={tutorialSteps.editorLetter && !tutorialSteps.editorOperator}
       classes={classes}
     >

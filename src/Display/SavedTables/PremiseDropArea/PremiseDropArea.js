@@ -4,6 +4,8 @@ import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { getSavedPremiseTables } from '../../displayTableLogic';
 import Context from '../../../context';
+import { Typography, Box } from '@material-ui/core';
+import theme from '../../../theme';
 
 const PremiseDropArea = (props) => {
   const { premises, setPremises } = props;
@@ -17,42 +19,49 @@ const PremiseDropArea = (props) => {
   const premiseTables = premises && getSavedPremiseTables(savedPremisesData);
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
-    width: '100%',
     backgroundColor: isDraggingOver && grey['900']
   });
+  const boxStyle = {
+    display: 'flex', 
+    flexBasis: '66%', 
+    flexDirection: 'column',
+  }
   return (
-    <Paper variant="outlined" style={{display: 'flex', flexBasis: '66%'}}>
-      <Droppable droppableId='PremiseDropZone' direction="horizontal">
-        {(provided, snapshot) => (
-          <div 
-            style={getDropStyle(snapshot.isDraggingOver)}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            {...provided.dragHandleProps}
-          >
-            { premiseTables && premiseTables.map((premiseTable, i) => (
-              <Draggable 
-                draggableId={`p${i}`} 
-                key={`p${i}`} 
-                index={i} 
-              >
-                { (provided, snapshot) => (
-                  <div 
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    { premiseTable }
-                  </div>
-                ) }
-              </Draggable>
-            )) }
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </Paper>
-  )
+    <Box style={boxStyle}>
+      <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Premises:</Typography>
+      <Paper style={{flexGrow: '1'}}variant="outlined">
+        <Droppable droppableId='PremiseDropZone' direction="horizontal">
+          {(provided, snapshot) => (
+            <div 
+              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%'}}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              {...provided.dragHandleProps}
+            >
+              { premiseTables && premiseTables.map((premiseTable, i) => (
+                <Draggable 
+                  draggableId={`p${i}`} 
+                  key={`p${i}`} 
+                  index={i} 
+                >
+                  { (provided, snapshot) => (
+                    <div 
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      { premiseTable }
+                    </div>
+                  ) }
+                </Draggable>
+              )) }
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </Paper>
+    </Box>
+  );
 }
 
 export default PremiseDropArea;

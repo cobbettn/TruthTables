@@ -20,9 +20,10 @@ const LetterPicker = () => {
   return (
     <Tooltip
       title='Click or drag letter into editor to begin building a schema'
-      arrow={true}
+      arrow
       open={tutorialSteps.addLetter && !tutorialSteps.editorLetter}
       classes={classes}
+      placement='right'
     >
       <Paper style={getPaperStyles(sentenceLetters.length)} variant="outlined">
         <Droppable droppableId="LetterPicker" direction="horizontal">
