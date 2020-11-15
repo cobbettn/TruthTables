@@ -3,24 +3,20 @@ import { Paper, Box, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../context';
-import DnDElement from '../DnDElement/DnDElement';
 import theme from '../../theme'
+import DnDElement from '../DnDElement/DnDElement';
 
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
   const { symbols } = schema;
-  const getDropStyle = isDraggingOver => ({
+  const getDropStyle = (isDraggingOver) => ({
     display: 'flex',
     height: '3.5rem',
     backgroundColor: isDraggingOver && grey['900']
   });
-  const labelStyle = {
-    color: theme.palette.grey[400]
-
-  }
   return (
     <Box style={{paddingTop: '2rem', display: 'flex', flexDirection: 'column'}}>
-      <Typography variant='caption' style={labelStyle}>Schema Editor:</Typography>
+      <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Schema Editor:</Typography>
       <Paper variant="outlined">
         <Droppable droppableId='SchemaBuilder' direction="horizontal">
           {(provided, snapshot) => (

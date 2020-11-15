@@ -78,12 +78,12 @@ const getCardTable = (config) => {
     <Box style={{display: 'flex', justifyContent: 'center'}}>
       <Tooltip arrow placement='top' title='previous operation'>
         <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onPrev}>
-          <Typography variant="button">{'\u23EA'}</Typography>
+          <Typography variant="button">{'\u21E6'}</Typography>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top'title='next operation'>
         <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onNext}>
-          <Typography variant="button">{'\u23E9'}</Typography>
+          <Typography variant="button">{'\u21E8'}</Typography>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top' title='edit schema'>
@@ -93,7 +93,7 @@ const getCardTable = (config) => {
       </Tooltip>
       <Tooltip arrow placement='top' title='delete schema'>
         <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onDelete}>
-          <Typography variant="button">{'\u{1F5D1}'}</Typography>
+          <Typography variant="button">{'\u232B'}</Typography>
         </Box>
       </Tooltip>
     </Box>

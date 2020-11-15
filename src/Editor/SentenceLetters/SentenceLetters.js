@@ -17,8 +17,8 @@ const SentenceLetters = () => {
       classes={classes}
     >
       <TextField
-        style={{width: '5.5rem'}}
-        label="Sentences"
+        style={{width: '4.5rem'}}
+        label="Letters"
         variant="outlined"
         inputProps={inputProps}
       />
