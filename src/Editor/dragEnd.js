@@ -12,12 +12,11 @@ const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
   const { symbols } = stateObj.schema;
   const tmpSchema = [...symbols];
-  let validTutorialOrder = true;
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
       let dropElement; // element being dropped into schema builder
-      
+      let tutorialOrder = true;
       switch (sourceId) {
         case "SchemaBuilder": 
           [dropElement] = tmpSchema.splice(sourceIndex, 1); 
@@ -29,15 +28,17 @@ const dragEnd = (drag, stateObj) => {
           dropElement = stateObj.sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
-          if (!stateObj.tutorialSteps.editorLetter) validTutorialOrder = false;
-          if (validTutorialOrder && !stateObj.tutorialSteps.editorOperator) {
+          if (stateObj.tutorialSteps.editorLetter && !stateObj.tutorialSteps.editorOperator) {
             stateObj.setTutorialSteps({...stateObj.tutorialSteps, editorOperator: true});
+          }
+          else {
+            tutorialOrder = false;
           }
           dropElement = OperatorConfig[sourceIndex];
           break;
         default:
       }
-      if (stateObj.sentenceLetters.length > 0 ) tmpSchema.splice(destIndex, 0, dropElement);
+      if (stateObj.sentenceLetters.length > 0 && tutorialOrder) tmpSchema.splice(destIndex, 0, {...dropElement});
     }
   }
   else {
