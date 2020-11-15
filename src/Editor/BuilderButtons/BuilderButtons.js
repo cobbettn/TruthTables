@@ -27,7 +27,7 @@ const BuilderButtons = () => {
       type: 'P'
     });
   } 
-  const saveValidSchema = (callback) => {
+  const saveValidSchema = () => {
     if (isValidSchema) {
       const steps = getMaxSteps(symbols);
       type === 'P' ? 

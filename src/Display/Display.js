@@ -19,10 +19,13 @@ const Display = () => {
   return (
     <Box className="Display" mt="1rem" style={boxStyle}>
       <Paper elevation={5} style={paperStyle}>
-        <EditorTable  
-          sentenceLetters={sentenceLetters}
-          schema={schema}
-        />
+        <div style={{display: 'flex', justifyContent:'center'}}>
+          <EditorTable  
+            sentenceLetters={sentenceLetters}
+            schema={schema}
+          />
+        </div>
+
         <SavedTables
           sentenceLetters={sentenceLetters}
           premises={premises}

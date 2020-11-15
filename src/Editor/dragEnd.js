@@ -12,11 +12,10 @@ const dragEnd = (drag, stateObj) => {
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
   const { symbols } = stateObj.schema;
   const tmpSchema = [...symbols];
+  let dropElement;
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
-      let dropElement; // element being dropped into schema builder
-      let tutorialOrder = true;
       switch (sourceId) {
         case "SchemaBuilder": 
           [dropElement] = tmpSchema.splice(sourceIndex, 1); 
@@ -28,17 +27,14 @@ const dragEnd = (drag, stateObj) => {
           dropElement = stateObj.sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
+          dropElement = OperatorConfig[sourceIndex];
           if (stateObj.tutorialSteps.editorLetter && !stateObj.tutorialSteps.editorOperator) {
             stateObj.setTutorialSteps({...stateObj.tutorialSteps, editorOperator: true});
           }
-          else {
-            tutorialOrder = false;
-          }
-          dropElement = OperatorConfig[sourceIndex];
           break;
         default:
       }
-      if (stateObj.sentenceLetters.length > 0 && tutorialOrder) tmpSchema.splice(destIndex, 0, {...dropElement});
+      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, {...dropElement});
     }
   }
   else {
@@ -46,8 +42,11 @@ const dragEnd = (drag, stateObj) => {
       tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  const steps = getMaxSteps(tmpSchema);
-  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
+  
+  if (!(dropElement?.elType !== 'L' && !stateObj.tutorialSteps.editorLetter)) {
+    const steps = getMaxSteps(tmpSchema);
+    stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
+  } 
 }
 
 export default dragEnd;
