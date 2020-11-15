@@ -4,26 +4,33 @@ import Typography from '@material-ui/core/Typography';
 import Context from '../../context'
 import { getStyles, getOnClick } from '../dndElementConfig';
 import './DnDElement.scss';
+import { Tooltip } from '@material-ui/core';
 
 const DnDElement = (props) => {
-  const { sentenceLetters, schema, setSchema } = useContext(Context);
+  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
   const configObj = {
     letterCount: sentenceLetters.length,
     schema: schema,
     setSchema: setSchema,
     elConfig: props.config,
+    tutorialSteps: tutorialSteps,
+    setTutorialSteps: setTutorialSteps
   }
   const style = getStyles(props.config.bgColor);
   const onClick = getOnClick(configObj);
   return (
-    <Card 
-      className="DnDElement" 
-      style={style}
-      elevation={10}
-      onClick={ onClick }
+    <Tooltip
+      title={ (!props.config.schemaBuilderEl && props.config.tooltip) || '' }
     >
-      <Typography>{props.config.value}</Typography>
-    </Card>
+      <Card 
+        className="DnDElement" 
+        style={style}
+        elevation={10}
+        onClick={ onClick }
+      >
+        <Typography>{props.config.value}</Typography>
+      </Card>
+    </Tooltip>
   );
 }
 

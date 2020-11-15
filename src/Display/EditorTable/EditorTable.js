@@ -10,9 +10,7 @@ const EditorTable = (props) => {
   }
   const editorTable = getSchemaTable(editorTableData);
   return (
-    <div style={{display: 'flex'}}>
-      { editorTable }
-    </div>
+    <div>{ editorTable }</div>
   );
 }
 

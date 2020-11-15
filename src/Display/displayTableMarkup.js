@@ -1,6 +1,6 @@
 import React from 'react';
 import { green, red, grey } from '@material-ui/core/colors';
-import { Box, Card, Typography } from '@material-ui/core';
+import { Box, Card, Typography, Tooltip } from '@material-ui/core';
 const getHeaders = (headers, mainOpIndex) => {
   const getStyle = (header, index) => {
     const style = {
@@ -75,32 +75,49 @@ const getCardTable = (config) => {
     boxShadow: `1px 1px 1px ${grey[800]}`
   }
   const buttons = (
-    <Box style={{display: 'flex', justifyContent: 'flex-end'}}>
-      
-      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onPrev}>
-        <Typography>{'\u23EA'}</Typography>
-      </Box>
-      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onNext}>
-        <Typography>{'\u23E9'}</Typography>
-      </Box>
-      
-      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onEdit}>
-        <Typography>{'\u270E'}</Typography>
-      </Box>
-      <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onDelete}>
-        <Typography>{'\u{1F5D1}'}</Typography>
-      </Box>
+    <Box style={{display: 'flex', justifyContent: 'center'}}>
+      <Tooltip arrow placement='top' title='previous operation'>
+        <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onPrev}>
+          <Typography variant="button">{'\u21E6'}</Typography>
+        </Box>
+      </Tooltip>
+      <Tooltip arrow placement='top'title='next operation'>
+        <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onNext}>
+          <Typography variant="button">{'\u21E8'}</Typography>
+        </Box>
+      </Tooltip>
+      <Tooltip arrow placement='top' title='edit schema'>
+        <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onEdit}>
+          <Typography variant="button">{'\u270E'}</Typography>
+        </Box>
+      </Tooltip>
+      <Tooltip arrow placement='top' title='delete schema'>
+        <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onDelete}>
+          <Typography variant="button">{'\u232B'}</Typography>
+        </Box>
+      </Tooltip>
+    </Box>
+  );
+  const editorTitleStyle = {
+    marginLeft: '0.25rem', 
+    marginRight: '0.25rem'
+  }
+  const editorTitle = (
+    <Box style={editorTitleStyle}>
+      <Typography variant='caption'>Schema Editor</Typography>
     </Box>
   );
   return (
     <Card raised className="Card" style={style}>
-      { showButtons &&  buttons }
-      <table>
-        <thead>
-          <tr>{ headers }</tr>
-        </thead>
-        <tbody>{ table }</tbody>
-      </table>
+      { showButtons ? buttons : editorTitle }
+      <div style={{display:'flex', justifyContent:'center'}}>
+        <table>
+          <thead>
+            <tr>{ headers }</tr>
+          </thead>
+          <tbody>{ table }</tbody>
+        </table>
+      </div>
     </Card>
   );
 };
