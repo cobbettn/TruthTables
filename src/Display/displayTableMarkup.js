@@ -86,12 +86,12 @@ const getCardTable = (config) => {
           <Typography variant="button">{'\u21E8'}</Typography>
         </Box>
       </Tooltip>
-      <Tooltip arrow placement='top' title='edit schema'>
+      <Tooltip arrow placement='top' title='edit'>
         <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onEdit}>
           <Typography variant="button">{'\u270E'}</Typography>
         </Box>
       </Tooltip>
-      <Tooltip arrow placement='top' title='delete schema'>
+      <Tooltip arrow placement='top' title='delete'>
         <Box style={buttonStyle} onClick={clickHandlers && clickHandlers.onDelete}>
           <Typography variant="button">{'\u232B'}</Typography>
         </Box>

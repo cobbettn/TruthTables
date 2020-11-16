@@ -18,6 +18,11 @@ const DnDElement = (props) => {
   }
   const style = getStyles(props.config.bgColor);
   const onClick = getOnClick(configObj);
+  const onRightClick = props.config.schemaBuilderEl && ((event) => {
+    event.preventDefault();
+    schema.symbols.splice(props.config.schemaIndex, 1);
+    setSchema({...schema});
+  })
   return (
     <Tooltip
       title={ (!props.config.schemaBuilderEl && props.config.tooltip) || '' }
@@ -27,6 +32,7 @@ const DnDElement = (props) => {
         style={style}
         elevation={10}
         onClick={ onClick }
+        onContextMenu={ onRightClick }
       >
         <Typography>{props.config.value}</Typography>
       </Card>
