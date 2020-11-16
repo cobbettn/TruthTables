@@ -8,12 +8,23 @@ export const getStyles = (color) => {
 }
 
 export const getOnClick = (config) => {
-  const onClick = (config) => {
-    if (config.letterCount > 0) {
-      const { symbols } = config.schema;
+  const {
+    letterCount,
+    schema,
+    setSchema,
+    elConfig,
+    tutorialSteps,
+    setTutorialSteps
+  } = config;
+  const { symbols } = schema; 
+  const { elType } = elConfig;
+  const onClick = () => {
+    if (letterCount > 0) {
       const steps = getMaxSteps(symbols);
-      config.setSchema({...config.schema, symbols: [...symbols, config.elConfig], steps: steps});
+      if (elType === 'L' && !tutorialSteps.editorLetter) setTutorialSteps( {...tutorialSteps, editorLetter: true});
+      if (elType !== 'L' && tutorialSteps.editorLetter && !tutorialSteps.editorOperator) setTutorialSteps({...tutorialSteps, editorOperator: true});
+      if (!(elType !== 'L' && !tutorialSteps.editorLetter)) setSchema({...schema, symbols: [...symbols, elConfig], steps: steps});
     }
   }
-  return !config.elConfig.schemaBuilderEl ? () => onClick(config) : null;
+  return !elConfig.schemaBuilderEl && (() => onClick());
 }
