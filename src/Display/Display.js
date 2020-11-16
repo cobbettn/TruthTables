@@ -6,7 +6,7 @@ import EditorTable from './EditorTable/EditorTable';
 import SavedTables from './SavedTables/SavedTables';
 
 const Display = () => {
-  const { sentenceLetters, schema, premises, conclusion } = useContext(Context);
+  const { sentenceLetters, schema, setSchema, premises, conclusion } = useContext(Context);
   const displayValue = schema.symbols.length > 0 || premises.length > 0 || conclusion ? 'flex' : 'none';
   const boxStyle = {
     display: displayValue
@@ -23,6 +23,7 @@ const Display = () => {
           <EditorTable  
             sentenceLetters={sentenceLetters}
             schema={schema}
+            setSchema={setSchema}
           />
         </div>
 

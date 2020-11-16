@@ -22,3 +22,7 @@
   border-width: 2px;
   animation: wiggle 0.5s;
 }
+
+.DnDElement.fade {
+  transition: opacity 2s linear;
+}
