@@ -263,7 +263,9 @@ const getSchemaTable = (tableData) => {
     headers: schemaTableHeaders,
     table: schemaTable,
     clickHandlers: clickHandlers,
-    showButtons
+    showButtons: showButtons,
+    collapsed: schema.collapsed,
+    schemaType: schema.type,
   });
 };
 
@@ -308,11 +310,22 @@ const getTableButtonHandlers = (obj) => {
       data.steps > 0 && data.steps--;
     setData(type === 'P' ? [...data] : {...data});
   }
+  const onCollapse = () => {
+    if (type === 'P') {
+      data[index].collapsed = !data[index].collapsed;
+      setData([...data]);
+    }
+    else {
+      data.collapsed = !data.collapsed;
+      setData({...data});
+    }
+  }
   return {
     onEdit: onEdit,
     onDelete: onDelete,
     onNext: onNext,
-    onPrev: onPrev
+    onPrev: onPrev,
+    onCollapse: onCollapse,
   }
 }
 

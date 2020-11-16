@@ -31,8 +31,8 @@ const BuilderButtons = () => {
     if (isValidSchema) {
       const steps = getMaxSteps(symbols);
       type === 'P' ? 
-        setPremises([...premises, {symbols: symbols, steps: steps}]) :
-        setConclusion({symbols: symbols, steps: steps});
+        setPremises([...premises, {symbols: symbols, steps: steps, collapsed: false}]) :
+        setConclusion({symbols: symbols, steps: steps, collapsed: false});
       setTutorialSteps({...tutorialSteps, saveSchema: true});
       setSchema({
         symbols: [],
