@@ -13,6 +13,7 @@ const SentenceLetters = () => {
     <Tooltip
       title='Add sentence letter(s)'
       arrow
+      placement='left'
       open={!tutorialSteps.addLetter}
       classes={classes}
     >
