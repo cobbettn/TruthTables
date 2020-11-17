@@ -19,7 +19,7 @@ const LetterPicker = () => {
   const classes = getTutorialStyles();
   return (
     <Tooltip
-      title='Click or drag letter into editor to begin building a schema'
+      title='Click or drag a sentence letter into schema editor'
       arrow
       open={tutorialSteps.addLetter && !tutorialSteps.editorLetter}
       classes={classes}
@@ -43,7 +43,7 @@ const LetterPicker = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <DnDElement config={config}/>
+                      <DnDElement config={{...config, isDragging: snapshot.isDragging}}/>
                     </div>
                   )}
                 </Draggable>

@@ -1,7 +1,13 @@
 import React from 'react';
 import { green, red, grey } from '@material-ui/core/colors';
 import { Box, Card, Typography, Tooltip, Switch } from '@material-ui/core';
-import theme from '../theme'
+import theme from '../theme';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FastRewindTwoToneIcon from '@material-ui/icons/FastRewindTwoTone';
+import FastForwardTwoToneIcon from '@material-ui/icons/FastForwardTwoTone';
+import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 
 const getHeaders = (headers, mainOpIndex) => {
   const getStyle = (header, index) => {
@@ -82,27 +88,27 @@ const getCardTable = (config) => {
     <Box style={{display: 'flex', justifyContent: 'center'}}>
       <Tooltip arrow placement='top' title={`${ collapsed ? 'expand' : 'collapse' }`}>
         <Box style={buttonStyle} onClick={clickHandlers?.onCollapse}>
-          <Typography variant="button">{ collapsed ? '\u25bc': '\u25b2' }</Typography>
+          { collapsed ? <ExpandMoreIcon fontSize='small'/>: <ExpandLessIcon fontSize='small'/> }
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top' title='previous operation'>
         <Box style={buttonStyle} onClick={clickHandlers?.onPrev}>
-          <Typography variant="button">{'\u21E6'}</Typography>
+          <FastRewindTwoToneIcon fontSize='small'/>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top'title='next operation'>
         <Box style={buttonStyle} onClick={clickHandlers?.onNext}>
-          <Typography variant="button">{'\u21E8'}</Typography>
+          <FastForwardTwoToneIcon fontSize='small'/>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top' title='edit'>
         <Box style={buttonStyle} onClick={clickHandlers?.onEdit}>
-          <Typography variant="button">{'\u270E'}</Typography>
+          <EditTwoToneIcon fontSize='small'/>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top' title='delete'>
         <Box style={buttonStyle} onClick={clickHandlers?.onDelete}>
-          <Typography variant="button">{'\u232B'}</Typography>
+          <DeleteTwoToneIcon fontSize='small'/>
         </Box>
       </Tooltip>
     </Box>

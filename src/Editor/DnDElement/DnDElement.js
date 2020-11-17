@@ -16,7 +16,7 @@ const DnDElement = (props) => {
     tutorialSteps: tutorialSteps,
     setTutorialSteps: setTutorialSteps
   }
-  const style = getStyles(props.config.bgColor);
+  const style = getStyles(props.config.bgColor, props.config.isDragging);
   const onClick = getOnClick(configObj);
   const onRightClick = props.config.schemaBuilderEl && ((event) => {
     event.preventDefault();

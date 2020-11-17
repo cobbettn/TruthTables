@@ -33,7 +33,7 @@ const BuilderButtons = () => {
       type === 'P' ? 
         setPremises([...premises, {symbols: symbols, steps: steps, collapsed: false}]) :
         setConclusion({symbols: symbols, steps: steps, collapsed: false});
-      setTutorialSteps({...tutorialSteps, saveSchema: true});
+      setTutorialSteps({...tutorialSteps, saveSchema: true, editorOperator: true});
       setSchema({
         symbols: [],
         type: 'P'

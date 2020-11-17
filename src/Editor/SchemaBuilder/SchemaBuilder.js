@@ -41,7 +41,11 @@ const SchemaBuilder = () => {
 
                       {/* schemaBuilderEl determines whether DnDElement is in the builder or a picker */}
                       <DnDElement config={
-                        {...config, schemaBuilderEl: true, schemaIndex: i}
+                        {...config, 
+                          schemaBuilderEl: true, 
+                          schemaIndex: i,
+                          isDragging: snapshot.isDragging
+                        }
                       }/>
 
                     </div>
