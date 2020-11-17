@@ -82,7 +82,7 @@ const getCardTable = (config) => {
     <Box style={{display: 'flex', justifyContent: 'center'}}>
       <Tooltip arrow placement='top' title={`${ collapsed ? 'expand' : 'collapse' }`}>
         <Box style={buttonStyle} onClick={clickHandlers?.onCollapse}>
-          <Typography variant="button">{collapsed ? '\u2BC6' : '\u2BC5'}</Typography>
+          <Typography variant="button">{ collapsed ? '\u25bc': '\u25b2' }</Typography>
         </Box>
       </Tooltip>
       <Tooltip arrow placement='top' title='previous operation'>
@@ -118,12 +118,23 @@ const getCardTable = (config) => {
   }
   const editorTitle = (
     <Box style={editorTitleStyle}>
-      <Typography style={{paddingLeft: '0.25rem'}} variant='button'>{schemaType === 'P' ? 'Premise' : 'Conclusion'}</Typography>
-      <Switch
-        size='small'
-        checked={schemaType === 'P'}
-        onChange={clickHandlers?.onSwitch}
-      />
+      <Typography 
+        style={{paddingLeft: '0.25rem', lineHeight: '1.5rem'}} 
+        variant='caption'
+      >{
+        schemaType === 'P' ? 'Premise' : 'Conclusion'
+      }</Typography>
+      <Tooltip 
+        title='save as a premise or conclusion'
+        placement='top'
+        arrow={true}
+      >
+        <Switch
+          size='small'
+          checked={schemaType === 'C'}
+          onChange={clickHandlers?.onSwitch}
+        />
+      </Tooltip>
     </Box>
   );
   const tableStyle = {
