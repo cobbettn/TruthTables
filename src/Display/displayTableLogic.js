@@ -93,7 +93,7 @@ const getDeepestScopes = (schema) => {
 
 const getNextOperator = (schema) => {
   let index, innermostNot;
-  for (let prec = 0; prec <= 3; prec++) {
+  for (let prec = 0; prec <= 4; prec++) {
     for (let i = 0; i < schema.length; i++) {
       if (schema[i]?.precedence === prec) {
         index = i;
