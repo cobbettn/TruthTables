@@ -1,10 +1,16 @@
 import theme from '../../theme';
-const styles = (makeStyles, validSchema, schemaSize) => {
+const styles = (makeStyles, validSchema, schemaSize, schemaType) => {
   const { 
     main:   primaryMain, 
     dark:   primaryDark, 
     light:  primaryLight,
   } = theme.palette.primary;
+  const {
+    main:   secondaryMain,
+    dark:   secondaryDark,
+    light:  secondaryLight
+  } = theme.palette.secondary;
+  const isPremise = schemaType === 'P';
   return makeStyles(
     {
       common : {
@@ -12,21 +18,21 @@ const styles = (makeStyles, validSchema, schemaSize) => {
       },
       saveBtn: {
         marginLeft: '0.5rem',
-        backgroundColor: validSchema ? primaryMain : null,
+        backgroundColor: (validSchema && schemaSize > 0) ? isPremise ? primaryMain : secondaryMain: '',
         '&:hover': {
-          backgroundColor: validSchema ? primaryDark : null,
+          backgroundColor: (validSchema && schemaSize > 0) ? isPremise ? primaryDark : secondaryDark: '',
         },
         '&:active': {
-          backgroundColor: validSchema ? primaryLight : null,
+          backgroundColor: (validSchema && schemaSize > 0) ? isPremise ? primaryLight : secondaryLight: '',
         },
       },
       clearBtn: {
-        backgroundColor: schemaSize > 0 ? primaryMain : null,
+        backgroundColor: schemaSize > 0 ? isPremise ? primaryMain : secondaryMain : '',
         '&:hover': {
-          backgroundColor: schemaSize > 0 ? primaryDark : null,
+          backgroundColor: schemaSize > 0 ? isPremise ? primaryDark : secondaryDark : '',
         },
         '&:active': {
-          backgroundColor: schemaSize > 0 ? primaryLight : null,
+          backgroundColor: schemaSize > 0 ? isPremise ? primaryLight : secondaryLight : '',
         },
       },
     }

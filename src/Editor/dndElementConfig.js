@@ -28,5 +28,5 @@ export const getOnClick = (config) => {
       if (!(elType !== 'L' && !tutorialSteps.editorLetter)) setSchema({...schema, symbols: [...symbols, elConfig], steps: steps});
     }
   }
-  return !elConfig.schemaBuilderEl && (() => onClick());
+  return !elConfig.schemaBuilderEl ? () => onClick() : null;
 }

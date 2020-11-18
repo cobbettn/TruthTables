@@ -10,7 +10,7 @@ const BuilderButtons = () => {
   const { symbols, type } = schema;
   const isValidSchema = validateSchema(symbols);
   const schemaSize = symbols.length;
-  const useStyles = styles(makeStyles, isValidSchema, schemaSize);
+  const useStyles = styles(makeStyles, isValidSchema, schemaSize, type);
   const classes = useStyles();
   const tooltipClasses = getTutorialStyles();
   const clearSchemaBuilder = () => {

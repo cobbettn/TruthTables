@@ -20,4 +20,14 @@
     padding: 0.15rem;
     margin: 0.5rem;
   }
+
+  .tableButton {
+    background-color: #757575; // mui
+    &:hover {
+      background-color:#424242; // mui
+    }
+    &:active {
+      background-color:#757575;
+    }
+  }
 }
