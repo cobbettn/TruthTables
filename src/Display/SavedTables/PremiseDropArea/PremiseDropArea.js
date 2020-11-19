@@ -2,30 +2,46 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getSavedPremiseTables } from '../../displayTableLogic';
+import { getTableButtonHandlers } from '../../DisplayLogic';
 import Context from '../../../context';
 import { Typography, Box } from '@material-ui/core';
 import theme from '../../../theme';
+import SchemaTable from '../SchemaTable/SchemaTable';
 
-const PremiseDropArea = (props) => {
-  const { premises, setPremises } = props;
-  const { sentenceLetters, setSchema } = useContext(Context);
-  const savedPremisesData = {
-    sentenceLetters: sentenceLetters,
-    premises: premises,
-    setPremises: setPremises,
-    setSchema: setSchema,
-  }
-  const premiseTables = premises && getSavedPremiseTables(savedPremisesData);
+const PremiseDropArea = () => {
+  const { sentenceLetters, setSchema, premises, setPremises } = useContext(Context);
+  
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     backgroundColor: isDraggingOver && grey['900']
   });
+ 
   const boxStyle = {
     display: 'flex', 
     flexBasis: '66%', 
     flexDirection: 'column',
   }
+
+  const premiseTables = premises?.map((premise, i) => (
+    
+    <SchemaTable
+      sentenceLetters={sentenceLetters}
+      schema= {{...premise}}
+      isSavedTable={true}
+      clickHandlers={ getTableButtonHandlers(
+        {
+          data: premise,
+          setData: (data) => {
+            data ? premises[i] = {...data} : premises.splice(i, i + 1); // delete premise when data is null, update otherwise
+            setPremises([...premises]);
+          },
+          setSchema: setSchema
+        }
+      )}
+    />
+    
+  ));
+
   return (
     <Box style={boxStyle}>
       <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Premises:</Typography>
@@ -50,7 +66,9 @@ const PremiseDropArea = (props) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      { premiseTable }
+                      { 
+                        premiseTable 
+                      }
                     </div>
                   ) }
                 </Draggable>
