@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getTableButtonHandlers } from '../../DisplayLogic';
+import { getTableButtonHandlers } from '../../lib';
 import Context from '../../../context';
 import { Typography, Box } from '@material-ui/core';
 import theme from '../../../theme';
@@ -13,7 +13,7 @@ const PremiseDropArea = () => {
   
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
-    backgroundColor: isDraggingOver && grey['900']
+    backgroundColor: isDraggingOver && grey[900]
   });
  
   const boxStyle = {

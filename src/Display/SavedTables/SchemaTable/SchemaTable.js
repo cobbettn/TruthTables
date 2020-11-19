@@ -1,11 +1,10 @@
 import React from 'react';
-import validateSchema from '../../../validateSchema';
-import { getTableDimensions, getLegend, getTableModel, computeTable } from '../../DisplayLogic';
+import { validateSchema } from '../../../lib';
+import { getTableDimensions, getLegend, getTableModel, computeTable } from '../../lib';
 import theme from '../../../theme';
 import TableHeader from '../SchemaTable/TableHeader/TableHeader';
 import TableRows from '../SchemaTable/TableRows/TableRows';
 import DisplayTable from '../../DisplayTable/DisplayTable';
-
 
 const SchemaTable = (props) => {
   const { schema, sentenceLetters, clickHandlers, isSavedTable } = props;

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Context from '../../context';
-import getInputProps from '../sentenceLettersConfig';
+import getInputProps from './sentenceLettersConfig';
 import { Tooltip } from '@material-ui/core';
 import { getTutorialStyles } from '../../lib';
 

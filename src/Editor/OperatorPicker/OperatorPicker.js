@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DnDElement from '../DnDElement/DnDElement';
-import operatorConfig from '../operatorConfig';
+import operatorConfig from './operatorConfig';
 import context from '../../context';
 import { Tooltip } from '@material-ui/core';
 import { getTutorialStyles } from '../../lib'

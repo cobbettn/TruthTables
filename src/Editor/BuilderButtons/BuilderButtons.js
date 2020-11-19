@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
-import validateSchema from '../../validateSchema';
 import Context from '../../context';
 import styles from './BuilderButton.style';
-import { getMaxSteps, getTutorialStyles } from '../../lib';
+import { getMaxSteps, getTutorialStyles, validateSchema } from '../../lib';
 
 const BuilderButtons = () => {
   const { schema, setSchema, premises, setPremises, setConclusion, tutorialSteps, setTutorialSteps } = useContext(Context);
