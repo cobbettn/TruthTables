@@ -9,10 +9,10 @@ const TableRows = (props) => {
     const style = {
       backgroundColor: 
         val === true  ? 
-          isMainOpColumn ? green['700'] : green['500'] :
+          isMainOpColumn ? green[700] : green[500] :
         val === false ? 
-          isMainOpColumn ? red['700']   : red['500']   : 
-        grey['500']
+          isMainOpColumn ? red[700]   : red[500]   : 
+        grey[500]
     };
     if (mainOpIndex === index) {
       style.fontWeight = 'bold'

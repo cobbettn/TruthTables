@@ -12,7 +12,7 @@ const SchemaBuilder = () => {
   const getDropStyle = (isDraggingOver) => ({
     display: 'flex',
     height: '3.5rem',
-    backgroundColor: isDraggingOver && grey['900'],
+    backgroundColor: isDraggingOver && grey[900],
     border: schema.symbols.length > 0 && 
       `solid 2px ${ schema.type === 'C' ? theme.palette.secondary.light : theme.palette.primary.light }`,
     borderRadius: '3px',

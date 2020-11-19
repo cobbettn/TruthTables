@@ -1,4 +1,4 @@
-import OperatorConfig from './operatorConfig';
+import OperatorConfig from './OperatorPicker/operatorConfig';
 import { getMaxSteps } from '../lib';
 /**
  * dragEnd()

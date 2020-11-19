@@ -1,4 +1,4 @@
-import Colors from '../letterColors';
+import Colors from '../../letterColors';
 
 const getInputProps =  (sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps) => {
   const min = 1, max = 6;
@@ -10,7 +10,7 @@ const getInputProps =  (sentenceLetters, setSentenceLetters, tutorialSteps, setT
         return {
           value: String.fromCharCode(112 + i), 
           elType: 'L',
-          bgColor: Colors[i]['500'],
+          bgColor: Colors[i][500],
         }
       });
       setSentenceLetters([...letters]);

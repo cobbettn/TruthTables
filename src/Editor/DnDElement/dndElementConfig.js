@@ -1,9 +1,9 @@
 import grey from '@material-ui/core/colors/grey';
-import { getMaxSteps } from '../lib';
+import { getMaxSteps } from '../../lib';
 
 export const getStyles = (color, isDragging) => {
   return {
-    backgroundColor: color || grey['700'],
+    backgroundColor: color || grey[700],
     border: isDragging && `white solid 2px`,
     opacity: isDragging && 0.8
   };
