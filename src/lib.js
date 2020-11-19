@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 const getMaxSteps = (schema) => {
   const stepsReducer = (acc, cur) => cur.elType === 'O' || cur.elType === 'N' ? acc + 1 : acc;
-  return schema.reduce(stepsReducer, 0);
+  return schema?.reduce(stepsReducer, 0);
 }
 
 const getTutorialStyles = makeStyles(theme => ({

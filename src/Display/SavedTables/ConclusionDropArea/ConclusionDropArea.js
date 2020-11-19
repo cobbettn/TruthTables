@@ -18,8 +18,6 @@ const ConclusionDropArea = (props) => {
       data: conclusion,
       setData: setConclusion,
       setSchema: setSchema,
-      type: 'C',
-      index: null
     })
   }
   const conclusionTable = conclusion && getSchemaTable(schemaTableData);

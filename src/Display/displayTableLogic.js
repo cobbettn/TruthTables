@@ -270,55 +270,43 @@ const getSchemaTable = (tableData) => {
 };
 
 const getSavedPremiseTables = (tableData) => {
-  const { sentenceLetters, premises, setPremises, setSchema } = tableData;
-  return premises.map((premise, i) => getSchemaTable({
+  let { premises } = tableData;
+  const { sentenceLetters, setPremises, setSchema } = tableData;
+  return premises?.map((premise, i) => getSchemaTable({
     sentenceLetters: sentenceLetters,
-    schema: premise,
+    schema: {...premise},
     showButtons: true,
     clickHandlers: getTableButtonHandlers({
-      data: premises,
-      setData: setPremises,
-      setSchema: setSchema,
-      type: 'P',
-      index: i
+      data: premise,
+      setData: (data) => {
+        data ? premises[i] = {...data} : premises.splice(i, i + 1); // delete premise when data is null, update otherwise
+        setPremises([...premises]);
+      },
+      setSchema: setSchema
     })
   }));
 };
 
-const getTableButtonHandlers = (obj) => {
-  const { data, setData, setSchema, type, index } = obj;
+const getTableButtonHandlers = (stateObj) => {
+  const { data, setData, setSchema } = stateObj;
+  const maxSteps = getMaxSteps(data?.symbols);
   const onEdit = () => {
-    const schema = type === 'P' ? data.splice(index, index + 1)[0] : data; 
-    schema.steps = getMaxSteps(schema.symbols);
-    setData(type === 'P' ? [...data] : null);
-    setSchema({...schema, type: type});
+    setData(null);
+    setSchema({...data, steps: maxSteps});
   }
   const onDelete = () => {
-    if (type === 'P') data.splice(index, index + 1);
-    setData(type === 'P' ? [...data] : null);
+    setData(null);
   }
   const onNext = () => {
-    const maxSteps = getMaxSteps(type === 'P' ? data[index].symbols : data.symbols);
-    type === 'P' ? 
-      data[index].steps < maxSteps && data[index].steps++ :
-      data.steps < maxSteps && data.steps++;
-    setData(type === 'P' ? [...data] : {...data});
+    if (data.steps < maxSteps) data.steps++;
+    setData({...data});
   }
   const onPrev = () => {
-    type === 'P' ?
-      data[index].steps > 0 && data[index].steps-- :
-      data.steps > 0 && data.steps--;
-    setData(type === 'P' ? [...data] : {...data});
+    if (data.steps > 0) data.steps--;
+    setData({...data});
   }
   const onCollapse = () => {
-    if (type === 'P') {
-      data[index].collapsed = !data[index].collapsed;
-      setData([...data]);
-    }
-    else {
-      data.collapsed = !data.collapsed;
-      setData({...data});
-    }
+    setData({...data, collapsed: !data.collapsed});
   }
   return {
     onEdit: onEdit,
