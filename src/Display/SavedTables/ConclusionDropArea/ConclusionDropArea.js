@@ -2,25 +2,24 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import grey from '@material-ui/core/colors/grey';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getSchemaTable, getTableButtonHandlers } from '../../displayTableLogic'
+import { getTableButtonHandlers } from '../../DisplayLogic';
 import Context from '../../../context';
 import { Box, Typography } from '@material-ui/core';
 import theme from '../../../theme';
+import SchemaTable from '../SchemaTable/SchemaTable';
 
-const ConclusionDropArea = (props) => {
-  const { conclusion, setConclusion } = props;
-  const { sentenceLetters, setSchema } = useContext(Context);
-  const schemaTableData = {
+const ConclusionDropArea = () => {
+  const { sentenceLetters, setSchema, conclusion, setConclusion } = useContext(Context);
+  const schemaTableProps = {
     sentenceLetters: sentenceLetters,
     schema: conclusion,
-    showButtons: true,
+    isSavedTable: true,
     clickHandlers: getTableButtonHandlers({
       data: conclusion,
       setData: setConclusion,
       setSchema: setSchema,
     })
   }
-  const conclusionTable = conclusion && getSchemaTable(schemaTableData);
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     flexGrow: '1',
@@ -56,7 +55,7 @@ const ConclusionDropArea = (props) => {
                       {...provided.dragHandleProps}
                     >
                       { 
-                        conclusionTable
+                        conclusion && <SchemaTable {...schemaTableProps}/>
                       }
                     </div>
                   )}

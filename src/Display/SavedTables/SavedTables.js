@@ -6,8 +6,9 @@ import dragEnd from './dragEnd';
 import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
 import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
 
-const SavedTables = () => {
+const SavedTables = (props) => {
   const { premises, setPremises, conclusion, setConclusion } = useContext(context);
+
   const onDragEnd = (drag) => {
     const stateObj = {
       premises: premises,
@@ -17,18 +18,13 @@ const SavedTables = () => {
     }
     dragEnd(drag, stateObj);
   }
+
   return (
     <Box style={{display: !conclusion && premises.length === 0 && 'none'}}>
       <DragDropContext onDragEnd={onDragEnd}>
         <div style={{display: 'flex', flexDirection:'row'}}>
-          <PremiseDropArea 
-            premises={premises}
-            setPremises={setPremises}
-          />
-          <ConclusionDropArea 
-            conclusion={conclusion}
-            setConclusion={setConclusion}
-          />
+          <PremiseDropArea/>
+          <ConclusionDropArea/>
         </div>
       </DragDropContext>
     </Box>
