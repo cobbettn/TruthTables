@@ -14,7 +14,7 @@ const PremiseDropArea = (props) => {
     sentenceLetters: sentenceLetters,
     premises: premises,
     setPremises: setPremises,
-    setSchema: setSchema
+    setSchema: setSchema,
   }
   const premiseTables = premises && getSavedPremiseTables(savedPremisesData);
   const getDropStyle = isDraggingOver => ({

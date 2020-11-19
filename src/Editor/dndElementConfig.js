@@ -23,9 +23,21 @@ export const getOnClick = (config) => {
   const onClick = () => {
     if (letterCount > 0) {
       const steps = getMaxSteps(symbols);
-      if (elType === 'L' && !tutorialSteps.editorLetter) setTutorialSteps( {...tutorialSteps, editorLetter: true});
-      if (elType !== 'L' && tutorialSteps.editorLetter && !tutorialSteps.editorOperator) setTutorialSteps({...tutorialSteps, editorOperator: true});
-      if (!(elType !== 'L' && !tutorialSteps.editorLetter)) setSchema({...schema, symbols: [...symbols, elConfig], steps: steps});
+      if (elType === 'L' && !tutorialSteps.editorLetter) {
+        setTutorialSteps({...tutorialSteps, editorLetter: true});
+      } 
+      if (elType !== 'L' && tutorialSteps.editorLetter && !tutorialSteps.editorOperator) {
+          setTutorialSteps({...tutorialSteps, editorOperator: true});
+      } 
+      if (!(elType !== 'L' && !tutorialSteps.editorLetter)) {
+        setSchema(
+          {...schema, 
+            type: schema.type || ' P', 
+            symbols: [...symbols, elConfig], 
+            steps: steps
+          }
+        );
+      }
     }
   }
   return !elConfig.schemaBuilderEl ? () => onClick() : null;
