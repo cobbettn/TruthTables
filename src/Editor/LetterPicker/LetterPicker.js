@@ -25,11 +25,12 @@ const LetterPicker = () => {
       classes={classes}
       placement='right'
     >
-      <Paper style={getPaperStyles(sentenceLetters.length)} variant="outlined">
+      <Paper style={getPaperStyles(sentenceLetters.length)} variant={sentenceLetters.length > 0 ?'outlined' : null }>
         <Droppable droppableId="LetterPicker" direction="horizontal">
           {(provided, snapshot) => (
             <div 
-              style={{display: 'flex'}}
+              style={{display: 'flex', padding: '0.2rem', borderRadius: '5px'}}
+              className='hover'
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}

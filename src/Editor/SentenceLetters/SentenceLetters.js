@@ -18,7 +18,8 @@ const SentenceLetters = () => {
       classes={classes}
     >
       <TextField
-        style={{width: '4.5rem'}}
+        className='hover'
+        style={{width: '4.5rem', borderRadius: '4px'}}
         label="Letters"
         variant="outlined"
         inputProps={inputProps}

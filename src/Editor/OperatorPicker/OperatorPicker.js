@@ -21,7 +21,8 @@ const OperatorPicker = () => {
         <Droppable droppableId="OperatorPicker" direction="horizontal">
           {(provided, snapshot) => (
             <div 
-              style={{display: 'flex'}}
+              style={{display: 'flex', padding: '0.2rem', borderRadius: '4px'}}
+              className='hover'
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}

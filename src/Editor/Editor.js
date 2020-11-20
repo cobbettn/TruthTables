@@ -8,6 +8,7 @@ import SchemaBuilder from './SchemaBuilder/SchemaBuilder';
 import BuilderButtons from './BuilderButtons/BuilderButtons';
 import Context from '../context';
 import dragEnd from './dragEnd';
+import './Editor.scss';
 
 const Editor = () => {
   const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
@@ -21,9 +22,9 @@ const Editor = () => {
   const onDragEnd = (drag) => dragEnd(drag, stateObj);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Box style={{display: 'flex'}}>
+      <Box style={{display: 'flex', alignItems: 'center'}}>
         <Box>
-          <SentenceLetters/>
+          <SentenceLetters style={{height: '4rem'}}/>
         </Box>
         <Box>
           <LetterPicker/>

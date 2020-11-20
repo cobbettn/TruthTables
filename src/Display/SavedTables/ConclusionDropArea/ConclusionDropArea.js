@@ -23,6 +23,7 @@ const ConclusionDropArea = () => {
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
     flexGrow: '1',
+    borderRadius: '4px',
     backgroundColor: isDraggingOver && grey[900]
   });
   const boxStyle = {

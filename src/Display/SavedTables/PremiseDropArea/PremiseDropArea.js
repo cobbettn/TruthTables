@@ -13,6 +13,7 @@ const PremiseDropArea = () => {
   
   const getDropStyle = isDraggingOver => ({
     display: 'flex',
+    borderRadius: '4px',
     backgroundColor: isDraggingOver && grey[900]
   });
  

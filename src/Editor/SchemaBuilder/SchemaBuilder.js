@@ -11,12 +11,13 @@ const SchemaBuilder = () => {
   const { symbols } = schema;
   const getDropStyle = (isDraggingOver) => ({
     display: 'flex',
-    height: '3.5rem',
-    backgroundColor: isDraggingOver && grey[900],
+    height: '4rem',
+    backgroundColor: (schema.symbols.length > 0 || isDraggingOver) && grey[900],
     border: schema.symbols.length > 0 && 
       `solid 2px ${ schema.type === 'C' ? theme.palette.secondary.light : theme.palette.primary.light }`,
     borderRadius: '3px',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: '0.1rem',
   });
   return (
     <Box style={{paddingTop: '2rem', display: 'flex', flexDirection: 'column'}}>
