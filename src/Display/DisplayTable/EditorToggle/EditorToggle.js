@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Typography, Tooltip, Switch } from '@material-ui/core';
-import { editorTitleStyle } from '../DisplayTable.style';
+import { editorTitleStyle, typeStyle } from './EditorToggle.style';
 
 const EditorToggle = (props) => {
   const { schemaType, clickHandlers } = props;
   return (
-    <Box style={editorTitleStyle}>
+    <Box style={ editorTitleStyle }>
       <Typography 
-        style={{paddingLeft: '0.25rem', lineHeight: '1.5rem'}} 
+        style={ typeStyle } 
         variant='caption'
       >
         { schemaType === 'P' ? 'Premise' : 'Conclusion'}

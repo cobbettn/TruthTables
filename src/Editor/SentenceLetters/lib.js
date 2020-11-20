@@ -25,4 +25,4 @@ const getInputProps =  (sentenceLetters, setSentenceLetters, tutorialSteps, setT
   };
 };
 
-export default getInputProps;
+export { getInputProps };

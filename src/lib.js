@@ -75,6 +75,4 @@ const getTutorialStyles = makeStyles(theme => ({
   }
 }));
 
-
-
 export { getMaxSteps, getTutorialStyles, validateSchema };

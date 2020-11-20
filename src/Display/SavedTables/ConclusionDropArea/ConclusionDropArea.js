@@ -1,16 +1,15 @@
 import React, { useContext } from 'react';
-import Paper from '@material-ui/core/Paper';
-import grey from '@material-ui/core/colors/grey';
+import { Box, Typography, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getTableButtonHandlers } from '../../lib';
 import Context from '../../../context';
-import { Box, Typography } from '@material-ui/core';
-import theme from '../../../theme';
 import SchemaTable from '../SchemaTable/SchemaTable';
+import theme from '../../../theme';
+import { getTableButtonHandlers } from '../../lib';
+import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
 
 const ConclusionDropArea = () => {
   const { sentenceLetters, setSchema, conclusion, setConclusion } = useContext(Context);
-  const schemaTableProps = {
+  const conclusionTableProps = {
     sentenceLetters: sentenceLetters,
     schema: conclusion,
     isSavedTable: true,
@@ -19,18 +18,7 @@ const ConclusionDropArea = () => {
       setData: setConclusion,
       setSchema: setSchema,
     })
-  }
-  const getDropStyle = isDraggingOver => ({
-    display: 'flex',
-    flexGrow: '1',
-    backgroundColor: isDraggingOver && grey[900]
-  });
-  const boxStyle = {
-    display: 'flex', 
-    flexBasis:'33%', 
-    marginLeft: '0.5rem', 
-    flexDirection:'column',
-  }
+  };
   return (
     <Box style={boxStyle}>
       <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Conclusion:</Typography>
@@ -55,7 +43,7 @@ const ConclusionDropArea = () => {
                       {...provided.dragHandleProps}
                     >
                       { 
-                        conclusion && <SchemaTable {...schemaTableProps}/>
+                        conclusion && <SchemaTable {...conclusionTableProps}/>
                       }
                     </div>
                   )}

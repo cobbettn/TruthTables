@@ -1,55 +1,21 @@
 import React, { useContext } from 'react';
-import Paper from '@material-ui/core/Paper';
-import grey from '@material-ui/core/colors/grey';
+import { Typography, Box, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getTableButtonHandlers } from '../../lib';
 import Context from '../../../context';
-import { Typography, Box } from '@material-ui/core';
-import theme from '../../../theme';
-import SchemaTable from '../SchemaTable/SchemaTable';
+import { getPremiseTables } from './lib';
+import { getDropStyle, boxStyle, typeStyle } from './PremiseDropArea.style';
 
 const PremiseDropArea = () => {
-  const { sentenceLetters, setSchema, premises, setPremises } = useContext(Context);
-  
-  const getDropStyle = isDraggingOver => ({
-    display: 'flex',
-    backgroundColor: isDraggingOver && grey[900]
-  });
- 
-  const boxStyle = {
-    display: 'flex', 
-    flexBasis: '66%', 
-    flexDirection: 'column',
-  }
-
-  const premiseTables = premises?.map((premise, i) => (
-    
-    <SchemaTable
-      sentenceLetters={sentenceLetters}
-      schema= {{...premise}}
-      isSavedTable={true}
-      clickHandlers={ getTableButtonHandlers(
-        {
-          data: premise,
-          setData: (data) => {
-            data ? premises[i] = {...data} : premises.splice(i, i + 1); // delete premise when data is null, update otherwise
-            setPremises([...premises]);
-          },
-          setSchema: setSchema
-        }
-      )}
-    />
-    
-  ));
-
+  const context = useContext(Context);
+  const premiseTables = getPremiseTables(context);
   return (
-    <Box style={boxStyle}>
-      <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Premises:</Typography>
+    <Box style={ boxStyle }>
+      <Typography variant='caption' style={ typeStyle }>Premises:</Typography>
       <Paper style={{flexGrow: '1'}}variant="outlined">
         <Droppable droppableId='PremiseDropZone' direction="horizontal">
           {(provided, snapshot) => (
             <div 
-              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%'}}
+              style={ {...getDropStyle(snapshot.isDraggingOver)} }
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}
