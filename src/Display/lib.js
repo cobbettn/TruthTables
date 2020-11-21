@@ -191,14 +191,15 @@ const computeOperator = (data) => {
   const { value: operator, opMapId } = schema[opIndex];
   let result = [],  numArgs = 2;
   for (let row = 0; row < numRows; row++) {
-    let value;
-    let L, R;
+    let L, R, value, valid;
     if (opIndex - 1 >= 0) L = table[row][opIndex - 1];
     if (opIndex + 1 < table[row].length) R = table[row][opIndex + 1];
+    valid = !(L === undefined || R=== undefined);
     switch (operator) {
       case '\u00AC': // not
-        value = !R; 
         numArgs = 1;
+        valid = R !== undefined;
+        value = !R; 
         break;
       case '\u2228': // or
         value = L || R; 
@@ -217,7 +218,7 @@ const computeOperator = (data) => {
         break;
       default:
     }
-    result.push(value);
+    if (valid) result.push(value);
   }
   const resultObj = {
     result: result,

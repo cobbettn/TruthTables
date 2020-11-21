@@ -24,7 +24,7 @@ const ConclusionDropArea = () => {
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}
-              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%'}}
+              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%', borderRadius: '5px'}}
             >
                 <Draggable 
                   draggableId={'C'} 

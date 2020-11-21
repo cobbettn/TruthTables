@@ -10,12 +10,12 @@ import { getBoxStyle } from './SavedTables.style';
 const SavedTables = (props) => {
   const context = useContext(Context);
   return (
-    <Box style={ getBoxStyle(context)}>
-      <DragDropContext onDragEnd={(drag) => dragEnd(drag, context)}>
-        <div style={{display: 'flex', flexDirection:'row'}}>
+    <Box style={ getBoxStyle(context) }>
+      <DragDropContext onDragEnd={ (drag) => dragEnd(drag, context) }>
+        <Box style={ {display: 'flex', flexDirection:'row'} }>
           <PremiseDropArea/>
           <ConclusionDropArea/>
-        </div>
+        </Box>
       </DragDropContext>
     </Box>
   );

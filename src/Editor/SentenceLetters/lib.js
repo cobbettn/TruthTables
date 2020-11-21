@@ -1,6 +1,7 @@
-import Colors from '../../letterColors';
+import { pink, orange, yellow, lightGreen, cyan, purple } from '@material-ui/core/colors';
 
 const getInputProps =  (context) => {
+  const colors =  [purple, pink, orange, yellow, lightGreen, cyan];
   const { sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps } = context
   const min = 1, max = 6;
   const onChange = (event) => {
@@ -11,7 +12,7 @@ const getInputProps =  (context) => {
         return {
           value: String.fromCharCode(112 + i), 
           elType: 'L',
-          bgColor: Colors[i][500],
+          bgColor: colors[i][500],
         }
       });
       setSentenceLetters([...letters]);

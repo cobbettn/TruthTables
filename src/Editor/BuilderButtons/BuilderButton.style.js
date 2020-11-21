@@ -1,6 +1,7 @@
+import { makeStyles } from '@material-ui/core';
 import theme from '../../theme';
 
-const getStyles = (makeStyles, validSchema, schemaSize, schemaType) => {
+const getStyles = (validSchema, schemaSize, schemaType) => {
   const { 
     main:   primaryMain, 
     dark:   primaryDark, 
@@ -12,7 +13,7 @@ const getStyles = (makeStyles, validSchema, schemaSize, schemaType) => {
     light:  secondaryLight
   } = theme.palette.secondary;
   const isPremise = schemaType === 'P';
-  return makeStyles(
+  const getClasses = makeStyles(
     {
       common : {
         minWidth: '6rem',
@@ -38,6 +39,7 @@ const getStyles = (makeStyles, validSchema, schemaSize, schemaType) => {
       },
     }
   );
+  const classes = getClasses();
+  return classes;
 }
-
 export { getStyles };

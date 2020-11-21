@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
+import { Box, Button, Tooltip } from '@material-ui/core';
 import Context from '../../context';
 import { getButtonHandlers } from './lib';
-import { validateSchema, getTutorialStyles } from '../../lib';
+import { getTutorialStyles } from '../lib';
+import { validateSchema } from '../../lib';
 import { getStyles } from './BuilderButton.style';
 
 const BuilderButtons = () => {
@@ -12,10 +13,8 @@ const BuilderButtons = () => {
   const schemaSize = schema.symbols.length;
   const { save, clear } = getButtonHandlers({...context, isValid: isValidSchema}); 
   const open = (isValidSchema && tutorialSteps.editorOperator && !tutorialSteps.saveSchema);
-  
-  // find a way to make the styling less clunky 
-  const useStyles = getStyles(makeStyles, isValidSchema, schemaSize, schema.type);
-  const classes = useStyles();
+
+  const classes = getStyles(isValidSchema, schemaSize, schema.type);
   const tooltipClasses = getTutorialStyles();
   const saveClasses = {root: [classes.saveBtn, classes.common].join(' ')};
   const clearClasses = {root: [classes.clearBtn, classes.common].join(' ')};
