@@ -7,7 +7,6 @@ import { getDropStyle, boxStyle, typeStyle } from './SchemaBuilder.style';
 
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
-  const { symbols } = schema;
   return (
     <Box style={boxStyle}>
       <Typography variant='caption' style={typeStyle}>Schema Editor:</Typography>
@@ -20,7 +19,7 @@ const SchemaBuilder = () => {
               {...provided.droppableProps}
               {...provided.dragHandleProps}
             >
-              {symbols && symbols.map((config, i) => (
+              {schema.symbols && schema.symbols.map((config, i) => (
                 <Draggable 
                   draggableId={`${config.value}${i}`} 
                   key={`${config.value}${i}`} 
@@ -32,16 +31,14 @@ const SchemaBuilder = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-
-                      {/* schemaBuilderEl determines whether DnDElement is in the builder or a picker */}
                       <DnDElement config={
-                        {...config, 
-                          schemaBuilderEl: true, 
-                          schemaIndex: i,
-                          isDragging: snapshot.isDragging
+                          {...config, 
+                            schemaBuilderEl: true, 
+                            schemaIndex: i,
+                            isDragging: snapshot.isDragging
+                          }
                         }
-                      }/>
-
+                      />
                     </div>
                   )}
                 </Draggable>

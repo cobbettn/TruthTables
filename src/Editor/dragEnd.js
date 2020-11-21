@@ -6,12 +6,12 @@ import { getMaxSteps } from '../lib';
  * Drag and drop handler for the Editor component.
  * 
  * @param {Object} drag       drag and drop event data
- * @param {Object} stateObj   object containing setters and getters for the app's state
+ * @param {Object} context   object containing setters and getters for the app's state
  */
-const dragEnd = (drag, stateObj) => {
+const dragEnd = (drag, context) => {
+  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = context;
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const { symbols } = stateObj.schema;
-  const tmpSchema = [...symbols];
+  const tmpSchema = [...schema.symbols];
   let dropElement;
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
@@ -21,20 +21,20 @@ const dragEnd = (drag, stateObj) => {
           [dropElement] = tmpSchema.splice(sourceIndex, 1); 
           break;
         case "LetterPicker": 
-          if (!stateObj.tutorialSteps.editorLetter) {
-            stateObj.setTutorialSteps({...stateObj.tutorialSteps, editorLetter: true});
+          if (!tutorialSteps.editorLetter) {
+            setTutorialSteps({tutorialSteps, editorLetter: true});
           }
-          dropElement = stateObj.sentenceLetters[sourceIndex];
+          dropElement = sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
           dropElement = OperatorConfig[sourceIndex];
-          if (stateObj.tutorialSteps.editorLetter && !stateObj.tutorialSteps.editorOperator) {
-            stateObj.setTutorialSteps({...stateObj.tutorialSteps, editorOperator: true});
+          if (tutorialSteps.editorLetter && !tutorialSteps.editorOperator) {
+            setTutorialSteps({...tutorialSteps, editorOperator: true});
           }
           break;
         default:
       }
-      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, {...dropElement});
+      if (sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, {...dropElement});
     }
   }
   else {
@@ -43,9 +43,9 @@ const dragEnd = (drag, stateObj) => {
     }
   }
   
-  if (!(dropElement?.elType !== 'L' && !stateObj.tutorialSteps.editorLetter)) {
+  if (!(dropElement?.elType !== 'L' && !tutorialSteps.editorLetter)) {
     const steps = getMaxSteps(tmpSchema);
-    stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
+    setSchema({...schema, symbols: [...tmpSchema], steps: steps}); // update schema state
   } 
 }
 

@@ -1,19 +1,20 @@
 import React, { useContext } from 'react';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 import Context from '../../context';
-import styles from './BuilderButton.style';
 import { getButtonHandlers } from './lib';
 import { validateSchema, getTutorialStyles } from '../../lib';
+import { getStyles } from './BuilderButton.style';
 
 const BuilderButtons = () => {
   const context = useContext(Context);
   const { schema, tutorialSteps } = context;
-  const { symbols, type } = schema;
-  const isValidSchema = validateSchema(symbols);
-  const schemaSize = symbols.length;
+  const isValidSchema = validateSchema(schema.symbols);
+  const schemaSize = schema.symbols.length;
   const { save, clear } = getButtonHandlers({...context, isValid: isValidSchema}); 
   const open = (isValidSchema && tutorialSteps.editorOperator && !tutorialSteps.saveSchema);
-  const useStyles = styles(makeStyles, isValidSchema, schemaSize, type);
+  
+  // find a way to make the styling less clunky 
+  const useStyles = getStyles(makeStyles, isValidSchema, schemaSize, schema.type);
   const classes = useStyles();
   const tooltipClasses = getTutorialStyles();
   const saveClasses = {root: [classes.saveBtn, classes.common].join(' ')};

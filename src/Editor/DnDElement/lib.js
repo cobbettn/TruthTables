@@ -9,19 +9,19 @@ const getStyles = (color, isDragging) => {
   };
 }
 
-const getOnClick = (config) => {
+const getOnClick = (data) => {
   const {
-    letterCount,
+    sentenceLetters,
     schema,
     setSchema,
     elConfig,
     tutorialSteps,
     setTutorialSteps
-  } = config;
+  } = data;
   const { symbols } = schema; 
   const { elType } = elConfig;
   const onClick = () => {
-    if (letterCount > 0) {
+    if (sentenceLetters.length > 0) {
       const steps = getMaxSteps(symbols);
       if (elType === 'L' && !tutorialSteps.editorLetter) {
         setTutorialSteps({...tutorialSteps, editorLetter: true});
@@ -43,7 +43,8 @@ const getOnClick = (config) => {
   return !elConfig.schemaBuilderEl ? () => onClick() : null;
 }
 
-const getRightClick =  (config, schema, setSchema) => {
+const getRightClick = (data) => {
+  const { schema, setSchema, config } = data;
   const { schemaBuilderEl, schemaIndex } = config;
   return schemaBuilderEl && ((event) => {
     event.preventDefault();

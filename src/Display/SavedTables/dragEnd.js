@@ -1,6 +1,6 @@
-const dragEnd = (drag, stateObj) => {
-  const { premises, setPremises, conclusion, setConclusion } = stateObj;
+const dragEnd = (drag, context) => {
   const { destination, source } = drag;
+  const { premises, setPremises, conclusion, setConclusion } = context;
   const { index: sourceIndex, droppableId: sourceId } = source;
   if (sourceId === 'PremiseDropZone') {
     if (destination?.droppableId === 'PremiseDropZone') {

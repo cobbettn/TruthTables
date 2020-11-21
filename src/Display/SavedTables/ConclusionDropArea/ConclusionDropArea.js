@@ -9,16 +9,11 @@ import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
 
 const ConclusionDropArea = () => {
   const { sentenceLetters, setSchema, conclusion, setConclusion } = useContext(Context);
-  const conclusionTableProps = {
-    sentenceLetters: sentenceLetters,
-    schema: conclusion,
-    isSavedTable: true,
-    clickHandlers: getTableButtonHandlers({
-      data: conclusion,
-      setData: setConclusion,
-      setSchema: setSchema,
-    })
-  };
+  const clickHandlers = getTableButtonHandlers({
+    data: conclusion,
+    setData: setConclusion,
+    setSchema: setSchema,
+  })
   return (
     <Box style={boxStyle}>
       <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Conclusion:</Typography>
@@ -41,9 +36,13 @@ const ConclusionDropArea = () => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                    >
-                      { 
-                        conclusion && <SchemaTable {...conclusionTableProps}/>
+                    > { 
+                        conclusion && <SchemaTable
+                                        sentenceLetters={ sentenceLetters }
+                                        schema={ conclusion }
+                                        isSavedTable={ true }
+                                        clickHandlers={ clickHandlers }
+                                      />
                       }
                     </div>
                   )}

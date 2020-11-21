@@ -1,6 +1,7 @@
 import Colors from '../../letterColors';
 
-const getInputProps =  (sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps) => {
+const getInputProps =  (context) => {
+  const { sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps } = context
   const min = 1, max = 6;
   const onChange = (event) => {
     if (event.target.value >= min && event.target.value <= max) {

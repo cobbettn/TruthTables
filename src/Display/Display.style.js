@@ -1,7 +1,7 @@
-
-const getBoxStyle = (symbols, premises, conclusion) => {
+const getBoxStyle = (context) => {
+  const { schema, premises, conclusion } = context;
   return {
-    display: (symbols.length > 0 || premises.length > 0 || conclusion) ? 'flex' : 'none'
+    display: (schema.symbols.length > 0 || premises.length > 0 || conclusion) ? 'flex' : 'none'
 };}
 const paperStyle = {
   padding: '0.5rem', 
@@ -10,4 +10,4 @@ const paperStyle = {
   justifyContent: 'center',
 };
 
-export { getBoxStyle, paperStyle }
+export { getBoxStyle, paperStyle };

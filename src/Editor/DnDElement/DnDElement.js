@@ -5,20 +5,12 @@ import { getStyles, getOnClick, getRightClick } from './lib';
 import './DnDElement.scss';
 
 const DnDElement = (props) => {
-  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
+  const context = useContext(Context);
   const { config } = props;
   const { isDragging, tooltip, schemaBuilderEl, value, bgColor } = config;
-  const configObj = {
-    letterCount: sentenceLetters.length,
-    schema: schema,
-    setSchema: setSchema,
-    elConfig: config,
-    tutorialSteps: tutorialSteps,
-    setTutorialSteps: setTutorialSteps
-  }
   const style = getStyles(bgColor, isDragging);
-  const onClick = getOnClick(configObj);
-  const onRightClick = getRightClick(config, schema, setSchema);
+  const onClick = getOnClick({...context, elConfig: config});
+  const onRightClick = getRightClick({...context, config: config});
   return (
     <Tooltip
       title={ (!schemaBuilderEl && tooltip) || '' }

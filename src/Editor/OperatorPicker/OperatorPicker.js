@@ -34,7 +34,11 @@ const OperatorPicker = () => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <DnDElement config={{...config, isDragging: snapshot.isDragging}}/>
+                      <DnDElement config={{
+                        ...config, 
+                        isDragging: snapshot.isDragging, 
+                      }}
+                      />
                     </div>
                   )}
                 </Draggable>

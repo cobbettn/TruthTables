@@ -10,15 +10,8 @@ import SchemaBuilder from './SchemaBuilder/SchemaBuilder';
 import BuilderButtons from './BuilderButtons/BuilderButtons';
 
 const Editor = () => {
-  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
-  const dragState = {
-    sentenceLetters: sentenceLetters,
-    schema: schema,
-    setSchema: setSchema,
-    tutorialSteps: tutorialSteps,
-    setTutorialSteps: setTutorialSteps
-  }
-  const onDragEnd = (drag) => dragEnd(drag, dragState);
+  const context = useContext(Context);
+  const onDragEnd = (drag) => dragEnd(drag, context);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box style={{display: 'flex'}}>
