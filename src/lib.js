@@ -1,4 +1,41 @@
-import { makeStyles } from "@material-ui/core";
+/**
+ * Creates a top-level context for handling app state
+ * 
+ * @param {*} _useState 
+ */
+const getContextProvider = (_useState) => {
+  const defaultSentenceLetters = [];
+  const defaultSchema = { symbols: [], type: 'P' };
+  const defaultPremises = [];
+  const defaultConclusion = null;
+  const defaultTutorialSteps = { addLetter: false, editorLetter: false, editorOperator: false, saveSchema: false };
+  
+  const [ sentenceLetters, setSentenceLetters ] = _useState(defaultSentenceLetters);
+  const [ schema, setSchema ] = _useState(defaultSchema); 
+  const [ premises, setPremises ] = _useState(defaultPremises);
+  const [ conclusion, setConclusion ] = _useState(defaultConclusion); 
+  const [ tutorialSteps, setTutorialSteps ] = _useState(defaultTutorialSteps);
+  
+  const state = {
+    sentenceLetters: sentenceLetters,
+    schema: schema,
+    premises: premises,
+    conclusion: conclusion,
+    tutorialSteps: tutorialSteps
+  };
+  const stateSetters = {
+    setSentenceLetters: setSentenceLetters,
+    setSchema: setSchema,
+    setPremises: setPremises,
+    setConclusion: setConclusion,
+    setTutorialSteps: setTutorialSteps
+  };
+
+  return {
+    ...state,
+    ...stateSetters,
+  };
+};
 
 /**
  * Checks if a schema is well-formed
@@ -63,16 +100,8 @@ const getMaxSteps = (schema) => {
   return schema?.reduce(stepsReducer, 0);
 }
 
-const getTutorialStyles = makeStyles(theme => ({
-  arrow: {
-    color: theme.palette.common.white
-  },
-  tooltip : {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-    fontSize: '12px',
-    boxShadow: `2px 2px 2px ${theme.palette.common.black}`
-  }
-}));
-
-export { getMaxSteps, getTutorialStyles, validateSchema };
+export { 
+  getMaxSteps, 
+  getContextProvider, 
+  validateSchema
+};

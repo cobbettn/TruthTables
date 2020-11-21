@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Tooltip, TextField } from '@material-ui/core';
 import Context from '../../context';
 import { getInputProps } from './lib';
-import { getTutorialStyles } from '../../lib';
+import { getTutorialStyles } from '../lib';
 
 const SentenceLetters = () => {
   const context = useContext(Context);
@@ -17,10 +17,11 @@ const SentenceLetters = () => {
       classes={classes}
     >
       <TextField
-        style={{width: '4.5rem'}}
+        style={{width: '5rem', borderRadius: '5px'}}
         label="Letters"
         variant="outlined"
         inputProps={inputProps}
+        className='hover'
       />
     </Tooltip>
   );

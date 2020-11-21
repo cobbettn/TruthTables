@@ -8,13 +8,14 @@ import LetterPicker from './LetterPicker/LetterPicker';
 import OperatorPicker from './OperatorPicker/OperatorPicker';
 import SchemaBuilder from './SchemaBuilder/SchemaBuilder';
 import BuilderButtons from './BuilderButtons/BuilderButtons';
+import './Editor.scss';
 
 const Editor = () => {
   const context = useContext(Context);
   const onDragEnd = (drag) => dragEnd(drag, context);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Box style={{display: 'flex'}}>
+      <Box style={{display: 'flex', alignItems: 'center'}}>
         <Box>
           <SentenceLetters/>
         </Box>

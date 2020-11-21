@@ -1,10 +1,10 @@
-const getPaperStyles = (count) => { 
-  const style = {
-    display: 'flex',
-    width: count === 0 && '0px'
-  }
-  if (count > 0) style.marginLeft = '1rem';
-  return style;
-}
+const getDropStyles = (count) =>  ({
+  display: 'flex', 
+  height: '4rem', 
+  alignItems: 'center',
+  paddingLeft: '0.2rem',
+  paddingRight: '0.2rem',
+  borderRadius: '5px',
+});
 
-export { getPaperStyles };
+export { getDropStyles };

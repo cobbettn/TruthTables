@@ -11,14 +11,15 @@ const typeStyle = {
 }
 
 const dropStyle = isDraggingOver => ({
-  display: 'flex',
   backgroundColor: isDraggingOver && theme.palette.grey[900]
 });
 
 const getDropStyle = (snapshot) => ({
   ...dropStyle(snapshot.isDraggingOver),
+  display: 'flex',
   flexGrow: '1',
-  height: '100%'
+  height: '100%',
+  borderRadius: '5px'
 });
 
 export { getDropStyle, boxStyle, typeStyle };
