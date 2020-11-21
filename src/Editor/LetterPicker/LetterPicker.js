@@ -1,47 +1,52 @@
 import React, { useContext } from 'react';
-import Paper from '@material-ui/core/Paper';
+import { Tooltip, Paper } from '@material-ui/core';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { getTutorialStyles } from '../../lib';
+import { getPaperStyles } from './LetterPicker.styles';
 
 const LetterPicker = () => {
-  const { sentenceLetters } = useContext(Context);
-  const getPaperStyles = (count) => { 
-    const style = {
-      display: count === 0 ? 'none' : 'flex'
-    }
-    if (count > 0) style.marginLeft = '1rem';
-    return style;
-  }
+  const { sentenceLetters, tutorialSteps } = useContext(Context);
+  const classes = getTutorialStyles();
+  const paperStyles = getPaperStyles(sentenceLetters.length);
   return (
-    <Paper style={getPaperStyles(sentenceLetters.length)} variant="outlined">
-      <Droppable droppableId="LetterPicker" direction="horizontal">
-        {(provided, snapshot) => (
-          <div 
-            style={{display: 'flex'}}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            {...provided.dragHandleProps}
-          >
-            {sentenceLetters.map((config, i) => 
-              <Draggable draggableId={config.value} key={config.value} index={i} >
-                {(provided, snapshot) => (
-                  <div
-                    className="DraggableElement"
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <DnDElement config={config}/>
-                  </div>
-                )}
-              </Draggable>
-            )}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </Paper>
+    <Tooltip
+      title='Click or drag a sentence letter into schema editor'
+      arrow
+      open={tutorialSteps.addLetter && !tutorialSteps.editorLetter}
+      classes={classes}
+      placement='right'
+    >
+      <Paper style={ paperStyles } variant="outlined">
+        <Droppable droppableId="LetterPicker" direction="horizontal">
+          {(provided, snapshot) => (
+            <div 
+              style={{display: 'flex'}}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              {...provided.dragHandleProps}
+            >
+              {sentenceLetters.map((config, i) => 
+                <Draggable draggableId={config.value} key={config.value} index={i} >
+                  {(provided, snapshot) => (
+                    <div
+                      className="DraggableElement"
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <DnDElement config={{...config, isDragging: snapshot.isDragging}}/>
+                    </div>
+                  )}
+                </Draggable>
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </Paper>
+    </Tooltip>
   );
 }
 

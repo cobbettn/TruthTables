@@ -1,32 +1,19 @@
 import React, { useContext } from 'react';
 import { Paper, Box } from '@material-ui/core';
-import './Display.scss';
 import Context from '../context';
 import EditorTable from './EditorTable/EditorTable';
 import SavedTables from './SavedTables/SavedTables';
+import { getBoxStyle, paperStyle } from './Display.style';
+import './Display.scss';
 
 const Display = () => {
-  const { sentenceLetters, schema, premises, conclusion } = useContext(Context);
-  const displayValue = schema.symbols.length > 0 || premises.length > 0 || conclusion ? 'flex' : 'none';
-  const boxStyle = {
-    display: displayValue
-  };
-  const paperStyle = {
-    padding: '0.5rem', 
-    display: 'flex',
-    flexDirection: 'column'
-  };
+  const context = useContext(Context);
+  const boxStyle = getBoxStyle(context);
   return (
     <Box className="Display" mt="1rem" style={boxStyle}>
       <Paper elevation={5} style={paperStyle}>
-        <EditorTable  
-          sentenceLetters={sentenceLetters}
-          schema={schema}
-        />
-        <SavedTables
-          sentenceLetters={sentenceLetters}
-          premises={premises}
-        />
+        <EditorTable {...context}/>
+        <SavedTables {...context}/>
       </Paper>
     </Box>
   );

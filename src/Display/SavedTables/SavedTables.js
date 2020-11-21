@@ -1,34 +1,20 @@
 import React, { useContext } from 'react';
 import Box from '@material-ui/core/Box';
 import { DragDropContext } from 'react-beautiful-dnd';
-import context from '../../context';
+import Context from '../../context';
 import dragEnd from './dragEnd';
 import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
 import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
+import { getBoxStyle } from './SavedTables.style';
 
-const SavedTables = () => {
-  const { premises, setPremises, conclusion, setConclusion } = useContext(context);
-  const onDragEnd = (drag) => {
-    const stateObj = {
-      premises: premises,
-      setPremises: setPremises,
-      conclusion: conclusion,
-      setConclusion: setConclusion
-    }
-    dragEnd(drag, stateObj);
-  }
+const SavedTables = (props) => {
+  const context = useContext(Context);
   return (
-    <Box style={{display: !conclusion && premises.length === 0 && 'none'}}>
-      <DragDropContext onDragEnd={onDragEnd}>
+    <Box style={ getBoxStyle(context)}>
+      <DragDropContext onDragEnd={(drag) => dragEnd(drag, context)}>
         <div style={{display: 'flex', flexDirection:'row'}}>
-          <PremiseDropArea 
-            premises={premises}
-            setPremises={setPremises}
-          />
-          <ConclusionDropArea 
-            conclusion={conclusion}
-            setConclusion={setConclusion}
-          />
+          <PremiseDropArea/>
+          <ConclusionDropArea/>
         </div>
       </DragDropContext>
     </Box>

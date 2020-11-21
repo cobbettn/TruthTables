@@ -1,4 +1,4 @@
-import OperatorConfig from './operatorConfig';
+import OperatorConfig from './OperatorPicker/operatorConfig';
 import { getMaxSteps } from '../lib';
 /**
  * dragEnd()
@@ -6,29 +6,35 @@ import { getMaxSteps } from '../lib';
  * Drag and drop handler for the Editor component.
  * 
  * @param {Object} drag       drag and drop event data
- * @param {Object} stateObj   object containing setters and getters for the app's state
+ * @param {Object} context   object containing setters and getters for the app's state
  */
-const dragEnd = (drag, stateObj) => {
+const dragEnd = (drag, context) => {
+  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = context;
   const { droppableId: sourceId, index: sourceIndex } = drag.source;
-  const { symbols } = stateObj.schema;
-  const tmpSchema = [...symbols];
+  const tmpSchema = [...schema.symbols];
+  let dropElement;
   if (drag?.destination) {
     const { droppableId: destId, index: destIndex } = drag.destination;
     if (destId === "SchemaBuilder") {
-      let dropElement; // element being dropped into schema builder
       switch (sourceId) {
         case "SchemaBuilder": 
           [dropElement] = tmpSchema.splice(sourceIndex, 1); 
           break;
         case "LetterPicker": 
-          dropElement = stateObj.sentenceLetters[sourceIndex];
+          if (!tutorialSteps.editorLetter) {
+            setTutorialSteps({tutorialSteps, editorLetter: true});
+          }
+          dropElement = sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
           dropElement = OperatorConfig[sourceIndex];
+          if (tutorialSteps.editorLetter && !tutorialSteps.editorOperator) {
+            setTutorialSteps({...tutorialSteps, editorOperator: true});
+          }
           break;
         default:
       }
-      if (stateObj.sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, dropElement);
+      if (sentenceLetters.length > 0) tmpSchema.splice(destIndex, 0, {...dropElement});
     }
   }
   else {
@@ -36,8 +42,11 @@ const dragEnd = (drag, stateObj) => {
       tmpSchema.splice(sourceIndex, 1); // delete elements dragged from schemabuilder to a non-drop area
     }
   }
-  const steps = getMaxSteps(tmpSchema);
-  stateObj.setSchema({...stateObj.schema, symbols: [...tmpSchema], steps: steps}); // update schema state
+  
+  if (!(dropElement?.elType !== 'L' && !tutorialSteps.editorLetter)) {
+    const steps = getMaxSteps(tmpSchema);
+    setSchema({...schema, symbols: [...tmpSchema], steps: steps}); // update schema state
+  } 
 }
 
 export default dragEnd;

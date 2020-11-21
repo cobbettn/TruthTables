@@ -1,45 +1,46 @@
 import React, { useContext } from 'react';
-import { Box, Button, makeStyles } from '@material-ui/core';
-import validateSchema from '../../validateSchema';
+import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 import Context from '../../context';
-import styles from './BuilderButton.style';
-import { getMaxSteps } from '../../lib';
+import { getButtonHandlers } from './lib';
+import { validateSchema, getTutorialStyles } from '../../lib';
+import { getStyles } from './BuilderButton.style';
 
 const BuilderButtons = () => {
-  const { schema, setSchema, premises, setPremises, setConclusion } = useContext(Context);
-  const { symbols, type } = schema;
-  const isValidSchema = validateSchema(symbols);
-  const schemaSize = symbols.length;
-  const useStyles = styles(makeStyles, isValidSchema, schemaSize);
+  const context = useContext(Context);
+  const { schema, tutorialSteps } = context;
+  const isValidSchema = validateSchema(schema.symbols);
+  const schemaSize = schema.symbols.length;
+  const { save, clear } = getButtonHandlers({...context, isValid: isValidSchema}); 
+  const open = (isValidSchema && tutorialSteps.editorOperator && !tutorialSteps.saveSchema);
+  
+  // find a way to make the styling less clunky 
+  const useStyles = getStyles(makeStyles, isValidSchema, schemaSize, schema.type);
   const classes = useStyles();
-  const clearSchemaBuilder = () => setSchema({
-    symbols: [],
-    type: 'P'
-  });
-  const saveValidSchema = () => {
-    if (isValidSchema) {
-      const steps = getMaxSteps(symbols);
-      type === 'P' ? 
-        setPremises([...premises, {symbols: symbols, steps: steps}]) :
-        setConclusion({symbols: symbols, steps: steps});
-      clearSchemaBuilder();
-    } 
-  }
+  const tooltipClasses = getTutorialStyles();
+  const saveClasses = {root: [classes.saveBtn, classes.common].join(' ')};
+  const clearClasses = {root: [classes.clearBtn, classes.common].join(' ')};
   return (
     <Box mt="1rem" style={{display: 'flex', flexDirection: 'row-reverse'}}>
-      <Button 
-        classes={ {root: [classes.saveBtn, classes.common].join(' ')} }
-        variant="outlined"
-        disabled={ !isValidSchema }
-        onClick={ saveValidSchema }
+      <Tooltip
+        title='Save schema to create an argument premise'
+        arrow
+        open={ open }
+        classes={tooltipClasses}
       >
-        save
-      </Button>
+        <Button 
+          classes={ saveClasses }
+          variant="outlined"
+          disabled={ !isValidSchema }
+          onClick={ save }
+        >
+          save
+        </Button>
+      </Tooltip>
       <Button
-        classes={ {root: [classes.clearBtn, classes.common].join(' ')} }
+        classes={ clearClasses }
         variant="outlined"
         disabled={ schemaSize === 0 }
-        onClick={ clearSchemaBuilder }
+        onClick={ clear }
       >
         clear
       </Button>

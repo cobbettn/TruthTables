@@ -5,23 +5,31 @@ import Editor from './Editor/Editor';
 import Display from './Display/Display';
 
 const App = () => {
-  const [ sentenceLetters, setSentenceLetters ] = useState([]); // the number of different sentence letters available in the editor
+  const [ sentenceLetters, setSentenceLetters ] = useState([]);
   const [ schema, setSchema ] = useState({
     symbols: [],
     type: 'P',
-  }); // schema that displays in editor
-  const [ premises, setPremises ] = useState([]); // schemata that have been saved
-  const [ conclusion, setConclusion ] = useState(null); // the conclusion
+  }); 
+  const [ premises, setPremises ] = useState([]);
+  const [ conclusion, setConclusion ] = useState(null); 
+  const [ tutorialSteps, setTutorialSteps ] = useState({
+    addLetter: false,
+    editorLetter: false,
+    editorOperator: false,
+    saveSchema: false
+  });
   
   const provider = {
     sentenceLetters: sentenceLetters,
     schema: schema,
     premises: premises,
     conclusion: conclusion,
+    tutorialSteps: tutorialSteps,
     setSentenceLetters: setSentenceLetters,
     setSchema: setSchema,
     setPremises: setPremises,
     setConclusion: setConclusion,
+    setTutorialSteps: setTutorialSteps,
   }
 
   return (

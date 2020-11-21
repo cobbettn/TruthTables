@@ -1,6 +1,6 @@
-const dragEnd = (drag, stateObj) => {
-  const { premises, setPremises, conclusion, setConclusion } = stateObj;
+const dragEnd = (drag, context) => {
   const { destination, source } = drag;
+  const { premises, setPremises, conclusion, setConclusion } = context;
   const { index: sourceIndex, droppableId: sourceId } = source;
   if (sourceId === 'PremiseDropZone') {
     if (destination?.droppableId === 'PremiseDropZone') {
@@ -10,9 +10,10 @@ const dragEnd = (drag, stateObj) => {
     }
     if (destination?.droppableId === 'ConclusionDropZone') {
       const [el] = premises.splice(sourceIndex, 1);
-      if (conclusion) setPremises([...premises, conclusion]);
-      setConclusion(el);
+      if (conclusion) setPremises([...premises, { ...conclusion, type: 'P'}]);
+      setConclusion({...el, type : 'C'});
     }
+    // delete by drag off 
     if (!destination) {
       premises.splice(sourceIndex, 1);
       setPremises([...premises]);
@@ -20,9 +21,10 @@ const dragEnd = (drag, stateObj) => {
   }
   if (sourceId === 'ConclusionDropZone') {
     if (destination?.droppableId === 'PremiseDropZone') {
-      setPremises([...premises, conclusion]);
+      setPremises([...premises, {...conclusion, type: 'P'}]);
       setConclusion(null);
     }
+    // delete by drag off 
     if (!destination) {
       setConclusion(null);
     }

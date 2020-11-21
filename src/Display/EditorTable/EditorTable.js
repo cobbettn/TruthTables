@@ -1,18 +1,17 @@
 import React from 'react';
-import { getSchemaTable } from '../displayTableLogic';
+import SchemaTable from '../SavedTables/SchemaTable/SchemaTable';
 
 const EditorTable = (props) => {
-  const { sentenceLetters, schema } = props;
-  const editorTableData = {
-    sentenceLetters: sentenceLetters,
-    schema: schema,
-    showButtons: false
-  }
-  const editorTable = getSchemaTable(editorTableData);
+  const { sentenceLetters, schema, setSchema } = props;
   return (
-    <div style={{display: 'flex'}}>
-      { editorTable }
-    </div>
+    <SchemaTable
+      schema={schema}
+      sentenceLetters={sentenceLetters}
+      isSavedTable={false}
+      clickHandlers={{
+        onSwitch: () => setSchema({...schema, type: schema.type === 'P' ? 'C' : 'P'})
+      }} 
+    />
   );
 }
 

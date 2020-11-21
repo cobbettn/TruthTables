@@ -1,29 +1,30 @@
 import React, { useContext } from 'react';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
+import { Tooltip, Card, Typography } from '@material-ui/core';
 import Context from '../../context'
-import { getStyles, getOnClick } from '../dndElementConfig';
+import { getStyles, getOnClick, getRightClick } from './lib';
 import './DnDElement.scss';
 
 const DnDElement = (props) => {
-  const { sentenceLetters, schema, setSchema } = useContext(Context);
-  const configObj = {
-    letterCount: sentenceLetters.length,
-    schema: schema,
-    setSchema: setSchema,
-    elConfig: props.config,
-  }
-  const style = getStyles(props.config.bgColor);
-  const onClick = getOnClick(configObj);
+  const context = useContext(Context);
+  const { config } = props;
+  const { isDragging, tooltip, schemaBuilderEl, value, bgColor } = config;
+  const style = getStyles(bgColor, isDragging);
+  const onClick = getOnClick({...context, elConfig: config});
+  const onRightClick = getRightClick({...context, config: config});
   return (
-    <Card 
-      className="DnDElement" 
-      style={style}
-      elevation={10}
-      onClick={ onClick }
+    <Tooltip
+      title={ (!schemaBuilderEl && tooltip) || '' }
     >
-      <Typography>{props.config.value}</Typography>
-    </Card>
+      <Card 
+        className="DnDElement" 
+        style={ style }
+        elevation={10}
+        onClick={ onClick }
+        onContextMenu={ onRightClick }
+      >
+        <Typography>{ value }</Typography>
+      </Card>
+    </Tooltip>
   );
 }
 
