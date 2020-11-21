@@ -10,9 +10,9 @@ const DisplayTable = (props) => {
   const saved = <SavedTableButtons collapsed={collapsed} clickHandlers={clickHandlers}/>;
   const editor = <EditorToggle schemaType={schemaType} clickHandlers={clickHandlers}/>;
   return (
-    <Card raised className="Card" style={style}>
+    <Card raised className="Card" style={ style }>
       { isSavedTable ? saved : editor }
-      <div style={tableStyle}>
+      <div style={ tableStyle }>
         <table>
           { headers }
           { !collapsed && table }

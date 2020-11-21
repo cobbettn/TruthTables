@@ -15,7 +15,7 @@ const SchemaTable = (props) => {
   const style = getStyle(isSavedTable, symbols);
 
   let schemaTableHeaders = (<TableHeader symbols={symbols}/>);
-  let schemaTable = (<TableHeader symbols={symbols}/>);
+  let schemaTable = (<TableRows symbols={symbols} model={tableModel}/>);
   
   if (validateSchema(symbols)) {
     const mainOpIndex = computeTable({

@@ -5,12 +5,14 @@ const EditorTable = (props) => {
   const { sentenceLetters, schema, setSchema } = props;
   return (
     <SchemaTable
-      schema={schema}
-      sentenceLetters={sentenceLetters}
-      isSavedTable={false}
-      clickHandlers={{
-        onSwitch: () => setSchema({...schema, type: schema.type === 'P' ? 'C' : 'P'})
-      }} 
+      schema={ schema }
+      sentenceLetters={ sentenceLetters}
+      isSavedTable={ false }
+      clickHandlers={
+        {
+          onSwitch: () => setSchema({...schema, type: schema.type === 'P' ? 'C' : 'P'})
+        }
+      } 
     />
   );
 }

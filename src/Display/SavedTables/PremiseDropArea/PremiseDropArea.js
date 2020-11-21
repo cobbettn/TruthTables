@@ -15,7 +15,7 @@ const PremiseDropArea = () => {
         <Droppable droppableId='PremiseDropZone' direction="horizontal">
           {(provided, snapshot) => (
             <div 
-              style={ {...getDropStyle(snapshot.isDraggingOver)} }
+              style={ {...getDropStyle(snapshot)} }
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}
