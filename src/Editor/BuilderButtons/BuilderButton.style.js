@@ -1,5 +1,6 @@
 import theme from '../../theme';
-const styles = (makeStyles, validSchema, schemaSize, schemaType) => {
+
+const getStyles = (makeStyles, validSchema, schemaSize, schemaType) => {
   const { 
     main:   primaryMain, 
     dark:   primaryDark, 
@@ -39,4 +40,4 @@ const styles = (makeStyles, validSchema, schemaSize, schemaType) => {
   );
 }
 
-export default styles;
+export { getStyles };

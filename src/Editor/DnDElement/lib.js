@@ -1,7 +1,7 @@
 import grey from '@material-ui/core/colors/grey';
 import { getMaxSteps } from '../../lib';
 
-export const getStyles = (color, isDragging) => {
+const getStyles = (color, isDragging) => {
   return {
     backgroundColor: color || grey[700],
     border: isDragging && `white solid 2px`,
@@ -9,19 +9,19 @@ export const getStyles = (color, isDragging) => {
   };
 }
 
-export const getOnClick = (config) => {
+const getOnClick = (data) => {
   const {
-    letterCount,
+    sentenceLetters,
     schema,
     setSchema,
     elConfig,
     tutorialSteps,
     setTutorialSteps
-  } = config;
+  } = data;
   const { symbols } = schema; 
   const { elType } = elConfig;
   const onClick = () => {
-    if (letterCount > 0) {
+    if (sentenceLetters.length > 0) {
       const steps = getMaxSteps(symbols);
       if (elType === 'L' && !tutorialSteps.editorLetter) {
         setTutorialSteps({...tutorialSteps, editorLetter: true});
@@ -42,3 +42,15 @@ export const getOnClick = (config) => {
   }
   return !elConfig.schemaBuilderEl ? () => onClick() : null;
 }
+
+const getRightClick = (data) => {
+  const { schema, setSchema, config } = data;
+  const { schemaBuilderEl, schemaIndex } = config;
+  return schemaBuilderEl && ((event) => {
+    event.preventDefault();
+    schema.symbols.splice(schemaIndex, 1);
+    setSchema({...schema});
+  });
+} 
+
+export { getStyles, getOnClick, getRightClick };

@@ -1,10 +1,10 @@
 import React from 'react';
-import { validateSchema } from '../../../lib';
-import { getTableDimensions, getLegend, getTableModel, computeTable } from '../../lib';
-import theme from '../../../theme';
 import TableHeader from '../SchemaTable/TableHeader/TableHeader';
 import TableRows from '../SchemaTable/TableRows/TableRows';
 import DisplayTable from '../../DisplayTable/DisplayTable';
+import { validateSchema } from '../../../lib';
+import { getTableDimensions, getLegend, getTableModel, computeTable } from '../../lib';
+import { getStyle } from './SchemaTable.style';
 
 const SchemaTable = (props) => {
   const { schema, sentenceLetters, clickHandlers, isSavedTable } = props;
@@ -12,12 +12,11 @@ const SchemaTable = (props) => {
   const { numRows } = getTableDimensions(sentenceLetters.length);
   const legend = getLegend(sentenceLetters);
   const tableModel = getTableModel(symbols, numRows, legend);
+  const style = getStyle(isSavedTable, symbols);
+
   let schemaTableHeaders = (<TableHeader symbols={symbols}/>);
-  let schemaTable = (<TableRows model={tableModel}/>);
-  const style = { 
-    display: symbols.length === 0 && 'none',
-    backgroundColor: !isSavedTable ? theme.palette.primary.dark : theme.palette.grey[700]
-  }
+  let schemaTable = (<TableHeader symbols={symbols}/>);
+  
   if (validateSchema(symbols)) {
     const mainOpIndex = computeTable({
       tableModel: tableModel,
@@ -25,9 +24,10 @@ const SchemaTable = (props) => {
       numRows: numRows,
       steps: steps
     });
-    schemaTableHeaders =  (<TableHeader symbols={symbols} mainOpIndex={mainOpIndex}/>);
+    schemaTableHeaders = (<TableHeader symbols={symbols} mainOpIndex={mainOpIndex}/>);
     schemaTable = (<TableRows model={tableModel} mainOpIndex={mainOpIndex}/>);
   }
+
   return (
     <DisplayTable
       style={style}

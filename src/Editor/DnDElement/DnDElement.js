@@ -1,40 +1,28 @@
 import React, { useContext } from 'react';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
+import { Tooltip, Card, Typography } from '@material-ui/core';
 import Context from '../../context'
-import { getStyles, getOnClick } from './dndElementConfig';
+import { getStyles, getOnClick, getRightClick } from './lib';
 import './DnDElement.scss';
-import { Tooltip } from '@material-ui/core';
 
 const DnDElement = (props) => {
-  const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = useContext(Context);
-  const configObj = {
-    letterCount: sentenceLetters.length,
-    schema: schema,
-    setSchema: setSchema,
-    elConfig: props.config,
-    tutorialSteps: tutorialSteps,
-    setTutorialSteps: setTutorialSteps
-  }
-  const style = getStyles(props.config.bgColor, props.config.isDragging);
-  const onClick = getOnClick(configObj);
-  const onRightClick = props.config.schemaBuilderEl && ((event) => {
-    event.preventDefault();
-    schema.symbols.splice(props.config.schemaIndex, 1);
-    setSchema({...schema});
-  })
+  const context = useContext(Context);
+  const { config } = props;
+  const { isDragging, tooltip, schemaBuilderEl, value, bgColor } = config;
+  const style = getStyles(bgColor, isDragging);
+  const onClick = getOnClick({...context, elConfig: config});
+  const onRightClick = getRightClick({...context, config: config});
   return (
     <Tooltip
-      title={ (!props.config.schemaBuilderEl && props.config.tooltip) || '' }
+      title={ (!schemaBuilderEl && tooltip) || '' }
     >
       <Card 
         className="DnDElement" 
-        style={style}
+        style={ style }
         elevation={10}
         onClick={ onClick }
         onContextMenu={ onRightClick }
       >
-        <Typography>{props.config.value}</Typography>
+        <Typography>{ value }</Typography>
       </Card>
     </Tooltip>
   );
