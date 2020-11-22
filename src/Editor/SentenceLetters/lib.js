@@ -2,12 +2,15 @@ import { pink, orange, yellow, lightGreen, cyan, purple } from '@material-ui/cor
 
 const getInputProps =  (context) => {
   const colors =  [purple, pink, orange, yellow, lightGreen, cyan];
-  const { sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps } = context
-  const min = 1, max = 6;
+  const { sentenceLetters, setSentenceLetters, tutorialSteps, setTutorialSteps } = context;
+  const min = 0, max = 6;
   const onChange = (event) => {
     if (event.target.value >= min && event.target.value <= max) {
       const number = Number(event.target.value);
       if (number > 0 && !tutorialSteps.addLetter) setTutorialSteps ({...tutorialSteps, addLetter: true});
+      if (number === 0 &&  tutorialSteps.addLetter && !tutorialSteps.editorLetter && !tutorialSteps.saveSchema) {
+        setTutorialSteps({...tutorialSteps, addLetter: false});
+      }
       const letters = [...Array(number)].map((el, i) => {
         return {
           value: String.fromCharCode(112 + i), 

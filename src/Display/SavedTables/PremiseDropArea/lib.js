@@ -1,5 +1,5 @@
 import React from 'react';
-import SchemaTable from '../SchemaTable/SchemaTable';
+import SchemaTable from '../../SchemaTable/SchemaTable';
 import { getTableButtonHandlers } from '../../lib';
 
 const getPremiseTables = (data) => {
