@@ -1,4 +1,4 @@
-import theme from '../../../../theme';
+import theme from '../../../theme';
 
 const getStyle = (header, index, mainOpIndex) => {
   const style = {

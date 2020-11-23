@@ -1,5 +1,7 @@
 import { getMaxSteps } from '../lib';
 
+// begin public functions
+
 const computeTable = (tableData) => {
   const { schema, tableModel, numRows } = tableData;
   let { symbols, steps } = schema;
@@ -121,6 +123,8 @@ const getTableButtonHandlers = (stateObj) => {
     onCollapse: onCollapse,
   }
 }
+
+// end public functions
 
 const getTruthValFromCoordinates = (numRows, row, col) => 0 === Math.floor(row / (numRows / Math.pow(2, col + 1)) % 2);
 

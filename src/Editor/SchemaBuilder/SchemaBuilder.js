@@ -8,8 +8,8 @@ import { getDropStyle, boxStyle, typeStyle } from './SchemaBuilder.style';
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
   return (
-    <Box style={boxStyle}>
-      <Typography variant='caption' style={typeStyle}>Schema Editor:</Typography>
+    <Box style={ boxStyle }>
+      <Typography variant='caption' style={ typeStyle }>Schema Editor:</Typography>
       <Paper variant="outlined">
         <Droppable droppableId='SchemaBuilder' direction="horizontal">
           {(provided, snapshot) => (
