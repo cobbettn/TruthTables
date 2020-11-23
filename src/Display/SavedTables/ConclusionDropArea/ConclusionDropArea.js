@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Box, Typography, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../../context';
-import SchemaTable from '../SchemaTable/SchemaTable';
+import SchemaTable from '../../SchemaTable/SchemaTable';
 import theme from '../../../theme';
 import { getTableButtonHandlers } from '../../lib';
 import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
@@ -24,7 +24,7 @@ const ConclusionDropArea = () => {
               ref={provided.innerRef}
               {...provided.droppableProps}
               {...provided.dragHandleProps}
-              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%'}}
+              style={{...getDropStyle(snapshot.isDraggingOver), flexGrow: '1', height: '100%', borderRadius: '5px'}}
             >
                 <Draggable 
                   draggableId={'C'} 

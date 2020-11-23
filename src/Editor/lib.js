@@ -1,12 +1,14 @@
-import OperatorConfig from './OperatorPicker/operatorConfig';
+import { makeStyles } from '@material-ui/core';
+import { operatorConfig } from './OperatorPicker/lib';
 import { getMaxSteps } from '../lib';
+
 /**
  * dragEnd()
  * 
- * Drag and drop handler for the Editor component.
+ * Drag and drop logic for the Editor component.
  * 
- * @param {Object} drag       drag and drop event data
- * @param {Object} context   object containing setters and getters for the app's state
+ * @param {Object} drag     drag and drop event data
+ * @param {Object} context  app state setters and getters
  */
 const dragEnd = (drag, context) => {
   const { sentenceLetters, schema, setSchema, tutorialSteps, setTutorialSteps } = context;
@@ -27,7 +29,7 @@ const dragEnd = (drag, context) => {
           dropElement = sentenceLetters[sourceIndex];
           break;
         case "OperatorPicker":
-          dropElement = OperatorConfig[sourceIndex];
+          dropElement = operatorConfig[sourceIndex];
           if (tutorialSteps.editorLetter && !tutorialSteps.editorOperator) {
             setTutorialSteps({...tutorialSteps, editorOperator: true});
           }
@@ -49,4 +51,19 @@ const dragEnd = (drag, context) => {
   } 
 }
 
-export default dragEnd;
+const getTutorialStyles = makeStyles(theme => (
+  {
+    arrow: {
+      color: theme.palette.common.white
+    },
+    tooltip : {
+      backgroundColor: theme.palette.common.white,
+      color: theme.palette.common.black,
+      fontSize: '12px',
+      boxShadow: `2px 2px 2px ${theme.palette.common.black}`
+    }
+  }
+));
+
+export { getTutorialStyles, dragEnd };
+

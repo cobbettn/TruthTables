@@ -1,4 +1,4 @@
-import theme from '../../../theme';
+import theme from '../../../../theme';
 
 const buttonStyle = {
   border: `1px solid ${theme.palette.grey[900]}`,
