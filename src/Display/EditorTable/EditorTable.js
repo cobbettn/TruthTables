@@ -6,11 +6,9 @@ const EditorTable = (props) => {
     <SchemaTable
       {...props}
       isSavedTable={ false }
-      clickHandlers={
-        {
-          onSwitch: () => props.setSchema({...props.schema, type: props.schema.type === 'P' ? 'C' : 'P'})
-        }
-      } 
+      clickHandlers={{
+        onSwitch: () => props.setSchema({...props.schema, type: props.schema.type === 'P' ? 'C' : 'P'})
+      }} 
     />
   );
 }

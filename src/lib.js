@@ -4,17 +4,17 @@
  * @param {*} _useState 
  */
 const getContextProvider = (_useState) => {
-  const defaultSentenceLetters = [];
   const defaultSchema = { symbols: [], type: 'P' };
   const defaultPremises = [];
   const defaultConclusion = null;
   const defaultTutorialSteps = { addLetter: false, editorLetter: false, editorOperator: false, saveSchema: false };
-  
-  const [ sentenceLetters, setSentenceLetters ] = _useState(defaultSentenceLetters);
+  const defaultSentenceLetters = [];
+ 
   const [ schema, setSchema ] = _useState(defaultSchema); 
   const [ premises, setPremises ] = _useState(defaultPremises);
   const [ conclusion, setConclusion ] = _useState(defaultConclusion); 
   const [ tutorialSteps, setTutorialSteps ] = _useState(defaultTutorialSteps);
+  const [ sentenceLetters, setSentenceLetters ] = _useState(defaultSentenceLetters);
   
   const state = {
     sentenceLetters: sentenceLetters,
@@ -33,7 +33,7 @@ const getContextProvider = (_useState) => {
 
   return {
     ...state,
-    ...stateSetters,
+    ...stateSetters
   };
 };
 

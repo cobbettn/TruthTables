@@ -1,6 +1,6 @@
 import React from 'react';
 import SchemaTable from '../../SchemaTable/SchemaTable';
-import { getTableButtonHandlers } from '../../lib';
+import { getTableButtonHandlers } from '../lib';
 
 const getPremiseTables = (data) => {
  const { sentenceLetters, premises, setPremises, setSchema } = data;
