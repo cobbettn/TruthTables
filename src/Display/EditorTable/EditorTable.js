@@ -1,16 +1,14 @@
 import React from 'react';
-import SchemaTable from '../SavedTables/SchemaTable/SchemaTable';
+import SchemaTable from '../SchemaTable/SchemaTable';
 
 const EditorTable = (props) => {
-  const { sentenceLetters, schema, setSchema } = props;
   return (
     <SchemaTable
-      schema={ schema }
-      sentenceLetters={ sentenceLetters}
+      {...props}
       isSavedTable={ false }
       clickHandlers={
         {
-          onSwitch: () => setSchema({...schema, type: schema.type === 'P' ? 'C' : 'P'})
+          onSwitch: () => props.setSchema({...props.schema, type: props.schema.type === 'P' ? 'C' : 'P'})
         }
       } 
     />

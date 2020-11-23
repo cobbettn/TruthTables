@@ -1,9 +1,9 @@
 import React from 'react';
 import TableHeader from '../SchemaTable/TableHeader/TableHeader';
 import TableRows from '../SchemaTable/TableRows/TableRows';
-import DisplayTable from '../../DisplayTable/DisplayTable';
-import { validateSchema } from '../../../lib';
-import { getTableDimensions, getLegend, getTableModel, computeTable } from '../../lib';
+import DisplayTable from '../SchemaTable/DisplayTable/DisplayTable';
+import { validateSchema } from '../../lib';
+import { getTableDimensions, getLegend, getTableModel, computeTable } from '../lib';
 import { getStyle } from './SchemaTable.style';
 
 const SchemaTable = (props) => {

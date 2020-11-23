@@ -10,7 +10,7 @@ const DisplayTable = (props) => {
   const saved = <SavedTableButtons collapsed={collapsed} clickHandlers={clickHandlers}/>;
   const editor = <EditorToggle schemaType={schemaType} clickHandlers={clickHandlers}/>;
   return (
-    <Card raised className="Card" style={ style }>
+    <Card raised className={`Card ${!isSavedTable ? 'fadeIn' : '' }`} style={ style }>
       { isSavedTable ? saved : editor }
       <div style={ tableStyle }>
         <table>

@@ -10,11 +10,10 @@ const BuilderButtons = () => {
   const context = useContext(Context);
   const { schema, tutorialSteps } = context;
   const isValidSchema = validateSchema(schema.symbols);
-  const schemaSize = schema.symbols.length;
   const { save, clear } = getButtonHandlers({...context, isValid: isValidSchema}); 
   const open = (isValidSchema && tutorialSteps.editorOperator && !tutorialSteps.saveSchema);
-
-  const classes = getStyles(isValidSchema, schemaSize, schema.type);
+  
+  const classes = getStyles(isValidSchema, schema.symbols.length, schema.type);
   const tooltipClasses = getTutorialStyles();
   const saveClasses = {root: [classes.saveBtn, classes.common].join(' ')};
   const clearClasses = {root: [classes.clearBtn, classes.common].join(' ')};
@@ -38,7 +37,7 @@ const BuilderButtons = () => {
       <Button
         classes={ clearClasses }
         variant="outlined"
-        disabled={ schemaSize === 0 }
+        disabled={ schema.symbols.length === 0 }
         onClick={ clear }
       >
         clear

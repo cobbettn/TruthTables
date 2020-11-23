@@ -31,4 +31,4 @@ const dragEnd = (drag, context) => {
   }
 }
 
-export default dragEnd;
+export { dragEnd };

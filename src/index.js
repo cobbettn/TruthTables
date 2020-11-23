@@ -7,7 +7,7 @@ import './index.scss';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ theme }>
       <App/>
     </ThemeProvider>
   </React.StrictMode>,

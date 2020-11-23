@@ -3,8 +3,8 @@ import { Tooltip, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
-import operatorConfig from './operatorConfig';
-import { getTutorialStyles } from '../lib'
+import { getTutorialStyles } from '../lib';
+import { operatorConfig } from './lib';
 
 const OperatorPicker = () => {
   const { tutorialSteps } = useContext(context);
