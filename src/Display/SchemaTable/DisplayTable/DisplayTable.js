@@ -11,10 +11,14 @@ const DisplayTable = (props) => {
   const editor = <EditorToggle schemaType={schema.type} clickHandlers={clickHandlers}/>;
   return (
     <Collapse 
-      in={!(!isSavedTable && schema.symbols.length === 0)}
-      style={{alignSelf: 'center'}} 
-    >
-      <Card raised className={`Card`} style={ style }>
+      in={ schema.symbols.length > 0 }
+      style={ {alignSelf: 'center'} } 
+    > 
+      <Card 
+        raised 
+        className='Card' 
+        style={ style }
+      >
         { isSavedTable ? saved : editor }
         <div style={ tableStyle }>
           <table>

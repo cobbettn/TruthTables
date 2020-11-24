@@ -230,4 +230,9 @@ const getTableModel = (schema, numRows, legend) => {
   return tableModel;
 }
 
-export { getLegend, getTableDimensions, computeTable, getTableModel };
+export { 
+  getLegend, 
+  getTableDimensions, 
+  computeTable, 
+  getTableModel
+};

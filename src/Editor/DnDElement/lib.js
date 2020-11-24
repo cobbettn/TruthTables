@@ -1,5 +1,5 @@
 import grey from '@material-ui/core/colors/grey';
-import { getMaxSteps } from '../../lib';
+import { getOpCount } from '../../lib';
 
 const getStyles = (color, isDragging) => {
   return {
@@ -22,7 +22,7 @@ const getOnClick = (data) => {
   const { elType } = elConfig;
   const onClick = () => {
     if (sentenceLetters.length > 0) {
-      const steps = getMaxSteps(symbols);
+      const steps = getOpCount(symbols);
       if (elType === 'L' && !tutorialSteps.editorLetter) {
         setTutorialSteps({...tutorialSteps, editorLetter: true});
       } 

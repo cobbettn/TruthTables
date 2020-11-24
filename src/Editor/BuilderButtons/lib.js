@@ -1,4 +1,4 @@
-import { getMaxSteps } from '../../lib';
+import { getOpCount } from '../../lib';
 
 const getButtonHandlers = (stateObj) => {
   const {
@@ -28,7 +28,7 @@ const getButtonHandlers = (stateObj) => {
   } 
   const saveValidSchema = () => {
     if (isValid) {
-      const steps = getMaxSteps(symbols);
+      const steps = getOpCount(symbols);
       type === 'P' ? 
         setPremises([...premises, {...schema, steps: steps, collapsed: false}]) :
         setConclusion({...schema, steps: steps, collapsed: false});

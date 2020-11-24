@@ -95,13 +95,14 @@ const validateSchema = (schema) => {
   return isValid;
 }
 
-const getMaxSteps = (schema) => {
+
+const getOpCount = (symbols) => {
   const stepsReducer = (acc, cur) => cur.elType === 'O' || cur.elType === 'N' ? acc + 1 : acc;
-  return schema?.reduce(stepsReducer, 0);
+  return symbols?.reduce(stepsReducer, 0);
 }
 
 export { 
-  getMaxSteps, 
+  getOpCount, 
   getContextProvider, 
   validateSchema
 };

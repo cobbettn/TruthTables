@@ -1,4 +1,4 @@
-import { getMaxSteps } from '../../lib';
+import { getOpCount } from '../../lib';
 
 const dragEnd = (drag, context) => {
   const { destination, source } = drag;
@@ -35,7 +35,7 @@ const dragEnd = (drag, context) => {
 
 const getTableButtonHandlers = (stateObj) => {
   const { data, setData, setSchema } = stateObj;
-  const maxSteps = getMaxSteps(data?.symbols);
+  const maxSteps = getOpCount(data?.symbols);
   const onCollapse = () => setData({...data, collapsed: !data.collapsed});
   const onPrev = () => {
     if (data.steps > 0)  {
