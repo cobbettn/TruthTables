@@ -1,11 +1,12 @@
-import grey from '@material-ui/core/colors/grey';
-import { getMaxSteps } from '../../lib';
+import theme from '../../theme';
+import { getOpCount } from '../../lib';
 
 const getStyles = (color, isDragging) => {
   return {
-    backgroundColor: color || grey[700],
+    backgroundColor: color || theme.palette.grey[700],
     border: isDragging && `white solid 2px`,
-    opacity: isDragging && 0.8
+    opacity: isDragging && 0.8,
+    boxShadow: isDragging && `0 0 3px 5px ${theme.palette.primary.main}`
   };
 }
 
@@ -22,7 +23,7 @@ const getOnClick = (data) => {
   const { elType } = elConfig;
   const onClick = () => {
     if (sentenceLetters.length > 0) {
-      const steps = getMaxSteps(symbols);
+      const steps = getOpCount(symbols);
       if (elType === 'L' && !tutorialSteps.editorLetter) {
         setTutorialSteps({...tutorialSteps, editorLetter: true});
       } 

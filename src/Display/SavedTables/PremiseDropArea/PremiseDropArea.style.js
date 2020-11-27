@@ -2,8 +2,9 @@ import theme from '../../../theme';
 
 const boxStyle = {
   display: 'flex', 
-  flexBasis: '66%', 
+  minWidth: '66%', 
   flexDirection: 'column',
+  overflow: 'auto',
 }
 
 const typeStyle = {
@@ -19,7 +20,7 @@ const getDropStyle = (snapshot) => ({
   display: 'flex',
   flexGrow: '1',
   height: '100%',
-  borderRadius: '5px'
+  borderRadius: '5px',
 });
 
 export { getDropStyle, boxStyle, typeStyle };

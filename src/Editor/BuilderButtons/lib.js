@@ -1,7 +1,8 @@
-import { getMaxSteps } from '../../lib';
+import { getOpCount, getTableModel, computeTable, getTableDimensions } from '../../lib';
 
 const getButtonHandlers = (stateObj) => {
   const {
+    sentenceLetters,
     tutorialSteps, 
     setTutorialSteps, 
     schema, 
@@ -28,10 +29,24 @@ const getButtonHandlers = (stateObj) => {
   } 
   const saveValidSchema = () => {
     if (isValid) {
-      const steps = getMaxSteps(symbols);
+      const steps = getOpCount(symbols);
+      const updateSchema = {...schema, steps: steps, collapsed: false};
+      const { numRows } = getTableDimensions(sentenceLetters.length);
+      const tableModel = getTableModel(stateObj);
+      const { mainOpColumn } = computeTable(updateSchema, tableModel, numRows);
+      if (mainOpColumn) {
+        const tableInfo = {
+          valid: !mainOpColumn.some(el => el === false),
+          invalid: mainOpColumn.some(el => el === false),
+          satisfiable: mainOpColumn.some(el => el === true),
+          unsatisfiable: !mainOpColumn.some(el => el === true)
+        }
+        updateSchema.tableInfo = tableInfo;
+      }
+
       type === 'P' ? 
-        setPremises([...premises, {...schema, steps: steps, collapsed: false}]) :
-        setConclusion({...schema, steps: steps, collapsed: false});
+        setPremises([...premises, updateSchema ]) :
+        setConclusion(updateSchema);
       setTutorialSteps({...tutorialSteps, saveSchema: true, editorOperator: true});
       setSchema({
         symbols: [],
@@ -44,6 +59,7 @@ const getButtonHandlers = (stateObj) => {
     save: saveValidSchema 
   }
 }
+
 
 
 

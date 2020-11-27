@@ -7,7 +7,7 @@ const getDropStyle = isDraggingOver => ({
 });
 const boxStyle = {
   display: 'flex', 
-  flexBasis:'33%', 
+  minWidth: '33%',
   marginLeft: '0.5rem', 
   flexDirection:'column',
 }

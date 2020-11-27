@@ -3,7 +3,7 @@ const getTooltipProps = (title) => {
     title: title,
     className: 'tableButton',
     arrow: true,
-    placement: 'bottom'
+    placement: 'top'
   };
 };
 
