@@ -1,21 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Collapse, Box } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Context from '../../context';
 import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
 import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
 import { dragEnd } from './lib';
 
-const SavedTables = () => {
-  const context = useContext(Context);
-  const onDragEnd = (drag) => dragEnd(drag, context);
+const SavedTables = (props) => {
+  const onDragEnd = (drag) => dragEnd(drag, props);
   return (
     <Box>
-      <Collapse in={ context.premises.length !== 0 || context.conclusion }>
+      <Collapse in={ !!(props.premises.length !== 0 || props.conclusion) }>
         <DragDropContext onDragEnd={ onDragEnd }>
           <Box style={ { display: 'flex', flexDirection:'row' } }>
-            <PremiseDropArea/>
-            <ConclusionDropArea/>
+            <PremiseDropArea {...props}/>
+            <ConclusionDropArea {...props}/>
           </Box>
         </DragDropContext>
       </Collapse>

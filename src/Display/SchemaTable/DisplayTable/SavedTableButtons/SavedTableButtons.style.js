@@ -1,4 +1,5 @@
 import theme from '../../../../theme';
+import { makeStyles } from '@material-ui/core/styles';
 
 const buttonStyle = {
   border: `1px solid ${theme.palette.grey[900]}`,
@@ -10,7 +11,7 @@ const buttonStyle = {
   alignContent: 'center',  
   margin: '0.1rem',
   borderRadius: '3px', 
-  cursor: 'pointer',
+  cursor: 'default',
   boxShadow: `1px 1px 1px ${theme.palette.grey[800]}`,
 };
 const boxStyle = {
@@ -18,4 +19,17 @@ const boxStyle = {
   justifyContent: 'center'
 };
 
-export { buttonStyle, boxStyle };
+const getTooltipStyles = makeStyles(theme => (
+  {
+    arrow: {
+      color: `${theme.palette.grey[900]}`,
+      opacity: '1'
+    },
+    tooltip: {
+      backgroundColor: `${theme.palette.grey[900]}`,
+      opacity: '1'
+    }
+  }
+));
+
+export { buttonStyle, boxStyle, getTooltipStyles };

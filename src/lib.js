@@ -173,6 +173,9 @@ const computeTable = (schema, tableModel, numRows) => {
   if (mainOpIndex >= 0) {
     scopedIndex = mainOpIndex;
     mainOpColumn = tableModel.map(row => row[mainOpIndex]);
+  } else {
+    // no-op schema, just return sentece letter val
+    mainOpColumn = tableModel.map(row => row[0]);
   }
   return {
     mainOpIndex: scopedIndex,

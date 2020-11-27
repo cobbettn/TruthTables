@@ -9,7 +9,7 @@ const Display = () => {
   const context = useContext(Context);
   const showDisplay = context.schema.symbols.length !== 0 || context.premises.length !== 0 || context.conclusion;
   return (
-    <Collapse in={ showDisplay }>
+    <Collapse in={ !!showDisplay }>
       <Box className='Display' mt="1rem">
         <Paper elevation={ 5 } style={ 
           {

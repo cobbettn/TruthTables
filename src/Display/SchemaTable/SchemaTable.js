@@ -21,9 +21,7 @@ const SchemaTable = (props) => {
     schemaTableHeaders = (<TableHeader symbols={symbols} mainOpIndex={mainOpIndex}/>);
     schemaTable = (<TableRows model={tableModel} mainOpIndex={mainOpIndex}/>);
   }
-
-  console.log(schema)
-
+  
   return (
     <DisplayTable
       { ...props }

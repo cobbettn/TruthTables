@@ -7,8 +7,8 @@ import { getTableStyles } from './DisplayTable.style.js';
 const DisplayTable = (props) => {
   const { style, headers, table, clickHandlers, isSavedTable, schema } = props;
   const tableStyle = getTableStyles(isSavedTable);
-  const saved = <SavedTableButtons collapsed={schema.collapsed} clickHandlers={clickHandlers}/>;
-  const editor = <EditorToggle schemaType={schema.type} clickHandlers={clickHandlers}/>;
+  const saved = <SavedTableButtons schema={ schema } clickHandlers={ clickHandlers }/>;
+  const editor = <EditorToggle schemaType={ schema.type } clickHandlers={ clickHandlers }/>;
   return (
     <Collapse 
       in={ schema.symbols.length > 0 }

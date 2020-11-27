@@ -34,13 +34,16 @@ const getButtonHandlers = (stateObj) => {
       const { numRows } = getTableDimensions(sentenceLetters.length);
       const tableModel = getTableModel(stateObj);
       const { mainOpColumn } = computeTable(updateSchema, tableModel, numRows);
-      const tableInfo = {
-        valid: !mainOpColumn.some(el => el === false),
-        invalid: mainOpColumn.some(el => el === false),
-        satisfiable: mainOpColumn.some(el => el === true),
-        unsatisfiable: !mainOpColumn.some(el => el === true)
+      if (mainOpColumn) {
+        const tableInfo = {
+          valid: !mainOpColumn.some(el => el === false),
+          invalid: mainOpColumn.some(el => el === false),
+          satisfiable: mainOpColumn.some(el => el === true),
+          unsatisfiable: !mainOpColumn.some(el => el === true)
+        }
+        updateSchema.tableInfo = tableInfo;
       }
-      updateSchema.tableInfo = tableInfo;
+
       type === 'P' ? 
         setPremises([...premises, updateSchema ]) :
         setConclusion(updateSchema);

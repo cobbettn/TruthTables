@@ -1,18 +1,16 @@
-import React, { useContext } from 'react';
+import React  from 'react';
 import { Typography, Box, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import Context from '../../../context';
 import { getDropStyle, boxStyle, typeStyle } from './PremiseDropArea.style';
 import SchemaTable from '../../SchemaTable/SchemaTable';
 import { getTableButtonHandlers } from '../lib';
 import { getButtonHandlerData } from './lib';
 
-const PremiseDropArea = () => {
-  const context = useContext(Context);
+const PremiseDropArea = (props) => {
   return (
     <Box style={ boxStyle }>
       <Typography variant='caption' style={ typeStyle }>Premises:</Typography>
-      <Paper style={ {flexGrow: '1'} }variant="outlined">
+      <Paper style={{flexGrow: '1', overflow: 'auto'}} variant="outlined">
         <Droppable droppableId='PremiseDropZone' direction="horizontal">
           {(provided, snapshot) => (
             <div 
@@ -21,7 +19,7 @@ const PremiseDropArea = () => {
               {...provided.droppableProps}
               {...provided.dragHandleProps}
             >
-              { context.premises.map((premise, i) => (
+              { props.premises.map((premise, i) => (
                 <Draggable 
                   draggableId={`p${i}`} 
                   key={`p${i}`} 
@@ -35,11 +33,11 @@ const PremiseDropArea = () => {
                     >
                       { 
                         <SchemaTable
-                          { ...context } 
+                          sentenceLetters={ props.sentenceLetters }
                           schema={ premise }
                           isSavedTable={ true }
                           clickHandlers={ 
-                            getTableButtonHandlers(getButtonHandlerData(context, i)) 
+                            getTableButtonHandlers(getButtonHandlerData(props, i)) 
                           }
                         />
                       }

@@ -1,24 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, Typography, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import Context from '../../../context';
 import SchemaTable from '../../SchemaTable/SchemaTable';
 import theme from '../../../theme';
 import { getTableButtonHandlers } from '../lib';
 import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
 
-const ConclusionDropArea = () => {
-  const { sentenceLetters, setSchema, conclusion, setConclusion } = useContext(Context);
+const ConclusionDropArea = (props) => {
+  const { sentenceLetters, setSchema, conclusion, setConclusion } = props;
   const clickHandlers = getTableButtonHandlers({
     data: conclusion,
     setData: setConclusion,
     setSchema: setSchema,
   })
   return (
-    <Box style={boxStyle}>
+    <Box style={ boxStyle }>
       <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Conclusion:</Typography>
-      <Paper style={{flexGrow: '1'}} variant="outlined">
-        <Droppable style={{height: '100%'}} droppableId='ConclusionDropZone' direction="horizontal">
+      <Paper style={ { flexGrow: '1', overflow: 'auto' } } variant="outlined">
+        <Droppable style={ {height: '100%'} } droppableId='ConclusionDropZone' direction="horizontal">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
