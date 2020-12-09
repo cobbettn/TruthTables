@@ -1,4 +1,4 @@
-import { getOpCount } from '../../lib';
+import { getOpCount, getTableDimensions } from '../../lib';
 
 const dragEnd = (drag, context) => {
   const { destination, source } = drag;
@@ -64,4 +64,33 @@ const getTableButtonHandlers = (stateObj) => {
   }
 }
 
-export { dragEnd, getTableButtonHandlers };
+const getImplies = (props) => {
+  let implies = false; 
+  const { sentenceLetters, premises, conclusion } = props;
+  const { numRows } = getTableDimensions(sentenceLetters.length);
+  if (premises.length > 0 && !!conclusion) {
+    implies = true;
+  
+    let reducedPremises = [];
+    
+    for (let i = 0; i < numRows; i++) {
+      let rowVal;
+      premises.forEach(premise => {
+        const mainOpVal = premise.mainOpColumn[i];
+        rowVal = rowVal === undefined ? mainOpVal : (rowVal && mainOpVal);
+      });
+      reducedPremises.push(rowVal);
+    }
+    
+    for (let i = 0; i < numRows; i++) {
+      if (reducedPremises[i] === true && conclusion.mainOpColumn[i] === false) {
+        implies = false;
+        break;
+      }
+    }
+  }
+
+  return implies;
+}
+
+export { dragEnd, getTableButtonHandlers, getImplies };

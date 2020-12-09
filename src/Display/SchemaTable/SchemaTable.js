@@ -16,8 +16,9 @@ const SchemaTable = (props) => {
   let schemaTableHeaders = (<TableHeader symbols={symbols}/>);
   let schemaTable = (<TableRows symbols={symbols} model={tableModel}/>);
   
-  if (validateSchema(symbols)) {
-    const { mainOpIndex } = computeTable(schema, tableModel, numRows);
+  if (validateSchema(symbols, sentenceLetters)) {
+    const { mainOpIndex, mainOpColumn } = computeTable(schema, tableModel, numRows);
+    schema.mainOpColumn = mainOpColumn;
     schemaTableHeaders = (<TableHeader symbols={symbols} mainOpIndex={mainOpIndex}/>);
     schemaTable = (<TableRows model={tableModel} mainOpIndex={mainOpIndex}/>);
   }
