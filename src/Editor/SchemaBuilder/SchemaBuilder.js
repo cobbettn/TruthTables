@@ -11,7 +11,7 @@ const SchemaBuilder = () => {
     <Box style={ boxStyle }>
       <Typography variant='caption' style={ typeStyle }>Schema Editor:</Typography>
       <Paper variant="outlined">
-        <Droppable  style={{overflow: 'auto'}} droppableId='SchemaBuilder' direction="horizontal">
+        <Droppable style={{overflow: 'auto'}} droppableId='SchemaBuilder' direction="horizontal">
           {(provided, snapshot) => (
             <div 
               style={getDropStyle(snapshot.isDraggingOver, schema)}

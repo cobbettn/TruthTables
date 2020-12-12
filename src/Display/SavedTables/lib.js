@@ -76,14 +76,14 @@ const getImplies = (props) => {
     for (let i = 0; i < numRows; i++) {
       let rowVal;
       premises.forEach(premise => {
-        const mainOpVal = premise.mainOpColumn[i];
+        const mainOpVal = premise.maxStepsOpCol[i];
         rowVal = rowVal === undefined ? mainOpVal : (rowVal && mainOpVal);
       });
       reducedPremises.push(rowVal);
     }
     
     for (let i = 0; i < numRows; i++) {
-      if (reducedPremises[i] === true && conclusion.mainOpColumn[i] === false) {
+      if (reducedPremises[i] === true && conclusion.maxStepsOpCol[i] === false) {
         implies = false;
         break;
       }
