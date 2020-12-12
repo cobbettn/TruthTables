@@ -3,7 +3,7 @@ import TableHeader from '../SchemaTable/TableHeader/TableHeader';
 import TableRows from '../SchemaTable/TableRows/TableRows';
 import DisplayTable from '../SchemaTable/DisplayTable/DisplayTable';
 import { validateSchema } from '../../lib';
-import { getTableDimensions, getTableModel, computeTable } from '../../lib';
+import { getTableDimensions, getTableModel, computeTable, getOpCount } from '../../lib';
 import { getStyle } from './SchemaTable.style';
 
 const SchemaTable = (props) => {
@@ -17,7 +17,18 @@ const SchemaTable = (props) => {
   let schemaTable = (<TableRows symbols={symbols} model={tableModel}/>);
   
   if (validateSchema(symbols)) {
-    const { mainOpIndex } = computeTable(schema, tableModel, numRows);
+    const copyTableModel = tableModel.map(row => row.slice());
+    const allOps = computeTable({...schema, steps: getOpCount(symbols)}, copyTableModel, numRows);
+    schema.maxStepsOpCol = allOps.mainOpColumn;
+    const { mainOpIndex, mainOpColumn } = computeTable({...schema}, tableModel, numRows);
+    schema.mainOpColumn = mainOpColumn;
+    schema.tableInfo = {
+      valid: !mainOpColumn.some(el => el === false),
+      invalid: mainOpColumn.some(el => el === false),
+      satisfiable: mainOpColumn.some(el => el === true),
+      unsatisfiable: !mainOpColumn.some(el => el === true)
+    }
+
     schemaTableHeaders = (<TableHeader symbols={symbols} mainOpIndex={mainOpIndex}/>);
     schemaTable = (<TableRows model={tableModel} mainOpIndex={mainOpIndex}/>);
   }

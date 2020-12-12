@@ -1,8 +1,7 @@
-import { getOpCount, getTableModel, computeTable, getTableDimensions } from '../../lib';
 
 const getButtonHandlers = (stateObj) => {
+  
   const {
-    sentenceLetters,
     tutorialSteps, 
     setTutorialSteps, 
     schema, 
@@ -12,7 +11,7 @@ const getButtonHandlers = (stateObj) => {
     setConclusion, 
     isValid,
   } = stateObj;
-  const { symbols, type } = schema;
+
   const clearSchemaBuilder = () => {
     if (!tutorialSteps.saveSchema) {
       setTutorialSteps({
@@ -26,44 +25,31 @@ const getButtonHandlers = (stateObj) => {
       symbols: [],
       type: 'P'
     });
-  } 
+  };
+
   const saveValidSchema = () => {
     if (isValid) {
-      const steps = getOpCount(symbols);
-      const updateSchema = {...schema, steps: steps, collapsed: false};
-      const { numRows } = getTableDimensions(sentenceLetters.length);
-      const tableModel = getTableModel(stateObj);
-      const { mainOpColumn } = computeTable(updateSchema, tableModel, numRows);
-      if (mainOpColumn) {
-        const tableInfo = {
-          valid: !mainOpColumn.some(el => el === false),
-          invalid: mainOpColumn.some(el => el === false),
-          satisfiable: mainOpColumn.some(el => el === true),
-          unsatisfiable: !mainOpColumn.some(el => el === true)
-        }
-        updateSchema.tableInfo = tableInfo;
-      }
+      // save editor schema as premise or conclusion
+      schema.type === 'P' ? 
+        setPremises([...premises, {...schema} ]) :
+        setConclusion({...schema});
 
-      type === 'P' ? 
-        setPremises([...premises, updateSchema ]) :
-        setConclusion(updateSchema);
+      // update tutorial steps
       setTutorialSteps({...tutorialSteps, saveSchema: true, editorOperator: true});
+      
+      // clear schema builder
       setSchema({
         symbols: [],
         type: 'P'
-      });
+      }); // clear schema editor when done
     } 
   }
+
   return {
     clear: clearSchemaBuilder, 
     save: saveValidSchema 
   }
+
 }
 
-
-
-
-
-
-
-export { getButtonHandlers }
+export { getButtonHandlers };
