@@ -1,4 +1,4 @@
-[Truth table](https://en.wikipedia.org/wiki/Truth_table) learning aid
+[Truth table](https://en.wikipedia.org/wiki/Truth_table) calculator
 
 Tech:
 - [React](https://reactjs.org/)
