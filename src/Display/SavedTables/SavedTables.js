@@ -1,26 +1,38 @@
-import React, { useContext } from 'react';
-import Box from '@material-ui/core/Box';
+import React from 'react';
+import { Collapse, Box, Typography } from '@material-ui/core';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Context from '../../context';
 import PremiseDropArea from './PremiseDropArea/PremiseDropArea';
 import ConclusionDropArea from './ConclusionDropArea/ConclusionDropArea';
-import { getBoxStyle } from './SavedTables.style';
-import { dragEnd } from './lib';
+import { dragEnd, getImplies } from './lib';
+import theme from '../../theme';
 
-const SavedTables = () => {
-  const context = useContext(Context);
-  const onDragEnd = (drag) => dragEnd(drag, context);
+const SavedTables = (props) => {
+  const onDragEnd = (drag) => dragEnd(drag, props);
+  const savedTable = (props.premises.length !== 0 || !!props.conclusion);
+  const savedArgument = (props.premises.length !== 0 && !!props.conclusion);
+  const implies = getImplies(props);
+  const impliesText = `${props.premises.length === 1 ? 'Premise implies' : 'Premises imply' }`;
+  const notImpliesText = `${props.premises.length === 1 ? 'Premise does not imply' : 'Premises do not imply' }`;
   return (
-    <Box 
-      style={ getBoxStyle(context) }
-      className={ (context.premises.length > 0 || context.conclusion) ? 'fadeIn' : '' }
-    >
-      <DragDropContext onDragEnd={ onDragEnd }>
-        <Box style={ {display: 'flex', flexDirection:'row'} }>
-          <PremiseDropArea/>
-          <ConclusionDropArea/>
-        </Box>
-      </DragDropContext>
+    <Box>
+      <Collapse in={ savedTable }>
+        <Collapse in={ savedArgument }>
+          <Typography style={{
+            display: 'flex', 
+            justifyContent: 'center', 
+            textShadow: '2px 2px black', 
+            color: theme.palette.grey[400],
+          }} variant='caption'>
+            { implies ? impliesText : notImpliesText } conclusion.
+          </Typography> 
+        </Collapse>
+        <DragDropContext onDragEnd={ onDragEnd }>
+          <Box style={ { display: 'flex', flexDirection:'row' } }>
+            <PremiseDropArea {...props}/>
+            <ConclusionDropArea {...props}/>
+          </Box>
+        </DragDropContext>
+      </Collapse>
     </Box>
   );
 }

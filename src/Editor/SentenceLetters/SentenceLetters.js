@@ -13,14 +13,14 @@ const SentenceLetters = () => {
       title='Add sentence letter(s)'
       arrow
       placement='left'
-      open={!context.tutorialSteps.addLetter}
-      classes={classes}
+      open={ !context.tutorialSteps.addLetter }
+      classes={ classes }
     >
       <TextField
-        style={{width: '5rem', borderRadius: '5px'}}
+        style={ { width: '5rem', borderRadius: '5px' } }
         label="Letters"
         variant="outlined"
-        inputProps={inputProps}
+        inputProps={ inputProps }
         className='hover'
       />
     </Tooltip>

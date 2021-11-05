@@ -1,6 +1,6 @@
-import { getMaxSteps } from '../../lib';
 
 const getButtonHandlers = (stateObj) => {
+  
   const {
     tutorialSteps, 
     setTutorialSteps, 
@@ -11,7 +11,7 @@ const getButtonHandlers = (stateObj) => {
     setConclusion, 
     isValid,
   } = stateObj;
-  const { symbols, type } = schema;
+
   const clearSchemaBuilder = () => {
     if (!tutorialSteps.saveSchema) {
       setTutorialSteps({
@@ -25,29 +25,31 @@ const getButtonHandlers = (stateObj) => {
       symbols: [],
       type: 'P'
     });
-  } 
+  };
+
   const saveValidSchema = () => {
     if (isValid) {
-      const steps = getMaxSteps(symbols);
-      type === 'P' ? 
-        setPremises([...premises, {...schema, steps: steps, collapsed: false}]) :
-        setConclusion({...schema, steps: steps, collapsed: false});
+      // save editor schema as premise or conclusion
+      schema.type === 'P' ? 
+        setPremises([...premises, {...schema} ]) :
+        setConclusion({...schema});
+
+      // update tutorial steps
       setTutorialSteps({...tutorialSteps, saveSchema: true, editorOperator: true});
+      
+      // clear schema builder
       setSchema({
         symbols: [],
         type: 'P'
-      });
+      }); // clear schema editor when done
     } 
   }
+
   return {
     clear: clearSchemaBuilder, 
     save: saveValidSchema 
   }
+
 }
 
-
-
-
-
-
-export { getButtonHandlers }
+export { getButtonHandlers };

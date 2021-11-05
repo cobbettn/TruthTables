@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { operatorConfig } from './OperatorPicker/lib';
-import { getMaxSteps } from '../lib';
+import { getOpCount } from '../lib';
 
 /**
  * dragEnd()
@@ -46,7 +46,7 @@ const dragEnd = (drag, context) => {
   }
   
   if (!(dropElement?.elType !== 'L' && !tutorialSteps.editorLetter)) {
-    const steps = getMaxSteps(tmpSchema);
+    const steps = getOpCount(tmpSchema);
     setSchema({...schema, symbols: [...tmpSchema], steps: steps}); // update schema state
   } 
 }

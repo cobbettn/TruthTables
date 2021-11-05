@@ -4,13 +4,12 @@ import SchemaTable from '../SchemaTable/SchemaTable';
 const EditorTable = (props) => {
   return (
     <SchemaTable
-      {...props}
+      sentenceLetters={ props.sentenceLetters }  
+      schema={ props.schema }
       isSavedTable={ false }
-      clickHandlers={
-        {
-          onSwitch: () => props.setSchema({...props.schema, type: props.schema.type === 'P' ? 'C' : 'P'})
-        }
-      } 
+      clickHandlers={{
+        onSwitch: () => props.setSchema({...props.schema, type: props.schema.type === 'P' ? 'C' : 'P'})
+      }} 
     />
   );
 }

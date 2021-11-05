@@ -8,7 +8,8 @@ const getCellStyle = (val, index, mainOpIndex) => {
         isMainOpColumn ? green[700] : green[500] :
       val === false ? 
         isMainOpColumn ? red[700]   : red[500]   : 
-      grey[500]
+      grey[500],
+    minWidth: '1.5rem'
   };
   if (mainOpIndex === index) {
     style.fontWeight = 'bold'

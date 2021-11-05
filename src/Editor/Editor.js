@@ -17,7 +17,7 @@ const Editor = () => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Box style={{display: 'flex', alignItems: 'center'}}>
         <Box>
-          <SentenceLetters/>
+          <SentenceLetters style={{height: '4rem'}}/>
         </Box>
         <Box>
           <LetterPicker/>
