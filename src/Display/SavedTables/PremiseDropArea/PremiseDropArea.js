@@ -3,7 +3,7 @@ import { Typography, Box, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { getDropStyle, boxStyle, typeStyle } from './PremiseDropArea.style';
 import SchemaTable from '../../SchemaTable/SchemaTable';
-import { getTableButtonHandlers } from '../lib';
+import { getTableButtonHandlers } from '../tableButtonHandlers';
 import { getButtonHandlerData } from './lib';
 
 const PremiseDropArea = (props) => {

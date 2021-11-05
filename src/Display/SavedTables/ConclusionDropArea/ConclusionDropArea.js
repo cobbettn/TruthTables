@@ -3,7 +3,7 @@ import { Box, Typography, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import SchemaTable from '../../SchemaTable/SchemaTable';
 import theme from '../../../theme';
-import { getTableButtonHandlers } from '../lib';
+import { getTableButtonHandlers } from '../tableButtonHandlers';
 import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
 
 const ConclusionDropArea = (props) => {
