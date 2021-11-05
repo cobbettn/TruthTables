@@ -4,15 +4,18 @@ import TableRows from '../SchemaTable/TableRows/TableRows';
 import DisplayTable from '../SchemaTable/DisplayTable/DisplayTable';
 import { validateSchema } from '../../lib';
 import { getTableDimensions, getTableModel, computeTable, getOpCount } from '../../lib';
-import { getStyle } from './SchemaTable.style';
+import theme from '../../theme';
 
 const SchemaTable = (props) => {
   const { schema, sentenceLetters, isSavedTable } = props;
   let { symbols } = schema;
   let tableModel = getTableModel({...props});
   const { numRows } = getTableDimensions(sentenceLetters.length)
-  const style = getStyle(isSavedTable);
-  
+  const getStyle = (isSavedTable) => ({ 
+    alignSelf: 'center',
+    backgroundColor: !isSavedTable ? theme.palette.primary.dark : theme.palette.grey[700],
+  });
+  const style = getStyle(isSavedTable);  
   let schemaTableHeaders = (<TableHeader symbols={symbols}/>);
   let schemaTable = (<TableRows symbols={symbols} model={tableModel}/>);
   

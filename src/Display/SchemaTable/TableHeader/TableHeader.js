@@ -1,8 +1,15 @@
 import React from 'react';
-import { getStyle } from './TableHeader.style';
+import theme from '../../../theme';
 
 const TableHeader = (props) => {
   const { symbols, mainOpIndex } = props;  
+  const getStyle = (header, index, mainOpIndex) => {
+    const style = {
+      backgroundColor: header.bgColor || theme.palette.grey[700],
+    }
+    if (mainOpIndex === index) style.fontWeight = 'bold'
+    return style;
+  };
   return (
     <thead>
       <tr>
