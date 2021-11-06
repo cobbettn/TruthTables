@@ -4,7 +4,6 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import SchemaTable from '../../SchemaTable/SchemaTable';
 import theme from '../../../theme';
 import { getTableButtonHandlers } from '../tableButtonHandlers';
-import { boxStyle, getDropStyle } from './ConclusionDropArea.style';
 
 const ConclusionDropArea = (props) => {
   const { sentenceLetters, setSchema, conclusion, setConclusion } = props;
@@ -13,6 +12,17 @@ const ConclusionDropArea = (props) => {
     setData: setConclusion,
     setSchema: setSchema,
   })
+  const getDropStyle = isDraggingOver => ({
+    display: 'flex',
+    flexGrow: '1',
+    backgroundColor: isDraggingOver && theme.palette.grey[900]
+  });
+  const boxStyle = {
+    display: 'flex', 
+    minWidth: '33%',
+    marginLeft: '0.5rem', 
+    flexDirection:'column',
+  }
   return (
     <Box style={ boxStyle }>
       <Typography variant='caption' style={{color: theme.palette.grey[400]}}>Conclusion:</Typography>

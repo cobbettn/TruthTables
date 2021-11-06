@@ -24,6 +24,18 @@ const SavedTableButtons = (props) => {
     margin: '0.5rem 0.2rem',
     justifyContent: 'center'
   }
+  const getTooltipStyles = makeStyles(theme => (
+    {
+      arrow: {
+        color: `${theme.palette.grey[900]}`,
+        opacity: '1'
+      },
+      tooltip: {
+        backgroundColor: `${theme.palette.grey[900]}`,
+        opacity: '1'
+      }
+    }
+  ));
   const tooltipClasses = getTooltipStyles();
   const getTooltipProps = (title) => {
     return {
@@ -51,19 +63,6 @@ const SavedTableButtons = (props) => {
     display: 'flex',
     justifyContent: 'center'
   };
-  
-  const getTooltipStyles = makeStyles(theme => (
-    {
-      arrow: {
-        color: `${theme.palette.grey[900]}`,
-        opacity: '1'
-      },
-      tooltip: {
-        backgroundColor: `${theme.palette.grey[900]}`,
-        opacity: '1'
-      }
-    }
-  ));
   
   const infoBox = (
     <Box >
