@@ -1,12 +1,48 @@
 import React  from 'react';
 import { Typography, Box, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { getDropStyle, boxStyle, typeStyle } from './PremiseDropArea.style';
 import SchemaTable from '../../SchemaTable/SchemaTable';
-import { getTableButtonHandlers } from '../lib';
-import { getButtonHandlerData } from './lib';
+import { getTableButtonHandlers } from '../tableButtonHandlers';
+import theme from '../../../theme';
 
 const PremiseDropArea = (props) => {
+  
+  const getButtonHandlerData = (context, i) => {
+    const { premises, setPremises, setSchema  } = context;
+    return {
+      data: premises[i],
+      setData: (data) => {
+        data ? premises[i] = {...data} : premises.splice(i, i + 1); // delete premise when data is null, update otherwise
+        setPremises([...premises]);
+      },
+      setSchema: setSchema,
+    };
+  }
+  
+  // styles
+  const boxStyle = {
+    display: 'flex', 
+    minWidth: '66%', 
+    flexDirection: 'column',
+    overflow: 'auto',
+  }
+
+  const typeStyle = {
+    color: theme.palette.grey[400]
+  }
+
+  const dropStyle = isDraggingOver => ({
+    backgroundColor: isDraggingOver && theme.palette.grey[900]
+  });
+
+  const getDropStyle = (snapshot) => ({
+    ...dropStyle(snapshot.isDraggingOver),
+    display: 'flex',
+    flexGrow: '1',
+    height: '100%',
+    borderRadius: '5px',
+  });
+
   return (
     <Box style={ boxStyle }>
       <Typography variant='caption' style={ typeStyle }>Premises:</Typography>

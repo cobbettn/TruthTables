@@ -8,8 +8,8 @@ import FastForwardTwoToneIcon from '@material-ui/icons/FastForwardTwoTone';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import InfoTwoToneIcon from '@material-ui/icons/InfoTwoTone';
-import { buttonStyle, boxStyle, getTooltipStyles } from './SavedTableButtons.style';
-import { getTooltipProps } from './lib';
+import theme from '../../../../theme';
+import { makeStyles } from '@material-ui/core/styles';
 
 const SavedTableButtons = (props) => {
   const { clickHandlers, schema } = props;
@@ -24,7 +24,46 @@ const SavedTableButtons = (props) => {
     margin: '0.5rem 0.2rem',
     justifyContent: 'center'
   }
+  const getTooltipStyles = makeStyles(theme => (
+    {
+      arrow: {
+        color: `${theme.palette.grey[900]}`,
+        opacity: '1'
+      },
+      tooltip: {
+        backgroundColor: `${theme.palette.grey[900]}`,
+        opacity: '1'
+      }
+    }
+  ));
   const tooltipClasses = getTooltipStyles();
+  const getTooltipProps = (title) => {
+    return {
+      title: title,
+      className: 'tableButton',
+      arrow: true,
+      placement: 'top'
+    };
+  };
+
+  const buttonStyle = {
+    border: `1px solid ${theme.palette.grey[900]}`,
+    width: '1.5rem',
+    height: '1.5rem',
+    lineHeight: '1.5rem',
+    display: 'flex',
+    justifyContent: 'center', 
+    alignContent: 'center',  
+    margin: '0.1rem',
+    borderRadius: '3px', 
+    cursor: 'default',
+    boxShadow: `1px 1px 1px ${theme.palette.grey[800]}`,
+  };
+  const boxStyle = {
+    display: 'flex',
+    justifyContent: 'center'
+  };
+  
   const infoBox = (
     <Box >
       <Box style={{display:'flex', alignItems: 'center'}}>

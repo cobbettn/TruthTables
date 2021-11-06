@@ -3,12 +3,19 @@ import { Tooltip, Paper, Box } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
-import { getTutorialStyles } from '../lib';
-import { getDropStyles } from './LetterPicker.styles';
+import { getTutorialStyles } from '../tutorialStyles';
 
 const LetterPicker = () => {
   const { sentenceLetters, tutorialSteps } = useContext(Context);
   const classes = getTutorialStyles();
+  const getDropStyles = (count) =>  ({
+    display: 'flex', 
+    height: '4rem', 
+    alignItems: 'center',
+    paddingLeft: '0.2rem',
+    paddingRight: '0.2rem',
+    borderRadius: '5px',
+  });
   return (
     <Tooltip
       title='Click or drag a sentence letter into schema editor'

@@ -3,10 +3,32 @@ import { Paper, Box, Typography } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
-import { getDropStyle, boxStyle, typeStyle } from './SchemaBuilder.style';
+import theme from '../../theme';
 
 const SchemaBuilder = () => {
   const { schema } = useContext(Context);
+  
+  const getDropStyle = (isDraggingOver, schema) => {
+    const { symbols, type } = schema;
+    return {
+      display: 'flex',
+      minHeight: '4rem',
+      backgroundColor: (symbols.length > 0 || isDraggingOver) && theme.palette.grey[900],
+      border: symbols.length > 0 && `solid 2px ${ type === 'C' ? theme.palette.secondary.light : theme.palette.primary.light }`,
+      borderRadius: '3px',
+      alignItems: 'center',
+      padding: '0.2rem',
+      overflow: 'auto',
+    };
+  }
+  const boxStyle = {
+    paddingTop: '2rem', 
+    display: 'flex', 
+    flexDirection: 'column'
+  };
+  const typeStyle = { 
+    color: theme.palette.grey[400]
+  };
   return (
     <Box style={ boxStyle }>
       <Typography variant='caption' style={ typeStyle }>Schema Editor:</Typography>

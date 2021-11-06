@@ -14,7 +14,7 @@ const App = () => {
       <CssBaseline/>
       <Container component="main">
         <Box style={{display: 'flex', padding: '0.25rem', alignItems: 'center'}}>
-          <Typography style={{flexGrow: '1', textShadow: '2px 2px black'}} variant='h6'>truthtables.app</Typography>
+          <Typography style={{flexGrow: '1', textShadow: '2px 2px black'}} variant='h6'>Truth Table Calculator</Typography>
           <Link href="https://github.com/cjn98/TruthTables">
             <img alt="github" style={{height: '0.75rem'}} src={githubImg}/>
           </Link>

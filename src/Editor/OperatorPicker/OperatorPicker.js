@@ -3,12 +3,13 @@ import { Tooltip, Paper } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import context from '../../context';
 import DnDElement from '../DnDElement/DnDElement';
-import { getTutorialStyles } from '../lib';
-import { operatorConfig } from './lib';
+import { getTutorialStyles } from '../tutorialStyles';
+import { operatorConfig } from '../operatorConfig';
 
 const OperatorPicker = () => {
   const { tutorialSteps } = useContext(context);
   const classes = getTutorialStyles();
+
   return (
     <Tooltip
       title='Click or drag an operator into the schema editor'

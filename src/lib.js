@@ -90,7 +90,6 @@ const validateSchema = (schema) => {
   // unclosed parentheses
   if (openParenCount !== closeParenCount) isValid = false;
   
-
   return isValid;
 }
 
@@ -251,7 +250,7 @@ const computeOperator = (data) => {
     let L, R, value, valid;
     if (opIndex - 1 >= 0) L = table[row][opIndex - 1];
     if (opIndex + 1 < table[row].length) R = table[row][opIndex + 1];
-    valid = !(L === undefined || R=== undefined);
+    valid = !(L === undefined || R === undefined);
     switch (operator) {
       case '\u00AC': // not
         numArgs = 1;
