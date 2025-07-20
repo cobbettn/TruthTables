@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.2fe8e60e.chunk.css",
-    "main.js": "/static/js/main.6b7a64e6.chunk.js",
-    "main.js.map": "/static/js/main.6b7a64e6.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.afd3c350.js",
-    "runtime-main.js.map": "/static/js/runtime-main.afd3c350.js.map",
-    "static/js/2.eda913f3.chunk.js": "/static/js/2.eda913f3.chunk.js",
-    "static/js/2.eda913f3.chunk.js.map": "/static/js/2.eda913f3.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.337f3adfca2cf493256cfa35f5d65d4f.js": "/precache-manifest.337f3adfca2cf493256cfa35f5d65d4f.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.2fe8e60e.chunk.css.map": "/static/css/main.2fe8e60e.chunk.css.map",
-    "static/js/2.eda913f3.chunk.js.LICENSE.txt": "/static/js/2.eda913f3.chunk.js.LICENSE.txt",
-    "static/media/GitHub_Logo_White.png": "/static/media/GitHub_Logo_White.84fd1fc9.png"
+    "main.css": "/TruthTables/static/css/main.2fe8e60e.chunk.css",
+    "main.js": "/TruthTables/static/js/main.6b7a64e6.chunk.js",
+    "main.js.map": "/TruthTables/static/js/main.6b7a64e6.chunk.js.map",
+    "runtime-main.js": "/TruthTables/static/js/runtime-main.d7145f3f.js",
+    "runtime-main.js.map": "/TruthTables/static/js/runtime-main.d7145f3f.js.map",
+    "static/js/2.eda913f3.chunk.js": "/TruthTables/static/js/2.eda913f3.chunk.js",
+    "static/js/2.eda913f3.chunk.js.map": "/TruthTables/static/js/2.eda913f3.chunk.js.map",
+    "index.html": "/TruthTables/index.html",
+    "precache-manifest.87fdf0698899b95d332b4d551f07bf8f.js": "/TruthTables/precache-manifest.87fdf0698899b95d332b4d551f07bf8f.js",
+    "service-worker.js": "/TruthTables/service-worker.js",
+    "static/css/main.2fe8e60e.chunk.css.map": "/TruthTables/static/css/main.2fe8e60e.chunk.css.map",
+    "static/js/2.eda913f3.chunk.js.LICENSE.txt": "/TruthTables/static/js/2.eda913f3.chunk.js.LICENSE.txt",
+    "static/media/GitHub_Logo_White.png": "/TruthTables/static/media/GitHub_Logo_White.84fd1fc9.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.afd3c350.js",
+    "static/js/runtime-main.d7145f3f.js",
     "static/js/2.eda913f3.chunk.js",
     "static/css/main.2fe8e60e.chunk.css",
     "static/js/main.6b7a64e6.chunk.js"
